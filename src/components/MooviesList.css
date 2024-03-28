@@ -1,0 +1,32 @@
+.moovies-list h2 {
+    text-align: left;
+    padding-left: 5vw;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+}
+
+.moovies-list ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.moovies-list li {
+    line-height: 1.5rem;
+}
+
+.moovies-list .card {
+    padding: 20px;
+    height: 250px;
+    width: 200px;
+}
+
+.moovies-list .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.moovies-list .card .title {
+    font-weight: bold;
+}
