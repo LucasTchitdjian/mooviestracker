@@ -1,32 +1,35 @@
-.moovies-list h2 {
+.trailers h2 {
     text-align: left;
     padding-left: 5vw;
     padding-top: 3vh;
     padding-bottom: 3vh;
 }
 
-.moovies-list ul {
+.trailers ul {
     padding-left: 3vw;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0;
 }
 
-.moovies-list li {
+.trailers li {
     line-height: 1.5rem;
 }
 
-.moovies-list .card {
+.trailers .card {
     padding: 20px;
-    height: 250px;
-    width: 200px;
+    width: 100%;
+    height: 100%;
 }
 
-.moovies-list .card img {
+.trailers .card iframe {
+    border: 0;
+    outline: none;
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-.moovies-list .card .title {
+.trailers .card .title {
     font-weight: bold;
 }

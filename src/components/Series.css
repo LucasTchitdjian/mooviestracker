@@ -1,32 +1,34 @@
-.moovies-list h2 {
+.series h2 {
     text-align: left;
     padding-left: 5vw;
     padding-top: 3vh;
     padding-bottom: 3vh;
 }
 
-.moovies-list ul {
+.series ul {
     padding-left: 3vw;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-rows: auto;
+    gap: 15vh;
 }
 
-.moovies-list li {
+.series li {
     line-height: 1.5rem;
 }
 
-.moovies-list .card {
+.series .card {
     padding: 20px;
     height: 250px;
     width: 200px;
 }
 
-.moovies-list .card img {
+.series .card img {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-.moovies-list .card .title {
+.series .card .title {
     font-weight: bold;
 }
