@@ -9,6 +9,7 @@
     padding-left: 3vw;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
 }
 
 .moovies-list li {
@@ -16,14 +17,20 @@
 }
 
 .moovies-list .card {
-    padding: 20px;
     height: 250px;
     width: 200px;
+    cursor: pointer;
+    position: relative;
+}
+
+.moovies-list .card .moovie-info {
+    position: absolute;
+    display: none;
 }
 
 .moovies-list .card img {
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 10px;
 }
 

@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 
 export function Header({ setMovies }) {
 
-    console.log(setMovies, "setMoovies header");
-
     const [search, setSearch] = useState('');
 
     useEffect(() => {

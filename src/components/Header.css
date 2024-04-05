@@ -2,7 +2,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 5vw;
+    padding: 10px 5vw;
+    padding-bottom: 20px;
     background-color: #ffd300;
 }
 
@@ -18,12 +19,13 @@ header .form {
     width: 25%;
     height: 2.125rem;
     border: 1px solid #fff;
-    border-radius: 2px;
+    border-radius: 10px;
     position: relative;
 }
 
 header .form .input {
     width: 100%;
+    border-radius: 10px;
 }
 
 header .form .search-icon {
@@ -41,7 +43,7 @@ header .form input[type="search"] {
     border: none;
     padding: 0.625rem 0.875rem;
     width: 100%;
-    border-radius: 2px;
+    border-radius: 10px;
 }
 
 header .menu ul {
