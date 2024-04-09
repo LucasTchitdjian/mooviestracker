@@ -1,0 +1,39 @@
+.moovies-list h2 {
+    text-align: left;
+    padding-left: 5vw;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+}
+
+.moovies-list ul {
+    padding-left: 3vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.moovies-list li {
+    line-height: 1.5rem;
+}
+
+.moovies-list .card {
+    height: 250px;
+    width: 200px;
+    cursor: pointer;
+    position: relative;
+}
+
+.moovies-list .card .moovie-info {
+    position: absolute;
+    display: none;
+}
+
+.moovies-list .card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.moovies-list .card .title {
+    font-weight: bold;
+}
