@@ -4,24 +4,26 @@ import { IoIosSearch } from "react-icons/io";
 import { Link } from 'react-router-dom';
 
 export function Header({ setMovies, searchTerm, setSearchTerm }) {
-
-    useEffect(() => {
-        // Vérifie si la recherche n'est pas vide
-        if (searchTerm !== '') {
-            const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
-            const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
     
-            Promise.all([
-                fetch(moviesUrl).then(response => response.json()),
-                fetch(seriesUrl).then(response => response.json())
-            ]).then(([moviesData, seriesData]) => {
-                // Combinez les résultats des films et des séries
-                const combinedResults = [...moviesData.results, ...seriesData.results];
-                setMovies(combinedResults);
-            }).catch(error => {
-                console.error('Erreur lors de la récupération des données:', error);
-            });
-        }
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if (searchTerm !== '') {
+                const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
+                const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
+    
+                Promise.all([
+                    fetch(moviesUrl).then(response => response.json()),
+                    fetch(seriesUrl).then(response => response.json())
+                ]).then(([moviesData, seriesData]) => {
+                    const combinedResults = [...moviesData.results, ...seriesData.results];
+                    setMovies(combinedResults);
+                }).catch(error => {
+                    console.error('Erreur lors de la récupération des données:', error);
+                });
+            }
+        }, 500); // Attend 500ms après la dernière frappe pour lancer la recherche
+    
+        return () => clearTimeout(delayDebounceFn); // Nettoie le timeout si le composant est démonté ou si searchTerm change
     }, [searchTerm, setMovies]);    
 
     const handleSearchChange = (e) => {

@@ -21,12 +21,12 @@ function App() {
       <Router>
         <Header movies={movies} setMovies={setMovies} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<MooviesList movies={movies} setMovies={setMovies} />} />
+          <Route path="/" element={<MooviesList movies={movies} setMovies={setMovies} setSeries={setSeries} />} />
           <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
           <Route path='/trailers' element={<Trailers movies={movies} setMovies={setMovies} />} />
           <Route path='/series' element={<Series series={series} setSeries={setSeries} />} />
-          <Route path='/serie/:id' element={<SingleSeries series={series} setSeries={setSeries} />} />
-          <Route path='/moovies' element={<Moovies />} />
+          <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+          <Route path='/moovies' element={<Moovies movies={movies} setMovies={setMovies} />} />
           <Route path='/movie/:id' element={<SingleMoovies movies={movies} />} />
         </Routes>
       </Router>

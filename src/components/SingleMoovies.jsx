@@ -7,6 +7,7 @@ function SingleMoovies({ movies }) {
     const { id } = useParams();
     // Utilise find pour obtenir directement le film désiré.
     const movie = movies.find(movie => movie.id === parseInt(id, 10));
+    console.log(movie, "movie dans singlemoovies");
 
     // Formater la date ici si movie existe
     const formatDate = (dateString) => {
@@ -51,7 +52,7 @@ function SingleMoovies({ movies }) {
                                 <div className="first-line">
                                     <p>{formatDate(movie.release_date)} <span>en salle</span></p>
                                     <p>| {formatRuntime(moovieInfos.runtime)}</p>
-                                    <p>| {movieGenres}</p>
+                                    <p>| {movieGenres ? movieGenres : ""}</p>
                                 </div>
                                 <div className="second-line">
                                     <div className="rating">

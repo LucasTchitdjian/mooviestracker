@@ -81,6 +81,7 @@
 
 .synopsis h3 {
     position: relative;
+    padding-left: 2px;
 }
 
 .synopsis h3::after {
