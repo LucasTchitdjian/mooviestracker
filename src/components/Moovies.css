@@ -10,16 +10,16 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-template-rows: auto;
-    gap: 15vh;
+    gap: 0;
 }
 
-.moovies li {
-    line-height: 1.5rem;
+.card li {
+    line-height: 1.5;
 }
 
 .moovies .card {
-    padding: 20px;
-    height: 250px;
+    padding: 10px;
+    height: 100%;
     width: 200px;
 }
 
