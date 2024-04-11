@@ -14,16 +14,17 @@ function App() {
 
   const [movies, setMovies] = useState([]);
   const [series, setSeries] = useState([]);
+  const [trailers, setTrailers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
     <div className="App">
       <Router>
-        <Header movies={movies} setMovies={setMovies} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Header setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<MooviesList movies={movies} setMovies={setMovies} setSeries={setSeries} />} />
+          <Route path="/" element={<MooviesList movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setTrailers={setTrailers} />} />
           <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
-          <Route path='/trailers' element={<Trailers movies={movies} setMovies={setMovies} />} />
+          <Route path='/trailers' element={<Trailers movies={movies} setMovies={setMovies} setTrailers={setTrailers} trailers={trailers} />} />
           <Route path='/series' element={<Series series={series} setSeries={setSeries} />} />
           <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path='/moovies' element={<Moovies movies={movies} setMovies={setMovies} />} />

@@ -1,10 +1,11 @@
 .wrapper {
-    padding: 3rem 5rem;
+    padding: 1rem 5rem;
     background-color: #f2f2f2;
+    min-height: 100vh;
 }
 
 .single-series {
-    padding: 3rem;
+    padding: 1rem;
     padding-left: 5vw;
     background-color: white;
     border-radius: 10px;
@@ -37,7 +38,8 @@
 
 .single-series .card .right .first-line {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 5px;
     padding-top: 20px;
     padding-bottom: 20px;

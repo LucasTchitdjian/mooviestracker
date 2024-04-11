@@ -4,8 +4,10 @@ import './SingleSeries.css';
 
 function SingleSeries({ series }) {
     const [serieInfos, setSerieInfos] = useState(null);
+    const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
     // Utilise find pour obtenir directement la série désiré. 
+    console.log(series, "series prop dans singleSeries")
 
     const serie = series.find(serie => serie.id === parseInt(id, 10));
 
@@ -33,24 +35,38 @@ function SingleSeries({ series }) {
         });
     }
 
+    const genre_ids = serieInfos?.genre_ids;
+
     useEffect(() => {
         if (!serie) {
             fetch(`https://api.themoviedb.org/3/tv/${serie}?api_key=d7e7ae694a392629f56dea0d38fd160e`)
                 .then(response => response.json())
                 .then(data => setSerieInfos(data))
                 .catch(error => console.error('Erreur lors de la récupération des données de la série:', error));
-
         } else {
             setSerieInfos(serie);
+            const fetchGenreNames = async () => {
+                const names = await getGenres(serie.genre_ids); // Supposons que genreIds est un tableau d'IDs de genres
+                setGenreNames(names); // Mettez à jour l'état avec les noms de genres obtenus
+            };
+            fetchGenreNames();
         }
-    }, [id, serie]);
+    }, [id, serie, genreNames, genre_ids]);
 
-    console.log(serieInfos, "serieInfos dans singleSeries")
-
-    let serieGenres = '';
-    if (serieInfos && serieInfos.genres) {
-        serieGenres = serie.genres.map(genre => genre.name).join(', ');
-    }
+    const getGenres = async (genres) => {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`);
+            const data = await response.json();
+            const serieGenres = genres.map(genreId => {
+                const genreData = data.genres.find(genre => genre.id === genreId);
+                return genreData ? genreData.name : null;
+            }).filter(name => name != null); // Filtrer pour enlever les éventuels null
+            return serieGenres.join(' | ');
+        } catch (error) {
+            console.error('Erreur lors de la récupération des genres:', error);
+            return ''; // Retourne une chaîne vide ou une valeur par défaut en cas d'erreur
+        }
+    };
 
     return (
         <div className="wrapper">
@@ -69,7 +85,7 @@ function SingleSeries({ series }) {
                                     {serieInfos && serieInfos.episode_run_time && serieInfos.episode_run_time.length > 0 ?
                                         <p>{formatRuntime(serieInfos.episode_run_time[0])}</p> // Si vous avez plusieurs durées et voulez toutes les afficher, vous devez ajuster la logique ici
                                         : null}
-                                    <p>{serieGenres}</p>
+                                    <p>{genreNames}</p>
                                 </div>
                                 <div className="second-line">
                                     <div className="rating">
@@ -85,6 +101,7 @@ function SingleSeries({ series }) {
                 )}
                 <div className="synopsis">
                     <h3>Synopsis</h3>
+                    <p>{serieInfos?.overview}</p>
                 </div>
             </div>
         </div>

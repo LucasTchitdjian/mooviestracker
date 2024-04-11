@@ -1,39 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Trailers.css';
 
-function Trailers({ movies }) {
-  const [trailers, setTrailers] = useState([]);
+function Trailers({ setTrailers, trailers }) {
+
+  console.log(trailers, "props trailers dans");
 
   useEffect(() => {
     const fetchTrailers = async () => {
-      const trailerPromises = movies.map(movie =>
-        fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`)
-          .then(response => response.json())
-          .then(data => {
-            // Sélectionner le premier trailer officiel trouvé
-            const officialTrailer = data.results.find(video => video.type === 'Trailer' && video.official);
-            // Si aucun trailer officiel n'est trouvé, prendre le premier trailer de la liste
-            return officialTrailer || data.results.find(video => video.type === 'Trailer') || null;
-          })
-      );
+      if (trailers.length > 0) {
+        const trailerPromises = trailers.map(trailer =>
+          fetch(`https://api.themoviedb.org/3/movie/${trailer.id}/videos?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`)
+            .then(response => response.json())
+            .then(data => {
+              if (data && Array.isArray(data.results)) { // Vérification ajoutée ici
+                const officialTrailer = data.results.find(video => video.type === 'Trailer' && video.official);
+                return officialTrailer || data.results.find(video => video.type === 'Trailer') || null;
+              }
+              return null; // Retourne null si `data.results` n'est pas un tableau
+            })
+        );        
 
-      const trailersData = await Promise.all(trailerPromises);
-      // Filtrer les éléments null si aucun trailer n'a été trouvé pour un film
-      const filteredTrailers = trailersData.filter(trailer => trailer !== null);
-      setTrailers(filteredTrailers);
+        const trailersData = await Promise.all(trailerPromises);
+        // Filtrer les éléments null si aucun trailer n'a été trouvé pour un film
+        const filteredTrailers = trailersData.filter(trailer => trailer !== null);
+        setTrailers(filteredTrailers);
+      }
     };
-
-    if (movies.length > 0) {
-      fetchTrailers();
-    }
-  }, [movies]); // Ajouter movies comme dépendance pour recharger les trailers quand les films changent
+    fetchTrailers();
+  }, [setTrailers, trailers]); // Ajouter movies comme dépendance pour recharger les trailers quand les films changent
 
   return (
     <div className='trailers'>
       <h2>Liste des trailers des films à l'affiche</h2>
       <ul>
         {trailers.map((trailer, index) => (
-          <div className="card">
+          <div className="card" key={index}>
             <li key={index}>
               {/* Exemple d'affichage d'un lien YouTube, ajustez selon vos besoins */}
               <iframe

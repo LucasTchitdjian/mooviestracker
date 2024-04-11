@@ -5,9 +5,9 @@ import './SingleMoovies.css';
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
     const { id } = useParams();
+    console.log(movies, "movies props dans singleMoovies")
     // Utilise find pour obtenir directement le film désiré.
     const movie = movies.find(movie => movie.id === parseInt(id, 10));
-    console.log(movie, "movie dans singlemoovies");
 
     // Formater la date ici si movie existe
     const formatDate = (dateString) => {

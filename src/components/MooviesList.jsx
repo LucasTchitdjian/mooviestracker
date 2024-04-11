@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './MooviesList.css';
 import { useEffect } from 'react';
 
-export function MooviesList({ movies, setMovies, setSeries }) {
+export function MooviesList({ movies, setMovies, setSeries, series, setTrailers }) {
 
     useEffect(() => {
         const fetchMovies = fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=1')
@@ -19,10 +19,11 @@ export function MooviesList({ movies, setMovies, setSeries }) {
                 const combinedItems = [...movies, ...series];
                 setMovies(combinedItems);
                 setSeries(series); // Pour faire passer la props series à SingleSeries et faire fonctionner la page détail d'un serie dans l'accueil
+                setTrailers(movies); // Pour faire passer la props trailers à Trailers et faire fonctionner la page Trailers dans l'accueil
             });
-    }, [setMovies, setSeries]);
+    }, [setMovies, setSeries, setTrailers]);
 
-    console.log(movies, "movies dans moovieslist")
+    console.log(series, "series prop dans moovieslist")
 
     return (
         <div className="moovies-list">

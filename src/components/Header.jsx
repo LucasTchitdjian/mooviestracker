@@ -1,40 +1,42 @@
-import React, { useEffect } from 'react';
 import './Header.css';
 import { IoIosSearch } from "react-icons/io";
 import { Link } from 'react-router-dom';
 
-export function Header({ setMovies, searchTerm, setSearchTerm }) {
-    
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (searchTerm !== '') {
-                const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
-                const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
-    
-                Promise.all([
-                    fetch(moviesUrl).then(response => response.json()),
-                    fetch(seriesUrl).then(response => response.json())
-                ]).then(([moviesData, seriesData]) => {
-                    const combinedResults = [...moviesData.results, ...seriesData.results];
-                    setMovies(combinedResults);
-                }).catch(error => {
-                    console.error('Erreur lors de la récupération des données:', error);
-                });
-            }
-        }, 500); // Attend 500ms après la dernière frappe pour lancer la recherche
-    
-        return () => clearTimeout(delayDebounceFn); // Nettoie le timeout si le composant est démonté ou si searchTerm change
-    }, [searchTerm, setMovies]);    
+export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
-    };
+        if (searchTerm !== '') {
+            const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
+            const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
 
-    console.log(searchTerm, "ce que j'ai ecris dans l'input de recherche");
+            Promise.all([
+                fetch(moviesUrl).then(response => response.json()),
+                fetch(seriesUrl).then(response => response.json())
+            ]).then(([moviesData, seriesData]) => {
+                // Ajout de la propriété 'type' pour chaque film
+                const moviesWithTypes = moviesData.results.map(movie => ({
+                    ...movie,
+                    type: 'movie'
+                }));
+                // Ajout de la propriété 'type' pour chaque série
+                const seriesWithTypes = seriesData.results.map(series => ({
+                    ...series,
+                    type: 'serie'
+                }));
+                // Combinez les résultats des films et des séries avec la propriété 'type' ajoutée
+                const combinedResults = [...moviesWithTypes, ...seriesWithTypes];
+                setMovies(combinedResults);
+                setSeries(seriesWithTypes);
+            }).catch(error => {
+                console.error('Erreur lors de la récupération des données:', error);
+            });
+        }
+    };
 
     return (
         <header>
