@@ -2,17 +2,20 @@ import { Link } from 'react-router-dom';
 import './MooviesList.css';
 import { useEffect } from 'react';
 
-export function MooviesList({ movies, setMovies, setSeries, series, setTrailers }) {
+export function MooviesList({ currentPage, movies, setMovies, setSeries, setTrailers, setPage }) {
 
     useEffect(() => {
-        const fetchMovies = fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=1')
+        const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&${currentPage}`)
             .then(response => response.json())
-            .then(data => data.results.map(movie => ({ ...movie, type: 'movie' }))); // Ajoute une propriété 'type'
-
-        const fetchSeries = fetch('https://api.themoviedb.org/3/tv/on_the_air?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=1')
+            .then(data => {
+                setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
+                return data.results.map(movie => ({ ...movie, type: 'movie' })); // Important: retournez le tableau transformé
+            });
+    
+        const fetchSeries = fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&${currentPage}`)
             .then(response => response.json())
-            .then(data => data.results.map(series => ({ ...series, type: 'serie' }))); // Ajoute une propriété 'type'
-
+            .then(data => data.results.map(series => ({ ...series, type: 'serie' }))); // Ajoute une propriété 'type' et retourne le tableau transformé
+    
         Promise.all([fetchMovies, fetchSeries])
             .then((results) => {
                 const [movies, series] = results;
@@ -20,11 +23,12 @@ export function MooviesList({ movies, setMovies, setSeries, series, setTrailers 
                 setMovies(combinedItems);
                 setSeries(series); // Pour faire passer la props series à SingleSeries et faire fonctionner la page détail d'un serie dans l'accueil
                 setTrailers(movies); // Pour faire passer la props trailers à Trailers et faire fonctionner la page Trailers dans l'accueil
+            })
+            .catch(error => {
+                console.error('Error fetching data: ', error);
             });
-    }, [setMovies, setSeries, setTrailers]);
-
-    console.log(series, "series prop dans moovieslist")
-
+    }, [setMovies, setSeries, setTrailers, setPage, currentPage]); // Ajoutez setPage si vous utilisez useState pour cela
+    
     return (
         <div className="moovies-list">
             <h2>Liste des films et séries à l'affiche</h2>

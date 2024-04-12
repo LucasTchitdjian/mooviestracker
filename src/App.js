@@ -4,6 +4,7 @@ import { MooviesList } from './components/MooviesList';
 import Trailers from './components/Trailers';
 import Series from './components/Series';
 import SingleMoovies from './components/SingleMoovies';
+import { Pagination }  from './components/Pagination';
 import { SearchResultsList } from './components/SearchResultsList';
 import SingleSeries from './components/SingleSeries';
 import { useState } from 'react';
@@ -16,13 +17,21 @@ function App() {
   const [series, setSeries] = useState([]);
   const [trailers, setTrailers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
 
   return (
     <div className="App">
       <Router>
         <Header setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <Routes>
-          <Route path="/" element={<MooviesList movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setTrailers={setTrailers} />} />
+          <Route path="/" element={
+            <>
+          <MooviesList currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setTrailers={setTrailers} />
+          <Pagination page={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+          </>
+          } />
           <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
           <Route path='/trailers' element={<Trailers movies={movies} setMovies={setMovies} setTrailers={setTrailers} trailers={trailers} />} />
           <Route path='/series' element={<Series series={series} setSeries={setSeries} />} />

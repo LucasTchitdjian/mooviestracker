@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 
 const Moovies = ({ movies, setMovies }) => {
 
-    console.log(movies, "props movies dans moovies");
-
     useEffect(() => {
         fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=1')
             .then(response => response.json())

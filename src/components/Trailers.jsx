@@ -3,8 +3,6 @@ import './Trailers.css';
 
 function Trailers({ setTrailers, trailers }) {
 
-  console.log(trailers, "props trailers dans");
-
   useEffect(() => {
     const fetchTrailers = async () => {
       if (trailers.length > 0) {

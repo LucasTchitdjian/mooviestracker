@@ -12,8 +12,6 @@ const Series = ({ series, setSeries }) => {
             });
     }, [setSeries]);
 
-    console.log(series, "series dans series");
-
     return (
         <div className='series'>
             <h2>Liste des séries les mieux notées de tous les temps</h2>

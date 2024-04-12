@@ -7,7 +7,6 @@ function SingleSeries({ series }) {
     const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
     // Utilise find pour obtenir directement la série désiré. 
-    console.log(series, "series prop dans singleSeries")
 
     const serie = series.find(serie => serie.id === parseInt(id, 10));
 
