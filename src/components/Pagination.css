@@ -1,7 +1,39 @@
+/* Reset a tags */
 .pagination a {
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.pagination a:active {
+    text-decoration: none;
+    color: black;
+}
+
+.pagination a:focus {
+    text-decoration: none;
+    color: black;
+}
+
+.pagination a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+/* Reset a tags */
+
+.pagination a.active {
+    color: red;
+}
+
+.pagination ul {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 20px;
 }

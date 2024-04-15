@@ -4,15 +4,17 @@ import { useEffect } from 'react';
 
 export function MooviesList({ currentPage, movies, setMovies, setSeries, setTrailers, setPage }) {
 
+    console.log(currentPage, "props current page dans moovieslist")
+
     useEffect(() => {
-        const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&${currentPage}`)
+        const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
                 setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
                 return data.results.map(movie => ({ ...movie, type: 'movie' })); // Important: retournez le tableau transformé
             });
     
-        const fetchSeries = fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&${currentPage}`)
+        const fetchSeries = fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => data.results.map(series => ({ ...series, type: 'serie' }))); // Ajoute une propriété 'type' et retourne le tableau transformé
     

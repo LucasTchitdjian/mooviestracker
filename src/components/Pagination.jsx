@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 export function Pagination({ page, totalPages, setCurrentPage }) {
 
+    console.log(page, totalPages, setCurrentPage, "props dans pagination")
+
     const [pages, setPages] = useState([]);
 
     useEffect(() => {
