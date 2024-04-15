@@ -4,7 +4,7 @@ import { MooviesList } from './components/MooviesList';
 import Trailers from './components/Trailers';
 import Series from './components/Series';
 import SingleMoovies from './components/SingleMoovies';
-import { Pagination }  from './components/Pagination';
+import { Pagination } from './components/Pagination';
 import { SearchResultsList } from './components/SearchResultsList';
 import SingleSeries from './components/SingleSeries';
 import { useState } from 'react';
@@ -20,6 +20,7 @@ function App() {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
 
   return (
     <div className="App">
@@ -28,12 +29,12 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-          <MooviesList currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setTrailers={setTrailers} />
-          <Pagination page={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
-          </>
+              <MooviesList page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
+              <Pagination page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+            </>
           } />
           <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
-          <Route path='/trailers' element={<Trailers movies={movies} setMovies={setMovies} setTrailers={setTrailers} trailers={trailers} />} />
+          <Route path='/trailers' element={<Trailers mooviesNowPlaying={mooviesNowPlaying} setTrailers={setTrailers} trailers={trailers} />} />
           <Route path='/series' element={<Series series={series} setSeries={setSeries} />} />
           <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path='/moovies' element={<Moovies movies={movies} setMovies={setMovies} />} />
@@ -42,7 +43,6 @@ function App() {
       </Router>
     </div>
   );
-
 }
 
 export default App;
