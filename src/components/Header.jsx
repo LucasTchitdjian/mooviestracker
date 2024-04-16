@@ -1,8 +1,13 @@
 import './Header.css';
 import { IoIosSearch } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import { RxHamburgerMenu } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
+import { useState } from 'react';
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
+
+    const [menuActive, setMenuActive] = useState(false);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -38,6 +43,10 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
         }
     };
 
+    const handleMenuClick = () => {
+       setMenuActive(!menuActive);
+    }
+
     return (
         <header>
             <div className="logo">
@@ -57,10 +66,14 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
                 </button>
             </form>
             <div className="menu">
-                <ul>
+                <ul className='browser-menu'>
                     <li><Link to="/top-rated">Cinéma</Link></li>
                     <li><Link to="/series">Séries</Link></li>
                     <li><Link to="/trailers">Trailers</Link></li>
+                </ul>
+                <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
+                    <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>
+                    <li onClick={handleMenuClick} className='close-hamburger'><RxCross2 /></li>
                 </ul>
             </div>
         </header>

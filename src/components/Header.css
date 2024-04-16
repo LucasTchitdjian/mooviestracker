@@ -13,6 +13,7 @@ header a {
 
 header .logo h1 {
     text-align: left;
+    font-size: clamp(1.25rem, 3vw, 3rem);
 }
 
 header .form {
@@ -55,4 +56,52 @@ header .menu ul {
 header .menu li {
     font-weight: 700;
     text-transform: uppercase;
+}
+
+.hamburger-menu li.open-hamburger, .hamburger-menu li.close-hamburger {
+    display: none;
+}
+
+@media screen and (max-width: 450px) {
+    .browser-menu a {
+        display: none;
+    }
+    .hamburger-menu li.open-hamburger {
+        display: block;
+    }
+    .hamburger-menu.active > li.open-hamburger {
+        display: none;
+    }
+    header {
+        padding: 10px 3vw;
+    }
+    header .form {
+        width: 50%;
+    }
+    header .menu ul {
+        gap: 0;
+    }
+    .close-hamburger-menu svg {
+        display: none;
+    }
+    .hamburger-menu.active > li.close-hamburger {
+        display: block;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        z-index: 2;
+    }
+    .hamburger-menu.active > li.close-hamburger > svg {
+        color: #fff;
+    }
+    .hamburger-menu.active::after {
+        content: "";
+        position: absolute;
+        width: 50vw;
+        height: 100vh;
+        background-color: #000;
+        top: 0;
+        right: 0;
+        z-index: 1;
+    }
 }
