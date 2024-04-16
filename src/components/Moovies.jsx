@@ -2,15 +2,16 @@ import React, { useEffect } from 'react';
 import './Moovies.css';
 import { Link } from 'react-router-dom';
 
-const Moovies = ({ movies, setMovies }) => {
+const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
 
     useEffect(() => {
-        fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=1')
+        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
+                setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
                 setMovies(data.results);
             });
-    }, [setMovies]);
+    }, [setMovies, currentPage, setPage]);
 
     return (
         <div className='moovies'>

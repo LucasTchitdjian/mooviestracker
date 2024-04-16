@@ -2,7 +2,7 @@ import './Pagination.css';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-export function Pagination({ page, totalPages, setCurrentPage }) {
+export function Pagination({ page, totalPages, setCurrentPage, context }) {
 
     const [pages, setPages] = useState([]);
 
@@ -20,7 +20,7 @@ export function Pagination({ page, totalPages, setCurrentPage }) {
                 {pages.map((pageNumber) => (
                     <li key={pageNumber}>
                         <Link
-                            to={`/?page=${pageNumber}`}
+                            to={`/${context}/?page=${pageNumber}`}
                             onClick={() => setCurrentPage(pageNumber)}
                             className={pageNumber === page ? 'active' : ''}
                         >

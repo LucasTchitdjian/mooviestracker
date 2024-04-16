@@ -36,8 +36,6 @@ function Trailers({ mooviesNowPlaying, setTrailers, trailers }) {
     };
 
     fetchTrailerData().catch(error => console.error('Failed to fetch trailers:', error));
-    console.log("Trailers Cache:", trailersCache); // Afficher le cache des trailers
-    console.log("Current Trailers State:", trailers);
   }, [mooviesNowPlaying, trailersCache, setTrailers, trailers]);
 
   if (!trailers || trailers.length === 0) {

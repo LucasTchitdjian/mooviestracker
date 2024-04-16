@@ -10,21 +10,27 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-template-rows: auto;
+    gap: 0;
 }
 
-.series li {
-    line-height: 1.5rem;
+.series ul a {
+    text-decoration: none;
+    color: black;
+}
+
+.card li {
+    line-height: 1.5;
 }
 
 .series .card {
-    padding: 20px;
-    height: 250px;
+    padding: 10px;
+    min-height: 100%;
     width: 200px;
 }
 
 .series .card img {
     width: 100%;
-    height: auto;
+    height: 250px;
     border-radius: 10px;
 }
 

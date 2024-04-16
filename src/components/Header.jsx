@@ -58,7 +58,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
             </form>
             <div className="menu">
                 <ul>
-                    <li><Link to="/moovies">Cinéma</Link></li>
+                    <li><Link to="/top-rated">Cinéma</Link></li>
                     <li><Link to="/series">Séries</Link></li>
                     <li><Link to="/trailers">Trailers</Link></li>
                 </ul>
