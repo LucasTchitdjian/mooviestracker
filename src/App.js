@@ -10,6 +10,7 @@ import SingleSeries from './components/SingleSeries';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Moovies from './components/Moovies';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
           <Route path='/movie/:id' element={<SingleMoovies movies={movies} />} />
         </Routes>
       </Router>
+      <Footer />
     </div>
   );
 }
