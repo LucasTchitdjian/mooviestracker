@@ -63,11 +63,27 @@ header .menu li {
 }
 
 @media screen and (max-width: 450px) {
-    .browser-menu a {
-        display: none;
+
+    .browser-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        position: absolute;
+        right: 25vw;
+        bottom: 0;
+        height: 100vh;
     }
+
+    .browser-menu li a {
+        position: relative;
+        z-index: 99999;
+        color: #fff;
+    }
+
     .hamburger-menu li.open-hamburger {
         display: block;
+        z-index: 99999;
     }
     .hamburger-menu.active > li.open-hamburger {
         display: none;
