@@ -39,17 +39,67 @@
     font-weight: bold;
 }
 
+.rating {
+    display: none;
+}
+
+.moovies-list .right {
+    display: none;
+}
+
 @media screen and (max-width: 450px) {
+
+    .moovie-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-left: 3vw;
+        padding-bottom: 20px;
+    }
+
     .moovies-list h2 {
         padding: 0;
         padding-left: 3vw;
     }
     .moovies-list ul {
+        display: block;
         justify-items: center;
         padding-left: 0;
+    }
+    .moovies-list li {
+        color: black;
     }
     .moovies-list .card {
         height: 200px;
         width: 150px;
+    }
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #333;
+        color: white;
+        padding: 8px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+    .rating > svg {
+        color: #ffd250 ;
+    }
+    .moovies-list .right {
+        align-self: flex-start;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 230px;
+    }
+    .play-btn {
+        padding: 15px 25px;
+        background-color: #333;
+        color: white;
+        border-radius: 20px;
     }
 }
