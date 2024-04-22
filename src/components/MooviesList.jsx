@@ -4,13 +4,13 @@ import { useEffect } from 'react';
 import { FaStar } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
 
-export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setPage }) {
+export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages }) {
 
     useEffect(() => {
         const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
-                setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
+                setTotalPages(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
                 setMooviesNowPlaying(data.results); // Pour faire passer la props mooviesNowPlaying à Trailers et faire fonctionner la page Trailers dans l'accueil
                 return data.results.map(movie => ({ ...movie, type: 'movie' })); // Important: retournez le tableau transformé
             });
@@ -29,10 +29,15 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
             .catch(error => {
                 console.error('Error fetching data: ', error);
             });
-    }, [setMovies, setSeries, setMooviesNowPlaying, setPage, currentPage]); // Ajoutez setPage si vous utilisez useState pour cela
+    }, [setMovies, setSeries, setMooviesNowPlaying, setTotalPages, currentPage]); // Ajoutez setPage si vous utilisez useState pour cela
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
+    }
+
+    const formatDate = (date) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString('fr-FR', options);
     }
 
     return (
@@ -53,7 +58,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                             <div className="right">
                                 <div className="first-col">
                                     <li className='title'>{moovie.title || moovie.name}</li>
-                                    <li>{moovie.release_date || moovie.first_air_date}</li>
+                                    <li>{formatDate(moovie.release_date) || formatDate(moovie.first_air_date)}</li>
                                 </div>
                                 <div className="second-col">
                                     <a className='play-btn' href="youtube.com">

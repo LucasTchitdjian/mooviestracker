@@ -1,11 +1,13 @@
 import './Header.css';
 import { IoIosSearch } from "react-icons/io";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
+
+    const navigate = useNavigate();
 
     const [menuActive, setMenuActive] = useState(false);
 
@@ -16,6 +18,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
     const handleSearch = async (e) => {
         e.preventDefault();
         if (searchTerm !== '') {
+            navigate('/search');
             const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
             const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
 
@@ -65,11 +68,11 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
                     <IoIosSearch />
                 </button>
             </form>
-            <div className="menu">
+            <div className={`menu ${menuActive ? 'active' : ''}`}>
                 <ul className='browser-menu'>
-                    <li><Link to="/top-rated">Cinéma</Link></li>
-                    <li><Link to="/series">Séries</Link></li>
-                    <li><Link to="/trailers">Trailers</Link></li>
+                    <li onClick={handleMenuClick}><Link to="/top-rated">Cinéma</Link></li>
+                    <li onClick={handleMenuClick}><Link to="/series">Séries</Link></li>
+                    <li onClick={handleMenuClick}><Link to="/trailers">Trailers</Link></li>
                 </ul>
                 <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
                     <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>

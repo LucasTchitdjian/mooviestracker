@@ -12,6 +12,8 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
     }, [setSearch, setMovies, search]);
 
+    console.log(movies, search, setSearch, setMovies)
+
     return (
         <div className="moovies-list">
             <h2>Recherche</h2>
