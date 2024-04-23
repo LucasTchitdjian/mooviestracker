@@ -4,6 +4,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+
+const variants = {
+    open: {
+        transition: {
+            staggerChildren: 0.3,
+            stiffness: 1000,
+        },
+    },
+    closed: {
+        transition: {
+            staggerChildren: 0.1,
+            staggerDirection: -1,
+            damping: 3000,
+        },
+    },
+};
+
+const itemVariants = {
+    open: {
+        y: 0,
+        opacity: 1,
+    },
+    closed: {
+        y: 50,
+        opacity: 0,
+    },
+};
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
 
@@ -47,8 +75,26 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
     };
 
     const handleMenuClick = () => {
-       setMenuActive(!menuActive);
+        setMenuActive(!menuActive);
     }
+
+    const menuItems = [
+        {
+            id: 1,
+            name: 'Cinéma',
+            path: '/top-rated'
+        },
+        {
+            id: 2,
+            name: 'Séries',
+            path: '/series'
+        },
+        {
+            id: 3,
+            name: 'Trailers',
+            path: '/trailers'
+        }
+    ];
 
     return (
         <header>
@@ -69,11 +115,13 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
                 </button>
             </form>
             <div className={`menu ${menuActive ? 'active' : ''}`}>
-                <ul className='browser-menu'>
-                    <li onClick={handleMenuClick}><Link to="/top-rated">Cinéma</Link></li>
-                    <li onClick={handleMenuClick}><Link to="/series">Séries</Link></li>
-                    <li onClick={handleMenuClick}><Link to="/trailers">Trailers</Link></li>
-                </ul>
+                <motion.ul initial="closed" animate={menuActive ? "open" : "closed"} variants={variants} className='browser-menu'>
+                    {menuItems.map(item => (
+                        <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick}>
+                            <Link to={item.path}>{item.name}</Link>
+                        </motion.li>
+                    ))}
+                </motion.ul>
                 <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
                     <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>
                     <li onClick={handleMenuClick} className='close-hamburger'><RxCross2 /></li>
