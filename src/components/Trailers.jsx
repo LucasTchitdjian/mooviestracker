@@ -2,43 +2,45 @@ import React, { useEffect, useState } from 'react';
 import './Trailers.css';
 
 function Trailers({ mooviesNowPlaying, setTrailers, trailers }) {
-  const [trailersCache, setTrailersCache] = useState({});
+
+  const [trailersData, setTrailersData] = useState(() => {
+    const savedData = localStorage.getItem('trailersData');
+    return savedData ? JSON.parse(savedData) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('trailersData', JSON.stringify(trailersData));
+  }, [trailersData]);
 
   useEffect(() => {
     const fetchTrailerData = async () => {
       if (mooviesNowPlaying.length > 0) {
         const fetchPromises = mooviesNowPlaying.map(movie => {
-          if (trailersCache[movie.id]) {  // Use cached trailer if available
-            return Promise.resolve({ movieId: movie.id, trailer: trailersCache[movie.id] });
-          } else {
-            return fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`)
-              .then(response => response.json())
-              .then(data => {
-                if (data && data.results && data.results.length > 0) {
-                  const trailer = data.results.find(t => t.type === 'Trailer' && t.official) || data.results[0];
-                  return { movieId: movie.id, trailer };
-                }
-                return { movieId: movie.id, trailer: null };
-              });
-          }
+          return fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`)
+            .then(response => response.json())
+            .then(data => {
+              if (data && data.results && data.results.length > 0) {
+                const trailer = data.results.find(t => t.type === 'Trailer' && t.official) || data.results[0];
+                setTrailersData([...trailersData, trailer]);  // Set the trailers data state
+                return trailer;  // Return the trailer data
+              }
+              return null;  // Return null if no suitable trailer is found
+            });
         });
 
         const allResults = await Promise.all(fetchPromises);
-        const newTrailers = {};
-        const validTrailers = allResults.filter(result => result.trailer !== null).map(result => {
-          newTrailers[result.movieId] = result.trailer;  // Save to new trailers if fetched
-          return result.trailer;
-        });
-
-        setTrailersCache(prev => ({ ...prev, ...newTrailers })); // Update the cache with new trailers
-        setTrailers(validTrailers);
+        const validTrailers = allResults.filter(trailer => trailer !== null);  // Filter out any null results
+        setTrailersData(validTrailers);  // Set the trailers data state with all fetched trailers
+        setTrailers(validTrailers);  // Set the trailers state with all fetched trailers
+      } else {
+        setTrailers(trailersData);
       }
     };
 
     fetchTrailerData().catch(error => console.error('Failed to fetch trailers:', error));
-  }, [mooviesNowPlaying, trailersCache, setTrailers, trailers]);
+  }, [mooviesNowPlaying, setTrailers, setTrailersData, trailersData]);
 
-  if (!trailers || trailers.length === 0) {
+  if (!setTrailers || setTrailers.length === 0) {
     return <div className="trailers"><h2>No trailers available</h2></div>;
   }
 

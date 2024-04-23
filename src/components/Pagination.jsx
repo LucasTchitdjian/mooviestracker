@@ -8,7 +8,7 @@ export function Pagination({ page, totalPages, setCurrentPage, context }) {
 
     useEffect(() => {
         const pagesArray = [];
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 1; i <= 10; i++) {
             pagesArray.push(i);
         }
         setPages(pagesArray);

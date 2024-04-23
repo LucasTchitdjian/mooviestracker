@@ -3,7 +3,7 @@
     padding-left: 5vw;
     padding-top: 3vh;
     padding-bottom: 3vh;
-    font-size: clamp(1.25rem, 3vw, 3rem);
+    font-size: clamp(1.25rem, 2vw, 3rem);
 }
 
 .moovies-list ul {
