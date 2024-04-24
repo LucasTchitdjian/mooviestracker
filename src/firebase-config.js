@@ -6,13 +6,13 @@ import { getAuth } from 'firebase/auth';
 
 // Configuration de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyDxDT2ONOIsPn48-hj4yE4RppH560Zekhg",
-  authDomain: "mooviestracker.firebaseapp.com",
-  projectId: "mooviestracker",
-  storageBucket: "mooviestracker.appspot.com",
-  messagingSenderId: "175137125913",
-  appId: "1:175137125913:web:e95a6d625a83017aca1c88",
-  measurementId: "G-7VE81BRV4D"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
