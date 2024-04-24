@@ -24,6 +24,18 @@
     position: relative;
 }
 
+.moovies-list .card .add-watchlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ffd250;
+    color: #333;
+    padding: 8px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 999;
+}
+
 .moovies-list .card .moovie-info {
     position: absolute;
     display: none;
@@ -48,6 +60,11 @@
 }
 
 @media screen and (max-width: 450px) {
+
+    .moovies-list .card .add-watchlist {
+        left: 10px;
+        right: none;
+    }
 
     .moovie-container {
         display: flex;

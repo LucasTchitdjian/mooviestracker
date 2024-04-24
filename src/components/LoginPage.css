@@ -1,0 +1,31 @@
+.login {
+    padding: 20px 5vw;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.login h1 {
+    font-size: clamp(1.5rem, 2vw, 1.5rem);
+    color: #333;
+    text-transform: uppercase;
+}
+
+.login .input > input {
+    width: 50%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #ffd300;
+    color: #333;
+    border: none;
+    border-radius: 1.875rem;
+    cursor: pointer;
+    width: 30%;
+    text-transform: uppercase;
+    font-weight: 600;
+}

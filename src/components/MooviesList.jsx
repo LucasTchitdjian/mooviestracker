@@ -3,6 +3,41 @@ import './MooviesList.css';
 import { useEffect } from 'react';
 import { FaStar } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
+import { CiCirclePlus } from "react-icons/ci";
+import { db } from '../firebase-config';
+import { auth } from '../firebase-config';
+import { collection, addDoc } from 'firebase/firestore';
+
+const addToWatchlist = async (movie) => {
+    console.log("Trying to add movie to watchlist", movie);
+
+    if (!auth.currentUser) {
+        console.log("No user logged in.");
+        alert('Vous devez être connecté pour ajouter des films à votre watchlist');
+        return;
+    }
+
+    try {
+        const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+        console.log("Watchlist Reference:", watchlistRef);
+
+        const docRef = await addDoc(watchlistRef, {
+            title: movie.title || movie.name,
+            release_date: movie.release_date || movie.first_air_date,
+            poster_path: movie.poster_path,
+            type: movie.type,
+            id: movie.id,
+            timestamp: new Date()
+        });
+        console.log("Document written with ID: ", docRef.id);
+        alert('Film ajouté à votre watchlist');
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
+        alert('Erreur lors de l\'ajout du film à la watchlist');
+    }
+};
+
+
 
 export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages }) {
 
@@ -49,6 +84,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
+                                    <span onClick={() => addToWatchlist(moovie)} className='add-watchlist'><CiCirclePlus /></span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">

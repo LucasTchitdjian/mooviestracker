@@ -11,6 +11,9 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Moovies from './components/Moovies';
 import Footer from './components/Footer';
+import { LoginPage } from './components/LoginPage';
+import { RegisterPage } from './components/RegisterPage';
+import { WatchlistPage } from './components/WatchlistPage';
 
 function App() {
 
@@ -52,6 +55,9 @@ function App() {
             </>
           } />
           <Route path='/movie/:id' element={<SingleMoovies movies={movies} />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/watchlist" element={<WatchlistPage />} />
         </Routes>
       </Router>
       <Footer />
