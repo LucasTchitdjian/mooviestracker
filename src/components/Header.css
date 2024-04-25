@@ -48,7 +48,6 @@ header .form input[type="search"] {
 }
 
 header .menu ul {
-    display: none;
     align-items: center;
     gap: 20px;
 }

@@ -1,6 +1,7 @@
 // Importations nécessaires de Firebase depuis le fichier firebase-config.js
 import { auth } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import './RegisterPage.css';
 
 // Fonction pour créer un utilisateur
 const registerUser = (email, password) => {
