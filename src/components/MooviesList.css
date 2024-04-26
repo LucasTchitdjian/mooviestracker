@@ -33,7 +33,7 @@
     padding: 8px;
     border-radius: 10px;
     font-weight: bold;
-    z-index: 999;
+    z-index: 0;
 }
 
 .moovies-list .card .moovie-info {

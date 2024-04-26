@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 import { LoginPage } from './components/LoginPage';
 import { RegisterPage } from './components/RegisterPage';
 import { WatchlistPage } from './components/WatchlistPage';
+import { LogoutPage } from './components/LogoutPage';
 
 function App() {
 
@@ -25,11 +26,12 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
+  const [userConnected, setUserConnected] = useState(false); // [1] Ajoutez un état pour gérer la connexion de l'utilisateur
 
   return (
     <div className="App">
       <Router>
-        <Header setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <Routes>
           <Route path="/" element={<Navigate to="/now-playing" />} /> {/* Redirect to /now-playing */}
           <Route path="/now-playing" element={
@@ -55,9 +57,10 @@ function App() {
             </>
           } />
           <Route path='/movie/:id' element={<SingleMoovies movies={movies} />} />
-          <Route path='/login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
+          <Route path='/logout' element={<LogoutPage />} />
         </Routes>
       </Router>
       <Footer />

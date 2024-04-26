@@ -115,6 +115,63 @@ header .menu.active .browser-menu {
     color: white;
 }
 
+header .right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.account {
+    position: relative;
+    cursor: pointer;
+}
+
+.right.active .account::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 80vh;
+    background-color: #333;
+    border-radius: 10px;
+    right: 0;
+    top: 18px;
+    z-index: 1;
+    border: none;
+    outline: none;
+}
+
+.account .columns {
+    display: none;
+}
+
+.right.active .account .columns {
+    display: block;
+    position: absolute;
+    width: 300px;
+    right: 0;
+    z-index: 2;
+    color: white;
+}
+
+.right.active .account .columns a {
+    color: white;
+}
+
+.right.active .account .columns .row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    padding-left: 16px;
+    padding-top: 24px;
+}
+
+.account > img {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
 @media screen and (max-width: 450px) {
     .browser-menu li a {
         position: relative;

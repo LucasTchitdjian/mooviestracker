@@ -5,6 +5,11 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import reactLogo from '../logo192.png';
+import { FaArrowRightToBracket } from "react-icons/fa6";
+import { IoIosListBox } from "react-icons/io";
+import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
+
 
 // const variants = {
 //     open: {
@@ -33,13 +38,12 @@ const itemVariants = {
     },
 };
 
-export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
+export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected }) {
 
     const navigate = useNavigate();
 
     const [menuActive, setMenuActive] = useState(false);
-
-    console.log(menuActive, "menuActive")
+    const [accountActive, setAccountActive] = useState(false);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -77,7 +81,13 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
     };
 
     const handleMenuClick = () => {
-        setMenuActive(!menuActive);
+        if (!accountActive) {
+            setMenuActive(!menuActive);
+        }
+    }
+
+    const handleAccountClick = () => {
+        setAccountActive(!accountActive);
     }
 
     const menuItems = [
@@ -96,20 +106,32 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
             name: 'Trailers',
             path: '/trailers'
         },
+    ];
+
+    const accountItems = [
         {
-            id: 4,
-            name: 'Connexion',
-            path: '/login'
+            id: 1,
+            name: 'Se connecter',
+            path: '/login',
+            icon: <FaArrowRightToBracket />
         },
         {
-            id: 5,
-            name: 'Inscription',
-            path: '/register'
-        }, 
+            id: 2,
+            name: 'S\'inscrire',
+            path: '/register',
+            icon: <FaArrowRightToBracket />
+        },
         {
-            id: 6,
+            id: 3,
             name: 'Watchlist',
-            path: '/watchlist'
+            path: '/watchlist',
+            icon: <IoIosListBox />
+        }, {
+            id: 4,
+            name: 'Déconnexion',
+            path: '/logout',
+            icon: <FaArrowRightToBracket />,
+            onClick: handleLogout // Ajoutez une propriété onClick pour gérer la déconnexion
         }
     ];
 
@@ -134,18 +156,44 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
             {/* <div className="watchlist">
                 <Link to="/watchlist">Watchlist</Link>
             </div> */}
-            <div className={`menu ${menuActive ? 'active' : ''}`}>
-                <ul className='browser-menu'>
-                    {menuItems.map(item => (
-                        <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick}>
-                            <Link to={item.path}>{item.name}</Link>
-                        </motion.li>
-                    ))}
-                </ul>
-                <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
-                    <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>
-                    <li onClick={handleMenuClick} className='close-hamburger'><RxCross2 /></li>
-                </ul>
+            <div className={`right ${accountActive ? 'active' : ''}`}>
+                <div className="account" onClick={handleAccountClick}>
+                    <img src={reactLogo} alt="" />
+                    <p>{userConnected}</p>
+                    <div className="columns">
+                        {accountItems.map(item => {
+                            return (
+                                <div className="row" key={item.id}>
+                                    {item.icon}
+                                    <Link to={item.path} onClick={(e) => {
+                                        // Only prevent default if there is an onClick function to handle
+                                        if (item.onClick) {
+                                            e.preventDefault();
+                                            item.onClick(); // This is where handleLogout gets called
+                                        }
+                                        // No else block needed, let the default link behavior proceed
+                                    }}>
+                                        {item.name}
+                                    </Link>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                </div>
+                <div className={`menu ${menuActive ? 'active' : ''}`}>
+                    <ul className='browser-menu'>
+                        {menuItems.map(item => (
+                            <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick}>
+                                <Link to={item.path}>{item.name}</Link>
+                            </motion.li>
+                        ))}
+                    </ul>
+                    <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
+                        <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>
+                        <li onClick={handleMenuClick} className='close-hamburger'><RxCross2 /></li>
+                    </ul>
+                </div>
             </div>
         </header>
     );

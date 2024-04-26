@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase-config';
 
-export function LoginPage() {
+export function LoginPage({ setUserConnected }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,8 +16,8 @@ export function LoginPage() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log('Connexion réussie');
         alert('Connexion réussie');
+        setUserConnected(true); // [2] Mettez à jour l'état pour indiquer que l'utilisateur est connecté
         navigation('/');
       })
       .catch(error => {
