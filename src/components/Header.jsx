@@ -39,6 +39,8 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
 
     const [menuActive, setMenuActive] = useState(false);
 
+    console.log(menuActive, "menuActive")
+
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -103,6 +105,11 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
             id: 5,
             name: 'Inscription',
             path: '/register'
+        }, 
+        {
+            id: 6,
+            name: 'Watchlist',
+            path: '/watchlist'
         }
     ];
 
@@ -124,9 +131,9 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm }) {
                     <IoIosSearch />
                 </button>
             </form>
-            <div className="watchlist">
+            {/* <div className="watchlist">
                 <Link to="/watchlist">Watchlist</Link>
-            </div>
+            </div> */}
             <div className={`menu ${menuActive ? 'active' : ''}`}>
                 <ul className='browser-menu'>
                     {menuItems.map(item => (

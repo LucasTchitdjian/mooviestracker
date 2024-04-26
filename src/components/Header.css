@@ -7,8 +7,14 @@ header {
     background-color: #ffd300;
 }
 
-header a {
-    color: #000;
+header .logo a {
+    color: black;
+}
+
+header li a {
+    position: relative;
+    color: white;
+    z-index: 9999;
 }
 
 header .logo h1 {
@@ -17,7 +23,7 @@ header .logo h1 {
 }
 
 header .form {
-    width: 25%;
+    width: 50%;
     height: 2.125rem;
     border: 1px solid #fff;
     border-radius: 10px;
@@ -52,6 +58,19 @@ header .menu ul {
     gap: 20px;
 }
 
+.browser-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 50vw;
+    z-index: -1;
+}
+
 .open-hamburger {
     display: block;
 }
@@ -61,31 +80,45 @@ header .menu li {
     text-transform: uppercase;
 }
 
-.hamburger-menu li.open-hamburger, .hamburger-menu li.close-hamburger {
+header .menu.active .browser-menu {
+    z-index: 999;
+}
+
+.hamburger-menu li.close-hamburger {
     display: none;
 }
 
-@media screen and (max-width: 450px) {
-    .browser-menu {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        height: 100vh;
-        width: 50vw;
-        z-index: 999;
-    }
+.hamburger-menu {
+    cursor: pointer;
+}
 
+.hamburger-menu.active::after {
+    content: "";
+    position: fixed;
+    width: 50vw;
+    height: 100vh;
+    background-color: #000;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    border: none;
+    outline: none;
+}
+    
+.hamburger-menu.active > li.close-hamburger {
+    display: block;
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 9999;
+    font-size: 1.5rem;
+    color: white;
+}
+
+@media screen and (max-width: 450px) {
     .browser-menu li a {
         position: relative;
         color: #fff;
-    }
-
-    .menu .browser-menu li {
-        display: none;
     }
 
     .menu.active .browser-menu li {
@@ -94,7 +127,7 @@ header .menu li {
 
     .hamburger-menu li.open-hamburger {
         display: block;
-        z-index: 99999;
+        z-index: 3;
     }
     .hamburger-menu.active > li.open-hamburger {
         display: none;
@@ -111,28 +144,7 @@ header .menu li {
     .close-hamburger-menu svg {
         display: none;
     }
-    .hamburger-menu.active > li.close-hamburger {
-        display: block;
-        position: fixed;
-        top: 10px;
-        right: 20px;
-        z-index: 9999;
-        font-size: 1.5rem;
-    }
     .hamburger-menu.active > li.close-hamburger > svg {
         color: #fff;
-    }
-
-    .hamburger-menu.active::after {
-        content: "";
-        position: fixed;
-        width: 50vw;
-        height: 100vh;
-        background-color: #000;
-        top: 0;
-        right: 0;
-        z-index: 1;
-        border: none;
-        outline: none;
     }
 }
