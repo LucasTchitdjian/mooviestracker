@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import './SearchResultsList.css';
 import { useEffect } from 'react';
+import { FaPlus } from "react-icons/fa";
+import { addToWatchlist } from '../components/MooviesList';
 
 export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
@@ -21,6 +23,7 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                 {movies.map((moovie) => (
                     <Link to={`/movie/${moovie.id}`} key={moovie.id}>
                         <div className="card">
+                            <span onClick={() => addToWatchlist(moovie)} className='add-watchlist'><FaPlus /></span>
                             <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" />
                             <div className="moovie-info">
                             </div>

@@ -3,12 +3,12 @@ import './MooviesList.css';
 import { useEffect } from 'react';
 import { FaStar } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
-import { CiCirclePlus } from "react-icons/ci";
+import { FaPlus } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 
-const addToWatchlist = async (movie) => {
+export const addToWatchlist = async (movie) => {
     console.log("Trying to add movie to watchlist", movie);
 
     if (!auth.currentUser) {
@@ -84,7 +84,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
-                                    <span onClick={() => addToWatchlist(moovie)} className='add-watchlist'><CiCirclePlus /></span>
+                                    <span onClick={() => addToWatchlist(moovie)} className='add-watchlist'><FaPlus /></span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">

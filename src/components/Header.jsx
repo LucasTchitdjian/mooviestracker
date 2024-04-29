@@ -5,7 +5,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import reactLogo from '../logo192.png';
+import profilImg from '../PhotoLucas.jpg';
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
@@ -113,27 +113,33 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             id: 1,
             name: 'Se connecter',
             path: '/login',
-            icon: <FaArrowRightToBracket />
+            icon: <FaArrowRightToBracket />,
+            visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         },
         {
             id: 2,
             name: 'S\'inscrire',
             path: '/register',
-            icon: <FaArrowRightToBracket />
+            icon: <FaArrowRightToBracket />,
+            visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         },
         {
             id: 3,
             name: 'Watchlist',
             path: '/watchlist',
-            icon: <IoIosListBox />
+            icon: <IoIosListBox />,
+            visible: userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         }, {
             id: 4,
             name: 'Déconnexion',
             path: '/logout',
             icon: <FaArrowRightToBracket />,
+            visible: userConnected, // Ajoutez une propriété visible pour afficher ou masquer l'élément
             onClick: handleLogout // Ajoutez une propriété onClick pour gérer la déconnexion
         }
     ];
+
+    console.log('userConnected:', userConnected)
 
     return (
         <header>
@@ -158,11 +164,11 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             </div> */}
             <div className={`right ${accountActive ? 'active' : ''}`}>
                 <div className="account" onClick={handleAccountClick}>
-                    <img src={reactLogo} alt="" />
-                    <p>{userConnected}</p>
+                    <img src={profilImg} alt="" />
+                    <p>{userConnected ? 'connecté' : 'non connecté'}</p>
                     <div className="columns">
                         {accountItems.map(item => {
-                            return (
+                            return item.visible && (
                                 <div className="row" key={item.id}>
                                     {item.icon}
                                     <Link to={item.path} onClick={(e) => {
