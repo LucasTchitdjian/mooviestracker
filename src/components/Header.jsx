@@ -11,21 +11,21 @@ import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
 
 
-// const variants = {
-//     open: {
-//         transition: {
-//             staggerChildren: 0.3,
-//             stiffness: 1000,
-//         },
-//     },
-//     closed: {
-//         transition: {
-//             staggerChildren: 0.1,
-//             staggerDirection: -1,
-//             damping: 3000,
-//         },
-//     },
-// };
+const variants = {
+    open: {
+        transition: {
+            staggerChildren: 0.3,
+            stiffness: 1000,
+        },
+    },
+    closed: {
+        transition: {
+            staggerChildren: 0.1,
+            staggerDirection: -1,
+            damping: 3000,
+        },
+    },
+};
 
 const itemVariants = {
     open: {
@@ -188,9 +188,9 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
 
                 </div>
                 <div className={`menu ${menuActive ? 'active' : ''}`}>
-                    <ul className='browser-menu'>
+                    <ul className='browser-menu' variants={variants}>
                         {menuItems.map(item => (
-                            <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick}>
+                            <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick} initial="closed" animate={`${menuActive ? 'open' : 'closed'}`}>
                                 <Link to={item.path}>{item.name}</Link>
                             </motion.li>
                         ))}

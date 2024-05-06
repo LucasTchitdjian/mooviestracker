@@ -49,9 +49,9 @@ function SingleMoovies({ movies }) {
                             </div>
                             <div className="right">
                                 <div className="first-line">
-                                    <p>{formatDate(movie.release_date)} <span>en salle</span></p>
-                                    <p>| {formatRuntime(moovieInfos.runtime)}</p>
-                                    <p>| {movieGenres ? movieGenres : ""}</p>
+                                    <p> {formatDate(movie.release_date)} <span>en salle</span></p>
+                                    <p> {formatRuntime(moovieInfos.runtime)}</p>
+                                    <p> {movieGenres ? movieGenres : ""}</p>
                                 </div>
                                 <div className="second-line">
                                     <div className="rating">

@@ -7,7 +7,8 @@
     box-sizing: border-box;  /* S'assure que padding et border sont inclus dans la largeur/hauteur */
 }
 
-.pagination a:hover {
+.pagination .pages:hover {
+    padding: 10px;
     background-color: #f1f1f1;
     /* Pas besoin de répéter text-decoration, color, ou padding ici */
 }

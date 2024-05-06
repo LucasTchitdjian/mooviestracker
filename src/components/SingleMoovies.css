@@ -37,7 +37,8 @@
 
 .single-moovies .card .right .first-line {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
     gap: 5px;
     padding-top: 20px;
     padding-bottom: 20px;
