@@ -26,6 +26,20 @@
     position: relative;
 }
 
+.watchlist .card .delete-movies {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    padding: 5px;
+    background-color: black;
+    border-radius: 10px;
+    z-index: 99999;
+}
+
+.watchlist .card .delete-movies > svg {
+    color: red;
+}
+
 .watchlist .card .moovie-info {
     position: absolute;
     display: none;
