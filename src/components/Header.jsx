@@ -167,26 +167,32 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                     <img src={profilImg} alt="" />
                     <p>{userConnected ? 'connecté' : 'non connecté'}</p>
                     <div className="columns">
-                        {accountItems.map(item => {
-                            return item.visible && (
-                                <div className="row" key={item.id}>
-                                    {item.icon}
-                                    <Link to={item.path} onClick={(e) => {
-                                        // Only prevent default if there is an onClick function to handle
+                        {accountItems.map((item) => {
+                            // La condition pour vérifier si l'élément est visible est déplacée à l'extérieur du composant Link
+                            if (!item.visible) return null;
+                            return (
+                                <Link
+                                    to={item.path}
+                                    key={item.id}  // Clé déplacée ici pour assurer une performance optimale et éviter des erreurs de rendu
+                                    onClick={(e) => {
+                                        // Seulement empêcher le comportement par défaut si une fonction onClick est fournie
                                         if (item.onClick) {
                                             e.preventDefault();
-                                            item.onClick(); // This is where handleLogout gets called
+                                            item.onClick();
                                         }
-                                        // No else block needed, let the default link behavior proceed
-                                    }}>
-                                        {item.name}
-                                    </Link>
-                                </div>
+                                        // Pas besoin de bloc 'else', laissez le comportement par défaut du lien se poursuivre
+                                    }}
+                                >
+                                    <div className="row">
+                                        {item.icon}
+                                        <span>{item.name}</span> {/* Modification pour inclure le nom de l'élément dans un span pour un meilleur contrôle du style */}
+                                    </div>
+                                </Link>
                             );
                         })}
                     </div>
-
                 </div>
+
                 <div className={`menu ${menuActive ? 'active' : ''}`}>
                     <ul className='browser-menu' variants={variants}>
                         {menuItems.map(item => (

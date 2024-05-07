@@ -1,0 +1,50 @@
+.watchlist h2 {
+    text-align: left;
+    padding-left: 5vw;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+    font-size: clamp(1.25rem, 2vw, 3rem);
+}
+
+.watchlist ul {
+    padding-left: 5vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 150px));
+    gap: 20px;
+}
+
+.watchlist ul a {
+    width: 100%;
+}
+
+.watchlist li {
+    line-height: 1.5rem;
+}
+
+.watchlist .card {
+    cursor: pointer;
+    position: relative;
+}
+
+.watchlist .card .moovie-info {
+    position: absolute;
+    display: none;
+}
+
+.watchlist .card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.watchlist .card .title {
+    font-weight: bold;
+}
+
+.rating {
+    display: none;
+}
+
+.watchlist .right {
+    display: none;
+}
