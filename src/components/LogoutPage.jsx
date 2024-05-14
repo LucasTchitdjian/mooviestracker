@@ -1,4 +1,16 @@
-export function LogoutPage () {
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+export function LogoutPage({ setUserConnected }) {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setUserConnected(false);
+        localStorage.setItem('userConnected', JSON.stringify(false));
+        setTimeout(() => {
+            navigate('/');
+        }, 3000);
+    }, [navigate, setUserConnected]);
 
     return (
         <div className="logout">

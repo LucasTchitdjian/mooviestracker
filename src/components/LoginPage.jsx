@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import './LoginPage.css';
 import { auth } from '../firebase-config';
 
 export function LoginPage({ setUserConnected }) {
-
-  setPersistence(auth, browserLocalPersistence)
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,9 +15,11 @@ export function LoginPage({ setUserConnected }) {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
         setUserConnected(true);
+        localStorage.setItem('userConnected', JSON.stringify(true));
         navigate('/');
       } else {
         setUserConnected(false);
+        localStorage.setItem('userConnected', JSON.stringify(false));
       }
     });
     return () => unsubscribe();
@@ -31,6 +31,7 @@ export function LoginPage({ setUserConnected }) {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in:', userCredential.user);
       setUserConnected(true);
+      localStorage.setItem('userConnected', JSON.stringify(true));
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);

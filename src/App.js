@@ -7,7 +7,7 @@ import SingleMoovies from './components/SingleMoovies';
 import { Pagination } from './components/Pagination';
 import { SearchResultsList } from './components/SearchResultsList';
 import SingleSeries from './components/SingleSeries';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Moovies from './components/Moovies';
 import Footer from './components/Footer';
@@ -15,6 +15,8 @@ import { LoginPage } from './components/LoginPage';
 import { RegisterPage } from './components/RegisterPage';
 import { WatchlistPage } from './components/WatchlistPage';
 import { LogoutPage } from './components/LogoutPage';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase-config';
 
 function App() {
 
@@ -27,6 +29,31 @@ function App() {
   const [totalPages, setTotalPages] = useState(0);
   const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
   const [userConnected, setUserConnected] = useState(false); // [1] Ajoutez un état pour gérer la connexion de l'utilisateur
+
+  // Load userConnected state from localStorage and Firebase when the app loads
+  useEffect(() => {
+    const userConnectedFromStorage = localStorage.getItem('userConnected');
+    if (userConnectedFromStorage) {
+      setUserConnected(JSON.parse(userConnectedFromStorage));
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        setUserConnected(true);
+        localStorage.setItem('userConnected', JSON.stringify(true));
+      } else {
+        setUserConnected(false);
+        localStorage.setItem('userConnected', JSON.stringify(false));
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Save userConnected state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('userConnected', JSON.stringify(userConnected));
+  }, [userConnected]);
 
   return (
     <div className="App">
@@ -60,7 +87,7 @@ function App() {
           <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
-          <Route path='/logout' element={<LogoutPage />} />
+          <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
         </Routes>
       </Router>
       <Footer />
