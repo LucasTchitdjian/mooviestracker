@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
 import './MooviesList.css';
 import { useEffect } from 'react';
-import { FaStar } from "react-icons/fa";
-import { FaPlay } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
+import { FaStar, FaPlay, FaPlus, FaCheck } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
 import { setDoc, doc } from 'firebase/firestore';
+import { useState } from 'react';
 
-export const addToWatchlist = async (movie) => {
+export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
     if (!auth.currentUser) {
         console.log("No user logged in.");
@@ -28,6 +27,7 @@ export const addToWatchlist = async (movie) => {
             release_date: movie.release_date || movie.first_air_date,
             timestamp: new Date()
         });
+        setMoviesAddedToWatchlist(prevState => [...prevState, movieId]); // Ajouter l'id du film à la liste des films ajoutés à la watchlist
         alert('Film ajouté à votre watchlist');
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
@@ -36,6 +36,8 @@ export const addToWatchlist = async (movie) => {
 };
 
 export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages }) {
+
+    const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
         const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
@@ -80,7 +82,10 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
-                                    <span onClick={() => addToWatchlist(moovie)} className='add-watchlist'><FaPlus /></span>
+                                    <span onClick={(e) => {
+                                        e.preventDefault();
+                                        addToWatchlist(moovie, setMoviesAddedToWatchlist);
+                                    }} className='add-watchlist'>{moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">
