@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase-config';
-import { query, onSnapshot, orderBy, collection, deleteDoc, doc } from 'firebase/firestore'; // 'collection' removed if not used directly
-// import { Link } from 'react-router-dom';
+import { query, onSnapshot, orderBy, collection, deleteDoc, doc } from 'firebase/firestore';
 import { FaPlay } from "react-icons/fa";
 import './WatchlistPage.css';
 import { RxCross2 } from "react-icons/rx";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function WatchlistPage() {
+    const notify = () => toast.error("Film supprimé de votre watchlist !", {
+        autoClose: 3000,
+    });
     const [watchlist, setWatchlist] = useState([]);
 
     useEffect(() => {
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        setWatchlist(storedWatchlist);
         if (!auth.currentUser) {
             alert('Vous devez être connecté pour accéder à votre liste de visionnage');
             return;
         }
 
-        // Using the new SDK syntax for accessing Firestore collections
         const watchlistRef = collection(db, "users", auth.currentUser.uid, "watchlist");
         const q = query(watchlistRef, orderBy('timestamp', 'desc'));
 
@@ -30,10 +35,6 @@ export function WatchlistPage() {
         return () => unsubscribe();
     }, []);
 
-    // const ratingFormat = (rating) => {
-    //     return rating.toFixed(1).toString().replace('.', ',');
-    // }
-
     const formatDate = (date) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(date).toLocaleDateString('fr-FR', options);
@@ -45,8 +46,11 @@ export function WatchlistPage() {
             const movieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', stringMovieId);
             try {
                 await deleteDoc(movieRef);
-                alert('Film supprimé de votre watchlist');
-                setWatchlist(watchlist.filter(movie => movie.id !== movieId));
+                setWatchlist(prevWatchlist => {
+                    const updatedWatchlist = prevWatchlist.filter(movie => movie.id !== movieId);
+                    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+                    return updatedWatchlist;
+                })
             } catch (error) {
                 console.error('Erreur lors de la suppression du film de la watchlist :', error);
             }
@@ -55,6 +59,7 @@ export function WatchlistPage() {
 
     return (
         <div className="watchlist">
+            <ToastContainer />
             <h2>Ma Liste à visionner</h2>
             <ul>
                 {watchlist.map(movie => (
@@ -62,8 +67,9 @@ export function WatchlistPage() {
                         <div className="left">
                             <div className="card">
                                 <div className="delete-movies" onClick={(e) => {
-                                    e.stopPropagation(); // Arrête la propagation, mais n'est plus nécessaire ici
-                                    deleteMovie(movie.id);
+                                    e.stopPropagation(); // Arrête la propagation de l'événement de clic
+                                    deleteMovie(movie.id, setWatchlist);
+                                    notify();
                                 }}>
                                     <RxCross2 />
                                 </div>
@@ -73,7 +79,6 @@ export function WatchlistPage() {
                             </div>
                         </div>
                         <div className="right" onClick={() => {
-                            // Redirection programmée au clic sur la partie droite
                             window.location.href = `/movie/${movie.id}`;
                         }}>
                             <div className="first-col">

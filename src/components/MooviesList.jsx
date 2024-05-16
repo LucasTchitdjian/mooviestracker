@@ -6,6 +6,8 @@ import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
 import { setDoc, doc } from 'firebase/firestore';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
@@ -42,7 +44,6 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
             return newWatchlist;
          }); 
 
-        alert('Film ajouté à votre watchlist');
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
         alert('Erreur lors de l\'ajout du film à la watchlist');
@@ -50,7 +51,9 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 };
 
 export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages }) {
-
+    const notify = () => toast.success("Film ajouté à votre watchlist", {
+        autoClose: 3000,
+    });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
@@ -93,6 +96,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
 
     return (
         <div className="moovies-list">
+            <ToastContainer />
             <h2>Liste des films et séries à l'affiche</h2>
             <ul>
                 {movies.map((moovie) => (
@@ -103,6 +107,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                                     <span onClick={(e) => {
                                         e.preventDefault();
                                         addToWatchlist(moovie, setMoviesAddedToWatchlist);
+                                        notify();
                                     }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
