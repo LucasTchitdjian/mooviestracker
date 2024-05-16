@@ -19,6 +19,15 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
         const movieId = movie.id.toString(); // utiliser l'id du film comme id du document
         const movieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', movieId);
 
+        // Récuperer la watchlist depuis local storage
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+
+        // Vérifier si le film est déjà dans la watchlist
+        if (storedWatchlist.includes(movieId)) {
+            alert('Ce film est déjà dans votre watchlist');
+            return;
+        }
+
         await setDoc(movieRef, {
             id: movie.id,
             title: movie.title || movie.name,
@@ -27,7 +36,12 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
             release_date: movie.release_date || movie.first_air_date,
             timestamp: new Date()
         });
-        setMoviesAddedToWatchlist(prevState => [...prevState, movieId]); // Ajouter l'id du film à la liste des films ajoutés à la watchlist
+        setMoviesAddedToWatchlist(prevState => { 
+            const newWatchlist = [...prevState, movieId];
+            localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
+            return newWatchlist;
+         }); 
+
         alert('Film ajouté à votre watchlist');
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
@@ -40,6 +54,10 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
+
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || []; // Récuperer la watchlist depuis local storage
+        setMoviesAddedToWatchlist(storedWatchlist); // Mettre à jour le state moviesAddedToWatchlist avec la watchlist
+
         const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
@@ -85,7 +103,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                                     <span onClick={(e) => {
                                         e.preventDefault();
                                         addToWatchlist(moovie, setMoviesAddedToWatchlist);
-                                    }} className='add-watchlist'>{moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                                    }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">
