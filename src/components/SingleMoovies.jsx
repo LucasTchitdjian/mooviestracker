@@ -35,7 +35,7 @@ function SingleMoovies({ movies }) {
         const fetchMoovieInfos = async () => {
             setLoading(true);
             // Vérifiez d'abord si les informations sont déjà dans localStorage
-            const storedMoovieInfos = localStorage.getItem(`moovieInfos_${id}`);
+            const storedMoovieInfos = localStorage.getItem(`moovieInfos_${id}`);         
 
             if (storedMoovieInfos) {
                 // Utilisez les informations stockées dans localStorage
@@ -45,7 +45,7 @@ function SingleMoovies({ movies }) {
                 // Si non, faites une requête à l'API
                 try {
                     const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=d7e7ae694a392629f56dea0d38fd160e`);
-                    const data = await response.json();
+                    const data = await response.json(); 
                     setMoovieInfos(data);
                     // Stockez les informations dans localStorage
                     localStorage.setItem(`moovieInfos_${id}`, JSON.stringify(data));
@@ -66,7 +66,7 @@ function SingleMoovies({ movies }) {
         return <p>Chargement...</p>;
     }
 
-    const displayedMovie = movie || moovieInfos;
+    const displayedMovie = moovieInfos || movie;
 
     return (
         <div className="wrapper">
@@ -81,7 +81,7 @@ function SingleMoovies({ movies }) {
                             <div className="right">
                                 <div className="first-line">
                                     <p>{formatDate(displayedMovie.release_date)} <span>en salle</span></p>
-                                    <p>{formatRuntime(displayedMovie.runtime)}</p>
+                                    <p>{formatRuntime(displayedMovie?.runtime)}</p>
                                     <p>{movieGenres ? movieGenres : ""}</p>
                                 </div>
                                 <div className="second-line">
@@ -98,7 +98,7 @@ function SingleMoovies({ movies }) {
                 )}
                 <div className="synopsis">
                     <h3>Synopsis</h3>
-                    <p>{displayedMovie.overview}</p>
+                    <p>{displayedMovie?.overview || "Pas de synopsis"}</p>
                 </div>
             </div>
         </div>
