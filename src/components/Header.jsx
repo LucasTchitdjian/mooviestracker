@@ -10,7 +10,6 @@ import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
 
-
 const variants = {
     open: {
         transition: {
@@ -150,7 +149,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                 <div className="input">
                     <input
                         type="search"
-                        placeholder="Rechercher un film, une série"
+                        placeholder="Rechercher"
                         value={searchTerm}
                         onChange={handleSearchChange}
                     />

@@ -8,7 +8,7 @@ export function LoginPage({ setUserConnected }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null); // [1] Ajouter un état pour gérer les erreurs
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,8 +36,8 @@ export function LoginPage({ setUserConnected }) {
     } catch (error) {
       console.error('Login error:', error);
       setError(error.message);
-    }
   };
+}
 
   return (
     <div className="login">

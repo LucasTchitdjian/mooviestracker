@@ -11,10 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
-    if (!auth.currentUser) {
+    if (!auth.currentUser) { // Check if user is logged in
         console.log("No user logged in.");
         alert('Vous devez être connecté pour ajouter des films à votre watchlist');
-        return;
+        return; // Stop execution if not logged in
     }
 
     try {
@@ -38,11 +38,11 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
             release_date: movie.release_date || movie.first_air_date,
             timestamp: new Date()
         });
-        setMoviesAddedToWatchlist(prevState => { 
+        setMoviesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, movieId];
             localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
             return newWatchlist;
-         }); 
+        });
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
@@ -50,11 +50,37 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
     }
 };
 
-export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages }) {
-    const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoClose: 3000,
-    });
+export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages, setPage }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
+
+    const notify = () => toast.success("Film ajouté à votre watchlist", { autoClose: 3000 });
+
+    useEffect(() => {
+        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
+            .then(response => response.json())
+            .then(data => {
+                setPage(data.total_pages);
+                setMovies(data.results);
+            });
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        setMoviesAddedToWatchlist(storedWatchlist);
+    }, [setMovies, currentPage, setPage]);
+
+    const handleAddToWatchlist = (movie) => {
+        if (auth.currentUser) {
+            addToWatchlist(movie, setMoviesAddedToWatchlist)
+                .then(() => {
+                    notify(); // Call notify after successful addition
+                })
+                .catch(error => {
+                    console.error("Error adding to watchlist:", error);
+                    // Optionally, you could display an error toast here
+                    toast.error("Erreur lors de l'ajout à la watchlist");
+                });
+        } else {
+            alert('Vous devez être connecté pour ajouter des films à votre watchlist');
+        }
+    };
 
     useEffect(() => {
 
@@ -106,8 +132,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                                 <div className="card">
                                     <span onClick={(e) => {
                                         e.preventDefault();
-                                        addToWatchlist(moovie, setMoviesAddedToWatchlist);
-                                        notify();
+                                        handleAddToWatchlist(moovie);
                                     }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}

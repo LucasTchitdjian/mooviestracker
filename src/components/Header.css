@@ -9,6 +9,7 @@ header {
 
 header .logo a {
     color: black;
+    width: 100%;
 }
 
 header li a {
@@ -19,7 +20,7 @@ header li a {
 
 header .logo h1 {
     text-align: left;
-    font-size: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(0.725rem, 3vw, 2rem);
 }
 
 header .form {
@@ -179,6 +180,10 @@ header .right {
 }
 
 @media screen and (max-width: 450px) {
+    .browser-menu {
+        width: 50vw;
+    }
+
     .browser-menu li a {
         position: relative;
         color: #fff;
@@ -197,6 +202,7 @@ header .right {
     }
     header {
         padding: 10px 3vw;
+        gap: 20px;
     }
     header .form {
         width: 60%;
@@ -209,5 +215,12 @@ header .right {
     }
     .hamburger-menu.active > li.close-hamburger > svg {
         color: #fff;
+    }
+    .account p {
+        display: none;
+    }
+
+    .hamburger-menu.active::after {
+        width: 50vw;
     }
 }

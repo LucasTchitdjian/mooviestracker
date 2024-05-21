@@ -103,10 +103,10 @@
 
  @media screen and (max-width: 450px) {
     .wrapper {
-        padding: 1rem 2rem;
+        padding: 1rem 1rem;
     }
-    .single-moovies .card .left {
-        width: 100%;
+    .single-series .card .left {
+        width: 50%;
     }
     .single-moovies .card {
         flex-direction: column;

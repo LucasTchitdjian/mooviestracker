@@ -1,6 +1,7 @@
 .wrapper {
-    padding: 3rem 5rem;
+    padding: 1rem 5rem;
     background-color: #f2f2f2;
+    min-height: 100vh;
 }
 
 .single-moovies {
@@ -37,8 +38,8 @@
 
 .single-moovies .card .right .first-line {
     display: flex;
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
     gap: 5px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -82,6 +83,7 @@
 
 .synopsis h3 {
     position: relative;
+    padding-left: 2px;
 }
 
 .synopsis h3::after {
@@ -98,3 +100,22 @@
     max-width: 70ch;
     padding-top: 20px;
 }
+
+ @media screen and (max-width: 450px) {
+    .wrapper {
+        padding: 1rem 1rem;
+    }
+    .single-moovies .card .left {
+        width: 50%;
+    }
+    .single-moovies .card {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .single-moovies .card .right .first-line {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+ }
