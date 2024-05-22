@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './SingleSeries.css';
+import { Link } from 'react-router-dom';
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 function SingleSeries({ series }) {
     const [serieInfos, setSerieInfos] = useState(null);
@@ -69,6 +71,9 @@ function SingleSeries({ series }) {
 
     return (
         <div className="wrapper">
+            <div className="back-btn">
+                <Link to="/series"><FaLongArrowAltLeft /> Retour</Link>
+            </div>
             <div className='single-series'>
                 {serieInfos ? (
                     <>

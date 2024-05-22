@@ -19,7 +19,7 @@
 }
 
 .series .card li {
-    line-height: 1.5;
+    line-height: 1.5;;
 }
 
 .series .card {
@@ -59,8 +59,12 @@
     gap: 10px;
 }
 
+.series-container li {
+    font-weight: bold;
+}
+
 @media screen and (max-width: 400px) {
     .series ul {
-        gap: 10px;
+        gap: 20px;
     } 
 }

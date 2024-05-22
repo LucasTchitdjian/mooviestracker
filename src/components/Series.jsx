@@ -23,9 +23,7 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         setSeriesAddedToWatchlist(storedWatchlist);
     }, [setSeries, setPage, currentPage]);
-
-    console.log(series, "series")
-
+    
     return (
         <div className='series'>
             <ToastContainer />
@@ -50,7 +48,7 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
                             </div>
                             <div className="right">
                                 <li className="title">{serie.name}</li>
-                                <li>Spectateurs {serie.vote_average.toFixed(1).replace('.', ',')}</li>
+                                <li>Note: {serie.vote_average.toFixed(1).replace('.', ',')} /10</li>
                             </div>
                         </div>
                     </Link>

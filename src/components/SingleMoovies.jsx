@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './SingleMoovies.css';
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
@@ -35,7 +36,7 @@ function SingleMoovies({ movies }) {
         const fetchMoovieInfos = async () => {
             setLoading(true);
             // Vérifiez d'abord si les informations sont déjà dans localStorage
-            const storedMoovieInfos = localStorage.getItem(`moovieInfos_${id}`);         
+            const storedMoovieInfos = localStorage.getItem(`moovieInfos_${id}`);
 
             if (storedMoovieInfos) {
                 // Utilisez les informations stockées dans localStorage
@@ -45,7 +46,7 @@ function SingleMoovies({ movies }) {
                 // Si non, faites une requête à l'API
                 try {
                     const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=d7e7ae694a392629f56dea0d38fd160e`);
-                    const data = await response.json(); 
+                    const data = await response.json();
                     setMoovieInfos(data);
                     // Stockez les informations dans localStorage
                     localStorage.setItem(`moovieInfos_${id}`, JSON.stringify(data));
@@ -70,6 +71,9 @@ function SingleMoovies({ movies }) {
 
     return (
         <div className="wrapper">
+            <div className="back-btn">
+                <Link to='/now-playing'><FaLongArrowAltLeft /> Retour</Link>
+            </div>
             <div className='single-moovies'>
                 {displayedMovie ? (
                     <>
