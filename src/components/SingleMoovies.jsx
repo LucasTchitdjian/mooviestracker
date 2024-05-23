@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import './SingleMoovies.css';
 import { FaLongArrowAltLeft } from "react-icons/fa";
 
@@ -7,6 +7,29 @@ function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const collection = searchParams.get('collection');
+
+    // Déterminez le chemin de retour en fonction de la collection
+    let backPath = '/'; // Chemin par défaut
+    if (collection === 'now-playing') {
+        backPath = '/now-playing';
+    } else if (collection === 'top-rated') {
+        backPath = '/top-rated';
+    } else {
+        // Si la collection n'est pas spécifiée, utilisez le chemin actuel comme chemin de retour
+        backPath = location.pathname.split('/').slice(0, -1).join('/');
+    }
+
+    // Déterminez le lien à afficher en fonction du backPath 
+    let linkTo = "/"; // Chemin par défaut vers la page d'accueil
+    if (backPath.startsWith('/now-playing')) {
+        linkTo = '/now-playing';
+    } else if (backPath.startsWith('/top-rated')) {
+        linkTo = '/top-rated';
+    }
 
     // Utilise find pour obtenir directement le film désiré.
     const movie = movies.find(movie => movie.id === parseInt(id, 10));
@@ -72,7 +95,7 @@ function SingleMoovies({ movies }) {
     return (
         <div className="wrapper">
             <div className="back-btn">
-                <Link to='/now-playing'><FaLongArrowAltLeft /> Retour</Link>
+                <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
             </div>
             <div className='single-moovies'>
                 {displayedMovie ? (

@@ -4,21 +4,6 @@
     min-height: 100vh;
 }
 
-.back-btn {
-    padding: 7px 10px;
-    background-color: #333;
-    width: 30%;
-    position: absolute;
-}
-
-.back-btn a {
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
 .single-moovies {
     padding: 1rem;
     padding-left: 5vw;
@@ -121,11 +106,12 @@
         padding: 1rem 1rem;
     }
     .single-moovies .card .left {
-        width: 50%;
+        width: 100%;
     }
     .single-moovies .card {
         flex-direction: column;
         gap: 10px;
+        align-items: flex-start;
     }
     .single-moovies .card .right .first-line {
         padding-top: 10px;

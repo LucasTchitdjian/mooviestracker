@@ -138,8 +138,6 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
         }
     ];
 
-    console.log('userConnected:', userConnected)
-
     return (
         <header>
             <div className="logo">

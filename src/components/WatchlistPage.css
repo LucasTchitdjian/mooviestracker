@@ -63,10 +63,6 @@
     font-weight: bold;
 }
 
-.rating {
-    display: none;
-}
-
 .watchlist .right .first-col {
     display: flex;
     align-items: center;

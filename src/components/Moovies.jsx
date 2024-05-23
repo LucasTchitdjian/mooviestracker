@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import './Moovies.css';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { FaPlus, FaCheck } from "react-icons/fa";
+import { FaPlus, FaCheck, FaStar } from "react-icons/fa";
 import { addToWatchlist } from './MooviesList'; // Assuming you have addToWatchlist in MooviesList
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from '../firebase-config';
+import { getDocs, collection } from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
 
@@ -15,7 +17,9 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
             addToWatchlist(movie, setMoviesAddedToWatchlist);
             notify();
         } else {
-            alert('Vous devez être connecté pour ajouter des films à votre watchlist');
+            toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
+                autoClose: 3000,
+            });
         }
     };
 
@@ -24,14 +28,14 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
     });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            return "Date inconnue";
-        }
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Intl.DateTimeFormat('fr-FR', options).format(date);
-    };
+    // const formatDate = (dateString) => {
+    //     const date = new Date(dateString);
+    //     if (isNaN(date.getTime())) {
+    //         return "Date inconnue";
+    //     }
+    //     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    //     return new Intl.DateTimeFormat('fr-FR', options).format(date);
+    // };
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
@@ -42,7 +46,29 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
             });
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         setMoviesAddedToWatchlist(storedWatchlist);
+
+        if (auth.currentUser) {
+            // Fetch watchlist from Firestore when user is logged in
+            const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+            getDocs(watchlistRef)
+                .then(snapshot => {
+                    const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
+                    setMoviesAddedToWatchlist(watchlistMovies);
+                })
+                .catch(error => {
+                    console.error("Error getting watchlist:", error);
+                    toast.error("Erreur lors de la récupération de la watchlist", {
+                        autoClose: 3000,
+                    });
+                });
+        } else {
+            // Clear watchlist when user is not logged in
+            setMoviesAddedToWatchlist([]);
+        }
+
     }, [setMovies, currentPage, setPage]);
+
+    console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist")
 
     return (
         <div className='moovies'>
@@ -50,7 +76,7 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
             <h2>Liste des films les mieux notés de tous les temps</h2>
             <ul>
                 {movies.map((moovie, index) => (
-                    <Link to={`/movie/${moovie.id}`} key={moovie.id} index={index}>
+                    <Link to={`/top-rated/movie/${moovie.id}`} key={moovie.id} index={index}>
                         <div className="moovies-container">
                             <div className="left">
                                 <div className="card">
@@ -62,13 +88,13 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
                                         style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
                                         {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}
                                     </span>
+                                    <p className='rating'><FaStar /> {moovie.vote_average.toFixed(1).replace('.', ',')}</p>
                                     <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt={moovie.title} />
                                 </div>
                             </div>
                             <div className="right">
                                 <li className='title'>{moovie.title}</li>
-                                <li>Date de sortie: {formatDate(moovie.release_date)}</li>
-                                <li>Spectateurs {moovie.vote_average.toFixed(1).replace('.', ',')}</li>
+                                {/* <li>Date de sortie: {formatDate(moovie.release_date)}</li> */}
                             </div>
                         </div>
                     </Link>

@@ -13,7 +13,9 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
     if (!auth.currentUser) { // Check if user is logged in
         console.log("No user logged in.");
-        alert('Vous devez être connecté pour ajouter des films à votre watchlist');
+        toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
+            autoClose: 3000,
+        });
         return; // Stop execution if not logged in
     }
 
@@ -26,7 +28,9 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
         // Vérifier si le film est déjà dans la watchlist
         if (storedWatchlist.includes(movieId)) {
-            alert('Ce film est déjà dans votre watchlist');
+            toast.warning("Ce film est déjà dans votre watchlist", {
+                autoClose: 3000,
+            });
             return;
         }
 
@@ -46,7 +50,9 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
-        alert('Erreur lors de l\'ajout du film à la watchlist');
+        toast.error("Erreur lors de l'ajout à la watchlist", {
+            autoClose: 3000,
+        });
     }
 };
 
@@ -78,7 +84,9 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                     toast.error("Erreur lors de l'ajout à la watchlist");
                 });
         } else {
-            alert('Vous devez être connecté pour ajouter des films à votre watchlist');
+            toast.warning("Vous devez être connecté pour ajouter des films à votre watchlist", {
+                autoClose: 3000,
+            });
         }
     };
 
@@ -115,10 +123,10 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
         return rating.toFixed(1).toString().replace('.', ',');
     }
 
-    const formatDate = (date) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString('fr-FR', options);
-    }
+    // const formatDate = (date) => {
+    //     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    //     return new Date(date).toLocaleDateString('fr-FR', options);
+    // }
 
     return (
         <div className="moovies-list">
@@ -126,7 +134,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
             <h2>Liste des films et séries à l'affiche</h2>
             <ul>
                 {movies.map((moovie) => (
-                    <Link to={`/${moovie.type}/${moovie.id}`} key={moovie.id}>
+                    <Link to={`/now-playing/${moovie.type}/${moovie.id}`} key={moovie.id}>
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
@@ -143,7 +151,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
                             <div className="right">
                                 <div className="first-col">
                                     <li className='title'>{moovie.title || moovie.name}</li>
-                                    <li>{formatDate(moovie.release_date) || formatDate(moovie.first_air_date)}</li>
+                                    {/* <li>{formatDate(moovie.release_date) || formatDate(moovie.first_air_date)}</li> */}
                                 </div>
                                 <div className="second-col">
                                     <a className='play-btn' href="youtube.com">

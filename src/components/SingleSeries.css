@@ -6,17 +6,18 @@
 
 .back-btn {
     padding: 7px 10px;
-    background-color: #333;
     width: 30%;
     position: absolute;
 }
 
 .back-btn a {
-    color: white;
+    color: #333;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 .single-series {
@@ -121,10 +122,11 @@
         padding: 1rem 1rem;
     }
     .single-series .card .left {
-        width: 50%;
+        width: 100%;
     }
-    .single-moovies .card {
+    .single-series .card {
         flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
     .single-moovies .card .right .first-line {

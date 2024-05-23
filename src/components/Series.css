@@ -10,7 +10,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-template-rows: auto;
-    gap: 0;
+    gap: 20px;
 }
 
 .series ul a {
@@ -44,7 +44,7 @@
 .series .card .add-watchlist {
     position: absolute;
     top: 10px;
-    right: 10px;
+    left: 10px;
     background-color: #ffd250;
     color: #333;
     padding: 7px 10px;
@@ -63,8 +63,30 @@
     font-weight: bold;
 }
 
+.series-container li.title {
+    display: none;
+}
+
+.series-container .rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #333;
+    color: white;
+    padding: 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.rating > svg {
+    color: #ffd250 ;
+}
+
 @media screen and (max-width: 400px) {
-    .series ul {
-        gap: 20px;
-    } 
+    
+    .series-container li.title {
+        display: block;
+    }
 }

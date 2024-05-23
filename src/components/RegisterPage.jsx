@@ -2,15 +2,17 @@
 import { auth } from '../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import './RegisterPage.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { redirect } from 'react-router-dom';
 
 // Fonction pour créer un utilisateur
 const registerUser = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Utilisateur créé
-      const user = userCredential.user;
-      console.log("Utilisateur créé :", user);
+      toast.success("Votre compte a été créé avec succès", userCredential, { autoClose: 3000 });
       // Vous pouvez ici rediriger l'utilisateur ou afficher un message de succès
+      redirect('/login');
     })
     .catch((error) => {
       const errorMessage = error.message;
@@ -30,6 +32,7 @@ export function RegisterPage() {
 
   return (
     <div className="register">
+      <ToastContainer />
       <h1>Inscrivez-vous</h1>
       <form className="form" onSubmit={handleSubmit}>
         <div className="input">

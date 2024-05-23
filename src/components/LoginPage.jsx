@@ -21,7 +21,6 @@ export function LoginPage({ setUserConnected }) {
         localStorage.setItem('userConnected', JSON.stringify(true));
         navigate('/');
       } else {
-        toast.error("Vous êtes déconnecté", { autoClose: 3000 });
         setUserConnected(false);
         localStorage.setItem('userConnected', JSON.stringify(false));
       }

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './Series.css';
 import { Link } from 'react-router-dom';
-import { FaPlus, FaCheck } from "react-icons/fa";
+import { FaPlus, FaCheck, FaStar } from "react-icons/fa";
 import { addToWatchlist } from './MooviesList'; // Assuming you have addToWatchlist in MooviesList
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { auth } from '../firebase-config';
+import { getDocs, collection } from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 const Series = ({ series, setSeries, currentPage, setPage }) => {
 
@@ -22,8 +25,27 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
             });
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         setSeriesAddedToWatchlist(storedWatchlist);
+
+        if (auth.currentUser) {
+            // Fetch watchlist from Firestore when user is logged in
+            const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+            getDocs(watchlistRef)
+                .then(snapshot => {
+                    const watchlistSeries = snapshot.docs.map(doc => doc.data().id.toString());
+                    setSeriesAddedToWatchlist(watchlistSeries);
+                })
+                .catch(error => {
+                    console.error("Error getting watchlist:", error);
+                    toast.error("Erreur lors de la récupération de la watchlist", {
+                        autoClose: 3000,
+                    });
+                });
+        } else {
+            // Clear watchlist when user is not logged in
+            setSeriesAddedToWatchlist([]);
+        }
     }, [setSeries, setPage, currentPage]);
-    
+
     return (
         <div className='series'>
             <ToastContainer />
@@ -43,12 +65,13 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
                                         style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
                                         {Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serie.id.toString()) ? <FaCheck /> : <FaPlus />}
                                     </span>
+                                    <p className='rating'><FaStar /> {serie.vote_average.toFixed(1).replace('.', ',')}</p>
                                     <img src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`} alt={serie.name} />
                                 </div>
                             </div>
                             <div className="right">
                                 <li className="title">{serie.name}</li>
-                                <li>Note: {serie.vote_average.toFixed(1).replace('.', ',')} /10</li>
+                                {/* <li>Note: {serie.vote_average.toFixed(1).replace('.', ',')} /10</li> */}
                             </div>
                         </div>
                     </Link>
