@@ -83,7 +83,8 @@ function App() {
               <Pagination context="top-rated" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
-          <Route path='/movie/:id' element={<SingleMoovies movies={movies} />} />
+          <Route path='/now-playing/movie/:id' element={<SingleMoovies movies={movies} />} />
+          <Route path='/top-rated/movie/:id' element={<SingleMoovies movies={movies} />} />
           <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
