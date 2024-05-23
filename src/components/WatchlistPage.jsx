@@ -17,7 +17,9 @@ export function WatchlistPage() {
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
         setWatchlist(storedWatchlist);
         if (!auth.currentUser) {
-            alert('Vous devez être connecté pour accéder à votre liste de visionnage');
+            toast.error("Vous devez être connecté pour voir votre watchlist", {
+                autoClose: 3000,
+            });
             return;
         }
 
