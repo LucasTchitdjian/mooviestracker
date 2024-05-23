@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import './LoginPage.css';
 import { auth } from '../firebase-config';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function LoginPage({ setUserConnected }) {
 
@@ -14,10 +16,12 @@ export function LoginPage({ setUserConnected }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
+        toast.success("Vous êtes connecté", { autoClose: 3000 });
         setUserConnected(true);
         localStorage.setItem('userConnected', JSON.stringify(true));
         navigate('/');
       } else {
+        toast.error("Vous êtes déconnecté", { autoClose: 3000 });
         setUserConnected(false);
         localStorage.setItem('userConnected', JSON.stringify(false));
       }
@@ -29,11 +33,12 @@ export function LoginPage({ setUserConnected }) {
     event.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log('User logged in:', userCredential.user);
+      toast.success("Vous êtes connecté", userCredential, { autoClose: 3000 });
       setUserConnected(true);
       localStorage.setItem('userConnected', JSON.stringify(true));
       navigate('/');
     } catch (error) {
+      toast.error("Erreur lors de la connexion", error, { autoClose: 3000 });
       console.error('Login error:', error);
       setError(error.message);
   };
@@ -41,6 +46,7 @@ export function LoginPage({ setUserConnected }) {
 
   return (
     <div className="login">
+      <ToastContainer />
       <h1>Connectez-vous</h1>
       <div className="form">
         <form onSubmit={handleLogin}>
