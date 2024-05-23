@@ -29,3 +29,21 @@
     text-transform: uppercase;
     font-weight: 600;
 }
+
+@media screen and (max-width: 768px) {
+    .register button[type="submit"] {
+        width: 50%;
+    }
+    .register .input > input {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .register button[type="submit"] {
+        width: 80%;
+    }
+    .register .input > input {
+        width: 100%;
+    }
+}
