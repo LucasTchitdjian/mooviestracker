@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './SearchResultsList.css';
 import { useEffect } from 'react';
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaStar } from "react-icons/fa";
 import { addToWatchlist } from '../components/MooviesList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,14 +26,17 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
     }, [setSearch, setMovies, search]);
 
-    console.log(movies, search, setSearch, setMovies)
+    // Fonction pour trier les films par vote_average décroissant
+    const sortMoviesByPopularity = (movies) => {
+        return movies.sort((a, b) => b.vote_average - a.vote_average); // Trier par ordre décroissant
+    };
 
     return (
         <div className="search-list">
             <ToastContainer />
             <h2>Recherche</h2>
             <ul>
-                {movies.map((moovie) => (
+                {sortMoviesByPopularity(movies).map((moovie) => (
                     <Link to={`/movie/${moovie.id}`} key={moovie.id}>
                         <div className="card">
                             <span onClick={(e) => {
@@ -43,6 +46,7 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                             }} className='add-watchlist'
                                 style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
                                 {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                            <p className='rating'><FaStar /> {moovie.vote_average.toFixed(1).replace('.', ',')}</p>
                             <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" />
                             <div className="moovie-info">
                             </div>

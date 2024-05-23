@@ -55,10 +55,6 @@
     font-weight: bold;
 }
 
-.rating {
-    display: none;
-}
-
 .search-list .right {
     display: none;
 }
@@ -96,7 +92,7 @@
         height: 200px;
         width: 150px;
     }
-    .moovie-container .rating {
+    .search-list .rating {
         display: flex;
         align-items: center;
         gap: 5px;
