@@ -37,7 +37,7 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
             <h2>Recherche</h2>
             <ul>
                 {sortMoviesByPopularity(movies).map((moovie) => (
-                    <Link to={`/movie/${moovie.id}`} key={moovie.id}>
+                    <Link to={`/${moovie.type === 'movie' ? 'now-playing' : 'top-rated-series'}/movie/${moovie.id}`} key={moovie.id}>
                         <div className="card">
                             <span onClick={(e) => {
                                 e.preventDefault();

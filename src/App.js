@@ -84,6 +84,7 @@ function App() {
             </>
           } />
           <Route path='/now-playing/movie/:id' element={<SingleMoovies movies={movies} />} />
+          <Route path='/top-rated-series/movie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path='/top-rated/movie/:id' element={<SingleMoovies movies={movies} />} />
           <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
           <Route path="/register" element={<RegisterPage />} />
