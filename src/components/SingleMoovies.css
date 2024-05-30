@@ -19,6 +19,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    position: relative;
 }
 
 .single-moovies .card .left {
@@ -99,6 +100,18 @@
 .synopsis p {
     max-width: 70ch;
     padding-top: 20px;
+}
+
+.single-moovies .card .add-watchlist {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ffd250;
+    color: #333;
+    padding: 7px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 0;
 }
 
  @media screen and (max-width: 450px) {
