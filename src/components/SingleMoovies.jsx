@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import './SingleMoovies.css';
-import { FaLongArrowAltLeft } from "react-icons/fa";
+import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
+import { auth } from '../firebase-config';
+import { ToastContainer, toast } from 'react-toastify';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
+    const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
+
+    const notify = () => toast.success("Film ajouté à votre watchlist", { autoClose: 3000 });
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -84,6 +89,18 @@ function SingleMoovies({ movies }) {
         fetchMoovieInfos();
     }, [id]);
 
+    const handleAddToWatchlist = (movie) => {
+        if (auth.currentUser) {
+            const newWatchlist = [...moviesAddedToWatchlist, movie.id.toString()];
+            setMoviesAddedToWatchlist(newWatchlist);
+            notify();
+        } else {
+            toast.warning("Vous devez être connecté pour ajouter des films à votre watchlist", {
+                autoClose: 3000,
+            });
+        }
+    };
+
     const movieGenres = moovieInfos && moovieInfos.genres.map(genre => genre.name).join(', ');
 
     if (loading) {
@@ -92,8 +109,11 @@ function SingleMoovies({ movies }) {
 
     const displayedMovie = moovieInfos || movie;
 
+    console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist", displayedMovie.id, "displayedMovie id")
+
     return (
         <div className="wrapper">
+            <ToastContainer />
             <div className="back-btn">
                 <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
             </div>
@@ -102,6 +122,10 @@ function SingleMoovies({ movies }) {
                     <>
                         <h2>{displayedMovie.title}</h2>
                         <div className="card">
+                            <span onClick={(e) => {
+                                e.preventDefault();
+                                handleAddToWatchlist(displayedMovie);
+                            }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                             <div className="left">
                                 <img src={`https://image.tmdb.org/t/p/w500${displayedMovie.poster_path}`} alt={displayedMovie.title} />
                             </div>

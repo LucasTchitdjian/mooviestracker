@@ -56,21 +56,10 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
     }
 };
 
-export function MooviesList({ currentPage, movies, setMovies, setSeries, setMooviesNowPlaying, setTotalPages, setPage }) {
+export function MooviesList({ currentPage, movies, setMovies, setTotalPages, setPage }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     const notify = () => toast.success("Film ajouté à votre watchlist", { autoClose: 3000 });
-
-    useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
-            .then(response => response.json())
-            .then(data => {
-                setPage(data.total_pages);
-                setMovies(data.results);
-            });
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-        setMoviesAddedToWatchlist(storedWatchlist);
-    }, [setMovies, currentPage, setPage]);
 
     const handleAddToWatchlist = (movie) => {
         if (auth.currentUser) {
@@ -91,33 +80,31 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
     };
 
     useEffect(() => {
-
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || []; // Récuperer la watchlist depuis local storage
-        setMoviesAddedToWatchlist(storedWatchlist); // Mettre à jour le state moviesAddedToWatchlist avec la watchlist
-
-        const fetchMovies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
-            .then(response => response.json())
-            .then(data => {
-                setTotalPages(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
-                setMooviesNowPlaying(data.results); // Pour faire passer la props mooviesNowPlaying à Trailers et faire fonctionner la page Trailers dans l'accueil
-                return data.results.map(movie => ({ ...movie, type: 'movie' })); // Important: retournez le tableau transformé
-            });
-
-        const fetchSeries = fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
-            .then(response => response.json())
-            .then(data => data.results.map(series => ({ ...series, type: 'serie' }))); // Ajoute une propriété 'type' et retourne le tableau transformé
-
-        Promise.all([fetchMovies, fetchSeries])
-            .then((results) => {
-                const [movies, series] = results;
-                const combinedItems = [...movies, ...series];
-                setMovies(combinedItems);
-                setSeries(series); // Pour faire passer la props series à SingleSeries et faire fonctionner la page détail d'un serie dans l'accueil
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            });
-    }, [setMovies, setSeries, setMooviesNowPlaying, setTotalPages, currentPage]); // Ajoutez setPage si vous utilisez useState pour cela
+        const fetchMovies = async () => {
+          try {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`
+            );
+            const data = await response.json();
+            setTotalPages(data.total_pages);
+            setMovies(data.results);
+    
+            // Fetch watchlist from Firestore for the current user (if logged in)
+            if (auth.currentUser) {
+              // ... your code to fetch from Firestore and update moviesAddedToWatchlist ...
+            } else {
+              // If not logged in, get watchlist from local storage
+              const storedWatchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+              setMoviesAddedToWatchlist(storedWatchlist);
+            }
+    
+          } catch (error) {
+            console.error("Error fetching movies:", error);
+          }
+        };
+    
+        fetchMovies();
+      }, [currentPage, setMovies, setTotalPages]);    
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
@@ -134,7 +121,7 @@ export function MooviesList({ currentPage, movies, setMovies, setSeries, setMoov
             <h2>Liste des films et séries à l'affiche</h2>
             <ul>
                 {movies.map((moovie) => (
-                    <Link to={`/now-playing/${moovie.type}/${moovie.id}`} key={moovie.id}>
+                    <Link to={`/now-playing/movie/${moovie.id}`} key={moovie.id}>
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
