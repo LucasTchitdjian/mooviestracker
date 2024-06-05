@@ -5,9 +5,10 @@
 }
 
 .back-btn {
-    padding: 7px 10px;
-    width: 30%;
+    padding: 10px 0;
+    width: 10%;
     position: absolute;
+    background-color: #fecc00;
 }
 
 .back-btn a {
@@ -15,7 +16,8 @@
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+    gap: 10px;
     text-transform: uppercase;
     font-weight: bold;
 }
@@ -28,7 +30,7 @@
 }
 
 .single-series h2 {
-    margin: 2rem 0;
+    margin: 3rem 0;
 }
 
 .single-series .card {
