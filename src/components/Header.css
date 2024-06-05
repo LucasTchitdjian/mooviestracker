@@ -2,7 +2,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 5vw;
+    padding: 10px 2vw;
     padding-bottom: 20px;
     background-color: #ffd300;
 }
@@ -170,13 +170,17 @@ header .right {
 }
 
 .account > img {
-    width: 32px;
-    height: 32px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
 }
 
 .account p {
     font-size: small;
+}
+
+.open-hamburger {
+    font-size: 1.5em;
 }
 
 @media screen and (max-width: 450px) {
