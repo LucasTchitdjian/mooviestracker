@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { FaStar, FaPlay, FaPlus, FaCheck } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, getDocs } from 'firebase/firestore';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -92,6 +92,15 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, set
             // Fetch watchlist from Firestore for the current user (if logged in)
             if (auth.currentUser) {
               // ... your code to fetch from Firestore and update moviesAddedToWatchlist ...
+              const watchlistRef = doc(db, 'users', auth.currentUser.uid, 'watchlist');
+              getDocs(watchlistRef)
+                .then(snapshot => {
+                  const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
+                  setMoviesAddedToWatchlist(watchlistMovies);
+                })
+                .catch(error => {
+                  console.error("Error getting watchlist:", error);
+                });
             } else {
               // If not logged in, get watchlist from local storage
               const storedWatchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
