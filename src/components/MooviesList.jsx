@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { FaStar, FaPlay, FaPlus, FaCheck } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
-import { setDoc, doc, getDocs } from 'firebase/firestore';
+import { setDoc, doc, getDocs, collection } from 'firebase/firestore';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -44,6 +44,9 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
         });
         setMoviesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, movieId];
+            toast.success("Film ajouté à votre watchlist", {
+                autoClose: 3000,
+            });
             localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
             return newWatchlist;
         });
@@ -59,61 +62,30 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 export function MooviesList({ currentPage, movies, setMovies, setTotalPages, setPage }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", { autoClose: 3000 });
-
-    const handleAddToWatchlist = (movie) => {
-        if (auth.currentUser) {
-            addToWatchlist(movie, setMoviesAddedToWatchlist)
-                .then(() => {
-                    notify(); // Call notify after successful addition
-                })
-                .catch(error => {
-                    console.error("Error adding to watchlist:", error);
-                    // Optionally, you could display an error toast here
-                    toast.error("Erreur lors de l'ajout à la watchlist");
-                });
-        } else {
-            toast.warning("Vous devez être connecté pour ajouter des films à votre watchlist", {
-                autoClose: 3000,
-            });
-        }
-    };
-
     useEffect(() => {
-        const fetchMovies = async () => {
-          try {
-            const response = await fetch(
-              `https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`
-            );
-            const data = await response.json();
-            setTotalPages(data.total_pages);
-            setMovies(data.results);
-    
-            // Fetch watchlist from Firestore for the current user (if logged in)
-            if (auth.currentUser) {
-              // ... your code to fetch from Firestore and update moviesAddedToWatchlist ...
-              const watchlistRef = doc(db, 'users', auth.currentUser.uid, 'watchlist');
-              getDocs(watchlistRef)
-                .then(snapshot => {
-                  const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
-                  setMoviesAddedToWatchlist(watchlistMovies);
-                })
-                .catch(error => {
-                  console.error("Error getting watchlist:", error);
-                });
-            } else {
-              // If not logged in, get watchlist from local storage
-              const storedWatchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
-              setMoviesAddedToWatchlist(storedWatchlist);
+        const fetchMoviesAndWatchlist = async () => {
+            try {
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`
+                );
+                const data = await response.json();
+                setTotalPages(data.total_pages);
+                setMovies(data.results);
+
+                if (auth.currentUser) {
+                    const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+                    const snapshot = await getDocs(watchlistRef);
+                    const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
+                    setMoviesAddedToWatchlist(watchlistMovies);
+                } 
+            } catch (error) {
+                console.error("Error fetching movies:", error);
             }
-    
-          } catch (error) {
-            console.error("Error fetching movies:", error);
-          }
         };
-    
-        fetchMovies();
-      }, [currentPage, setMovies, setTotalPages]);    
+        fetchMoviesAndWatchlist(); 
+    }, [currentPage, setMovies, setTotalPages]);    
+
+      console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist   ")
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
@@ -127,7 +99,7 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, set
     return (
         <div className="moovies-list">
             <ToastContainer />
-            <h2>Liste des films et séries à l'affiche</h2>
+            <h2>Liste des films à l'affiche</h2>
             <ul>
                 {movies.map((moovie) => (
                     <Link to={`/now-playing/movie/${moovie.id}`} key={moovie.id}>
@@ -136,7 +108,7 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, set
                                 <div className="card">
                                     <span onClick={(e) => {
                                         e.preventDefault();
-                                        handleAddToWatchlist(moovie);
+                                        addToWatchlist(moovie, setMoviesAddedToWatchlist);
                                     }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}

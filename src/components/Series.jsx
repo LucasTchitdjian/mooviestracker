@@ -5,49 +5,11 @@ import { FaPlus, FaCheck, FaStar } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from '../firebase-config';
-import { getDocs, collection, doc, setDoc } from 'firebase/firestore';
+import { getDocs, collection } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import { addToWatchlist } from './MooviesList';
 
-const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
-    if (!auth.currentUser) { 
-      console.log("No user logged in.");
-      toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", { autoClose: 3000 });
-      return; 
-    }
-  
-    try {
-      const serieId = serie.id.toString();
-      const serieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', serieId);
-  
-      const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-  
-      if (storedWatchlist.includes(serieId)) {
-        toast.warning("Cette série est déjà dans votre watchlist", { autoClose: 3000 });
-        return;
-      }
-  
-      await setDoc(serieRef, {  // Use 'serie' instead of 'movie' here
-        id: serie.id,
-        title: serie.title || serie.name,
-        poster_path: serie.poster_path,
-        overview: serie.overview,
-        release_date: serie.release_date || serie.first_air_date,
-        timestamp: new Date()
-      });
-  
-      setSeriesAddedToWatchlist(prevState => {
-        const newWatchlist = [...prevState, serieId];
-        localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
-        return newWatchlist;
-      });
-  
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout de la série à la watchlist :', error);
-      toast.error("Erreur lors de l'ajout à la watchlist", { autoClose: 3000 });
-    }
-  };
-
-const Series = ({ series, setSeries, currentPage, setPage }) => {
+const Series = ({ series, setSeries, currentPage }) => {
     const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
 
     const notify = () => toast.success("Film ajouté à votre watchlist", {
@@ -58,7 +20,6 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
         fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
-                setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
                 setSeries(data.results);
             });
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
@@ -83,7 +44,7 @@ const Series = ({ series, setSeries, currentPage, setPage }) => {
             const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
             setSeriesAddedToWatchlist(storedWatchlist);
         }
-    }, [setSeries, setPage, currentPage]);
+    }, [setSeries, currentPage]);
 
     return (
         <div className='series'>

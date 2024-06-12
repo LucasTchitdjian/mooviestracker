@@ -11,6 +11,10 @@
     background-color: #fecc00;
 }
 
+.back-btn:hover {
+    background-color: #fad462;
+}
+
 .back-btn a {
     color: #333;
     text-decoration: none;
@@ -63,6 +67,20 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    position: relative;
+}
+
+.single-series .card .add-watchlist {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ffd250;
+    color: #333;
+    padding: 7px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 0;
+    cursor: pointer;
 }
 
 .single-series .card .left {

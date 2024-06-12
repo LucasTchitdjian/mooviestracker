@@ -2,12 +2,60 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './SingleSeries.css';
 import { Link } from 'react-router-dom';
-import { FaLongArrowAltLeft } from "react-icons/fa";
+import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
+import { auth } from '../firebase-config';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase-config';
+import { ToastContainer, toast } from 'react-toastify';
+
+const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
+    if (!auth.currentUser) {
+        console.log("No user logged in.");
+        toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", { autoClose: 3000 });
+        return;
+    }
+
+    try {
+        const serieId = serie.id.toString();
+        const serieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', serieId);
+
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+
+        if (storedWatchlist.includes(serieId)) {
+            toast.warning("Cette série est déjà dans votre watchlist", { autoClose: 3000 });
+            return;
+        }
+
+        await setDoc(serieRef, {  // Use 'serie' instead of 'movie' here
+            id: serie.id,
+            title: serie.title || serie.name,
+            poster_path: serie.poster_path,
+            overview: serie.overview,
+            release_date: serie.release_date || serie.first_air_date,
+            timestamp: new Date()
+        });
+
+        setSeriesAddedToWatchlist(prevState => {
+            const newWatchlist = [...prevState, serieId];
+            localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
+            return newWatchlist;
+        });
+
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout de la série à la watchlist :', error);
+        toast.error("Erreur lors de l'ajout à la watchlist", { autoClose: 3000 });
+    }
+};
 
 function SingleSeries({ series }) {
     const [serieInfos, setSerieInfos] = useState(null);
     const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
+    const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
+
+    const notify = () => toast.success("Film ajouté à votre watchlist", {
+        autoClose: 3000,
+    });
     // Utilise find pour obtenir directement la série désiré. 
 
     const serie = series.find(serie => serie.id === parseInt(id, 10));
@@ -46,13 +94,37 @@ function SingleSeries({ series }) {
                 .catch(error => console.error('Erreur lors de la récupération des données de la série:', error));
         } else {
             setSerieInfos(serie);
+            const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+            setSeriesAddedToWatchlist(storedWatchlist);
             const fetchGenreNames = async () => {
                 const names = await getGenres(serie.genre_ids); // Supposons que genreIds est un tableau d'IDs de genres
                 setGenreNames(names); // Mettez à jour l'état avec les noms de genres obtenus
             };
             fetchGenreNames();
+
+            if (auth.currentUser) {
+                // Fetch watchlist from Firestore when user is logged in
+                const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+                getDocs(watchlistRef)
+                    .then(snapshot => {
+                        const watchlistSeries = snapshot.docs.map(doc => doc.data().id.toString());
+                        setSeriesAddedToWatchlist(watchlistSeries);
+                    })
+                    .catch(error => {
+                        console.error("Error getting watchlist:", error);
+                        toast.error("Erreur lors de la récupération de la watchlist", {
+                            autoClose: 3000,
+                        });
+                    });
+            } else {
+                // Clear watchlist when user is not logged in
+                const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+                setSeriesAddedToWatchlist(storedWatchlist);
+            }
         }
     }, [id, serie, genreNames, genre_ids]);
+
+    console.log(seriesAddedToWatchlist, "seriesAddedToWatchlist")
 
     const getGenres = async (genres) => {
         try {
@@ -71,6 +143,7 @@ function SingleSeries({ series }) {
 
     return (
         <div className="wrapper">
+            <ToastContainer />
             <div className="back-btn">
                 <Link to="/series"><FaLongArrowAltLeft /> Retour</Link>
             </div>
@@ -79,6 +152,15 @@ function SingleSeries({ series }) {
                     <>
                         <h2>{serieInfos.name}</h2>
                         <div className="card">
+                            <span onClick={(e) => {
+                                e.preventDefault();
+                                addToWatchlist(serieInfos, setSeriesAddedToWatchlist);
+                                notify();
+                            }}
+                                className='add-watchlist'
+                                style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
+                                {Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? <FaCheck /> : <FaPlus />}
+                            </span>
                             <div className="left">
                                 <img src={`https://image.tmdb.org/t/p/w500${serieInfos.poster_path}`} alt={serieInfos.title} />
                             </div>

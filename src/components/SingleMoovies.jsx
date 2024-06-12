@@ -3,7 +3,10 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import './SingleMoovies.css';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
 import { auth } from '../firebase-config';
+import { getDocs, collection } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
+import { db } from '../firebase-config';
+import { addToWatchlist } from './MooviesList';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
@@ -15,13 +18,13 @@ function SingleMoovies({ movies }) {
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const collection = searchParams.get('collection');
+    const collectionUrl = searchParams.get('collection');
 
     // Déterminez le chemin de retour en fonction de la collection
     let backPath = '/'; // Chemin par défaut
-    if (collection === 'now-playing') {
+    if (collectionUrl === 'now-playing') {
         backPath = '/now-playing';
-    } else if (collection === 'top-rated') {
+    } else if (collectionUrl === 'top-rated') {
         backPath = '/top-rated';
     } else {
         // Si la collection n'est pas spécifiée, utilisez le chemin actuel comme chemin de retour
@@ -61,45 +64,34 @@ function SingleMoovies({ movies }) {
     }
 
     useEffect(() => {
-        const fetchMoovieInfos = async () => {
-            setLoading(true);
-            // Vérifiez d'abord si les informations sont déjà dans localStorage
-            const storedMoovieInfos = localStorage.getItem(`moovieInfos_${id}`);
-
-            if (storedMoovieInfos) {
-                // Utilisez les informations stockées dans localStorage
-                setMoovieInfos(JSON.parse(storedMoovieInfos));
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=d7e7ae694a392629f56dea0d38fd160e`)
+            .then(response => response.json())
+            .then(data => {
+                setMoovieInfos(data);
                 setLoading(false);
-            } else {
-                // Si non, faites une requête à l'API
-                try {
-                    const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=d7e7ae694a392629f56dea0d38fd160e`);
-                    const data = await response.json();
-                    setMoovieInfos(data);
-                    // Stockez les informations dans localStorage
-                    localStorage.setItem(`moovieInfos_${id}`, JSON.stringify(data));
-                    setLoading(false);
-                } catch (error) {
-                    console.error('Erreur lors de la récupération des informations du film:', error);
-                    setLoading(false);
-                }
-            }
-        };
-
-        fetchMoovieInfos();
-    }, [id]);
-
-    const handleAddToWatchlist = (movie) => {
-        if (auth.currentUser) {
-            const newWatchlist = [...moviesAddedToWatchlist, movie.id.toString()];
-            setMoviesAddedToWatchlist(newWatchlist);
-            notify();
-        } else {
-            toast.warning("Vous devez être connecté pour ajouter des films à votre watchlist", {
-                autoClose: 3000,
             });
+        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        setMoviesAddedToWatchlist(storedWatchlist);
+
+        if (auth.currentUser) {
+            // Fetch watchlist from Firestore when user is logged in
+            const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+            getDocs(watchlistRef)
+                .then(snapshot => {
+                    const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
+                    setMoviesAddedToWatchlist(watchlistMovies);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération de la watchlist :', error);
+                    toast.error("Erreur lors de la récupération de la watchlist", { autoClose: 3000 });
+                });
+        } else {
+            // Clear watchlist when user is not logged in
+            const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+            setMoviesAddedToWatchlist(storedWatchlist);
         }
-    };
+
+    }, [id]);
 
     const movieGenres = moovieInfos && moovieInfos.genres.map(genre => genre.name).join(', ');
 
@@ -109,7 +101,8 @@ function SingleMoovies({ movies }) {
 
     const displayedMovie = moovieInfos || movie;
 
-    console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist", displayedMovie.id, "displayedMovie id")
+    console.log("single moovies component", displayedMovie)
+
 
     return (
         <div className="wrapper">
@@ -124,7 +117,8 @@ function SingleMoovies({ movies }) {
                         <div className="card">
                             <span onClick={(e) => {
                                 e.preventDefault();
-                                handleAddToWatchlist(displayedMovie);
+                                addToWatchlist(displayedMovie);
+                                notify();
                             }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                             <div className="left">
                                 <img src={`https://image.tmdb.org/t/p/w500${displayedMovie.poster_path}`} alt={displayedMovie.title} />
