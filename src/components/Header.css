@@ -9,13 +9,15 @@ header {
 
 header .logo a {
     color: black;
-    width: 100%;
+    font-family: "Caveat", cursive;
 }
 
 header li a {
     position: relative;
     color: white;
     z-index: 9999;
+    letter-spacing: 2px;
+    font-size: 1.3em;
 }
 
 header .logo h1 {
@@ -119,7 +121,7 @@ header .menu.active .browser-menu {
 header .right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
 }
 
 .account {
@@ -135,7 +137,7 @@ header .right {
     background-color: #333;
     border-radius: 10px;
     right: 0;
-    top: 32px;
+    top: 22px;
     z-index: 1;
     border: none;
     outline: none;
@@ -169,10 +171,8 @@ header .right {
     background-color: #444;
 }
 
-.account > img {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
+.account > svg {
+    font-size: 1.5em;
 }
 
 .account p {
