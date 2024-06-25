@@ -17,6 +17,7 @@ import { WatchlistPage } from './components/WatchlistPage';
 import { LogoutPage } from './components/LogoutPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
+import { ProfilePage } from './components/ProfilePage';
 
 function App() {
 
@@ -90,6 +91,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
           <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
+          <Route path='/profile' element={<ProfilePage setUserConnected={setUserConnected} />} />
         </Routes>
       </Router>
       <Footer />
