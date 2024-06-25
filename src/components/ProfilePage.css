@@ -1,0 +1,16 @@
+.profile-page {
+    padding: 10px 2vw;
+    padding-bottom: 20px;
+}
+
+.profile-page > img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.profile-page .infos-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
