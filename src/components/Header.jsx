@@ -136,6 +136,13 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             icon: <FaArrowRightToBracket />,
             visible: userConnected, // Ajoutez une propriété visible pour afficher ou masquer l'élément
             onClick: handleLogout // Ajoutez une propriété onClick pour gérer la déconnexion
+        },
+        {
+            id: 5,
+            name: 'Profil',
+            path: '/profile',
+            icon: <RxAvatar />,
+            visible: userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         }
     ];
 
