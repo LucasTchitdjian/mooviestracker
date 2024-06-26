@@ -1,6 +1,7 @@
 .profile-page {
     padding: 10px 2vw;
     padding-bottom: 20px;
+    min-height: 100vh;
 }
 
 .profile-page > img {
