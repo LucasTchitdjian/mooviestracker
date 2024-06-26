@@ -5,20 +5,31 @@ import './RegisterPage.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { redirect } from 'react-router-dom';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 // Fonction pour créer un utilisateur
-const registerUser = (email, password) => {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      toast.success("Votre compte a été créé avec succès", userCredential, { autoClose: 3000 });
-      // Vous pouvez ici rediriger l'utilisateur ou afficher un message de succès
-      redirect('/login');
-    })
-    .catch((error) => {
-      const errorMessage = error.message;
-      console.error("Erreur lors de la création de l'utilisateur :", errorMessage);
-      // Affichez un message d'erreur à l'utilisateur
-    });
+const registerUser = async (email, password, firstName, lastName) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Insérer les données dans Firestore
+    const db = getFirestore();
+    if (firstName && lastName && email) {
+      await setDoc(doc(db, "users", user.uid), {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+      });
+    }
+
+    toast.success("Votre compte a été créé avec succès", userCredential, { autoClose: 3000 });
+    redirect('/login');
+  } catch (error) {
+    const errorMessage = error.message;
+    console.error("Erreur lors de la création de l'utilisateur :", errorMessage);
+    // Affichez un message d'erreur à l'utilisateur
+  }
 };
 
 export function RegisterPage() {
@@ -27,7 +38,9 @@ export function RegisterPage() {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    registerUser(email, password);
+    const firstName = document.getElementById('firstname').value;
+    const lastName = document.getElementById('lastname').value;
+    registerUser(email, password, firstName, lastName);
   };
 
   return (
@@ -35,6 +48,12 @@ export function RegisterPage() {
       <ToastContainer />
       <h1>Inscrivez-vous</h1>
       <form className="form" onSubmit={handleSubmit}>
+        <div className="input">
+          <input type="text" id="firstname" placeholder='PRENOM' required />
+        </div>
+        <div className="input">
+          <input type="text" id="lastname" placeholder='NOM' required />
+        </div>
         <div className="input">
           <input type="email" id="email" placeholder='EMAIL' required />
         </div>
