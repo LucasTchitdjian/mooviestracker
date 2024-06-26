@@ -91,7 +91,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
           <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
-          <Route path='/profile' element={<ProfilePage setUserConnected={setUserConnected} />} />
+          <Route path='/profile' element={<ProfilePage />} />
         </Routes>
       </Router>
       <Footer />
