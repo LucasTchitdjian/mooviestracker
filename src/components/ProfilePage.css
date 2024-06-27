@@ -1,7 +1,17 @@
 .profile-page {
-    padding: 10px 2vw;
-    padding-bottom: 20px;
+    padding-top: 20px;
     min-height: 100vh;
+    border: 2px solid gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-container {
+    min-width: 50%;
+    border: 1px solid rgb(60, 64, 67);
+    border-radius: 10px;
 }
 
 .profile-page > img {
@@ -10,8 +20,38 @@
     border-radius: 10px;
 }
 
-.profile-page .infos-container {
+.profile-page .row {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 18px 24px;
 }
+
+.profile-page .row:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 24px;
+    height: 1px;
+    background-color: rgb(60, 64, 67);
+    width: calc(100% - 48px);
+}
+
+.profile-page .row .title {
+    display: flex;
+    justify-content: space-between; /* Ajouté pour espacer uniformément */
+    align-items: center;          /* Pour aligner verticalement */
+    width: 50%;                  /* Prend toute la largeur disponible */
+  }
+  
+  .profile-page .row .title p {
+    flex: 1;                    /* Permet aux éléments de prendre de l'espace */
+    text-align: left;           /* Alignement du texte à gauche pour le titre */
+  }
+  
+  .profile-page .row .title p:last-child {
+    text-align: left;          /* Alignement du texte à droite pour la valeur */
+  }
+
+  
