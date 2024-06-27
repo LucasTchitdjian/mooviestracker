@@ -20,6 +20,7 @@ const registerUser = async (email, password, firstName, lastName) => {
         firstName: firstName,
         lastName: lastName,
         email: email,
+        profilePicture: null
       });
     }
 
