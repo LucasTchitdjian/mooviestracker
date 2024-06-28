@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import './ProfilePage.css';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -12,22 +12,7 @@ export function ProfilePage({ setProfileImage, profileImage}) {
     const [profileInfo, setProfileInfo] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        // Listen for authentication state changes
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                setIsAuthenticated(true);
-                await fetchProfileData(user.uid);
-            } else {
-                setIsAuthenticated(false);
-                console.log('User is not authenticated');
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
-
-    const fetchProfileData = async (uid) => {
+    const fetchProfileData = useCallback(async (uid) => {
         try {
             const userDoc = doc(db, 'users', uid);
             const docSnap = await getDoc(userDoc);
@@ -41,7 +26,23 @@ export function ProfilePage({ setProfileImage, profileImage}) {
             console.error("Erreur lors de la récupération des données :", error);
             alert("Erreur lors de la récupération des données : " + error.message);
         }
-    };
+    }, [setProfileImage]);
+
+    
+    useEffect(() => {
+        // Listen for authentication state changes
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                setIsAuthenticated(true);
+                await fetchProfileData(user.uid);
+            } else {
+                setIsAuthenticated(false);
+                console.log('User is not authenticated');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [fetchProfileData]);
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0]; // Obtenir le fichier sélectionné
