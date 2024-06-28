@@ -5,30 +5,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 .profile-container {
-    min-width: 50%;
+    min-width: 60%;
     border: 1px solid rgb(60, 64, 67);
     border-radius: 10px;
 }
 
-.profile-page > img {
+.profilePicture img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+.infos-container {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
 }
 
 .profile-page .row {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 18px 24px;
 }
 
-.profile-page .row:not(:last-child)::after {
+.profile-page .row .icon > svg {
+    width: 24px;
+    height: 24px;
+}
+
+.profile-page .row:not(:last-child):after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -38,20 +46,30 @@
     width: calc(100% - 48px);
 }
 
-.profile-page .row .title {
-    display: flex;
-    justify-content: space-between; /* Ajouté pour espacer uniformément */
-    align-items: center;          /* Pour aligner verticalement */
-    width: 50%;                  /* Prend toute la largeur disponible */
-  }
-  
-  .profile-page .row .title p {
-    flex: 1;                    /* Permet aux éléments de prendre de l'espace */
-    text-align: left;           /* Alignement du texte à gauche pour le titre */
-  }
-  
-  .profile-page .row .title p:last-child {
-    text-align: left;          /* Alignement du texte à droite pour la valeur */
-  }
+.profile-page .title, .profile-page .value {
+    flex: 0.3;
+}
 
-  
+.profile-page .title {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-start;
+    /* border: 2px solid blue; */
+}
+
+.profile-page .value {
+    flex-grow: 0.8;
+    display: flex;
+    justify-content: flex-start;
+    /* border: 2px solid yellow; */
+}
+
+.profile-page .icon {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.profilePicture .value p {
+    font-size: 14px;
+    padding-left: 10px;
+}

@@ -18,6 +18,7 @@ import { LogoutPage } from './components/LogoutPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
+import DefaultAvatarImg from './DefaultAvatarImg.jpg'; // [3] Importez l'image par défaut
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
   const [totalPages, setTotalPages] = useState(0);
   const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
   const [userConnected, setUserConnected] = useState(false); // [1] Ajoutez un état pour gérer la connexion de l'utilisateur
+  const [profileImage, setProfileImage] = useState(DefaultAvatarImg); // [1] Ajoutez un état pour gérer l'image de profil
 
   // Load userConnected state from localStorage and Firebase when the app loads
   useEffect(() => {
@@ -91,7 +93,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/watchlist" element={<WatchlistPage />} />
           <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
-          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/profile' element={<ProfilePage profileImage={profileImage} setProfileImage={setProfileImage} />} />
         </Routes>
       </Router>
       <Footer />
