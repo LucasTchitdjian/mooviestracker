@@ -171,8 +171,9 @@ header .right {
     background-color: #444;
 }
 
-.account > svg {
-    font-size: 1.5em;
+.account > img {
+    width: 100%;
+    border-radius: 50%;
 }
 
 .account p {
@@ -226,5 +227,9 @@ header .right {
 
     .hamburger-menu.active::after {
         width: 50vw;
+    }
+    .right.active .account::after {
+        height: 70vw;
+        top: 50px;
     }
 }

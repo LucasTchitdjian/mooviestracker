@@ -6,7 +6,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from '../firebase-config';
 import { IoIosArrowForward } from "react-icons/io";
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import DefaultAvatarImg from '../DefaultAvatarImg.jpg'; // [1] Importez l'image par défaut
+import DefaultAvatarImg from '../DefaultAvatarImgRemoved.png'; // [1] Importez l'image par défaut
 
 export function ProfilePage({ setProfileImage, profileImage}) {
     const [profileInfo, setProfileInfo] = useState(null);

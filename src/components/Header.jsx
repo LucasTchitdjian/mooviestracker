@@ -38,7 +38,9 @@ const itemVariants = {
     },
 };
 
-export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected }) {
+export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected, profileImage }) {
+
+    console.log('profileImage', profileImage);
 
     const navigate = useNavigate();
 
@@ -169,7 +171,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             </div> */}
             <div className={`right ${accountActive ? 'active' : ''}`}>
                 <div className="account" onClick={handleAccountClick}>
-                    <RxAvatar />
+                    <img src={profileImage} alt="perso avatar" />
                     {/* <p>{userConnected ? 'connecté' : 'non connecté'}</p> */}
                     <div className="columns">
                         {accountItems.map((item) => {

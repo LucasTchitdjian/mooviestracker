@@ -18,7 +18,7 @@ import { LogoutPage } from './components/LogoutPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
-import DefaultAvatarImg from './DefaultAvatarImg.jpg'; // [3] Importez l'image par défaut
+import DefaultAvatarImg from './DefaultAvatarImgRemoved.png'; // [3] Importez l'image par défaut
 
 function App() {
 
@@ -61,7 +61,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} profileImage={profileImage} />
         <Routes>
           <Route path="/" element={<Navigate to="/now-playing" />} /> {/* Redirect to /now-playing */}
           <Route path="/now-playing" element={

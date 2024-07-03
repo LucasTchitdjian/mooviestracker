@@ -4,8 +4,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import './RegisterPage.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { redirect } from 'react-router-dom';
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 // Fonction pour créer un utilisateur
 const registerUser = async (email, password, firstName, lastName) => {
@@ -25,7 +25,6 @@ const registerUser = async (email, password, firstName, lastName) => {
     }
 
     toast.success("Votre compte a été créé avec succès", userCredential, { autoClose: 3000 });
-    redirect('/login');
   } catch (error) {
     const errorMessage = error.message;
     console.error("Erreur lors de la création de l'utilisateur :", errorMessage);
@@ -34,6 +33,7 @@ const registerUser = async (email, password, firstName, lastName) => {
 };
 
 export function RegisterPage() {
+  const navigate = useNavigate();
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,7 +41,12 @@ export function RegisterPage() {
     const password = document.getElementById('password').value;
     const firstName = document.getElementById('firstname').value;
     const lastName = document.getElementById('lastname').value;
-    registerUser(email, password, firstName, lastName);
+    registerUser(email, password, firstName, lastName)
+      .then(() => {
+        setTimeout(() => {
+          navigate('/');
+      }, 3000);
+      });
   };
 
   return (
