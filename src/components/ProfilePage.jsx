@@ -7,10 +7,12 @@ import { db, auth, storage } from '../firebase-config';
 import { IoIosArrowForward } from "react-icons/io";
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import DefaultAvatarImg from '../DefaultAvatarImgRemoved.png'; // [1] Importez l'image par défaut
+import { FaPen } from "react-icons/fa";
 
 export function ProfilePage({ setProfileImage, profileImage}) {
     const [profileInfo, setProfileInfo] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [editModeField, setEditMode] = useState(""); // [1] Ajoutez un état pour gérer le mode d'édition
 
     const fetchProfileData = useCallback(async (uid) => {
         try {
@@ -55,6 +57,12 @@ export function ProfilePage({ setProfileImage, profileImage}) {
         }
     }
 
+    const handleEditMode = (fieldType) => {
+        setEditMode(fieldType);
+    }
+
+    console.log(editModeField);
+
         return (
             <div className="profile-page">
                 <h1>Informations personnelles</h1>
@@ -76,24 +84,24 @@ export function ProfilePage({ setProfileImage, profileImage}) {
                                 </div>
                                 <div className="firstName row">
                                     <div className="title">
-                                        <p>Nom:</p>
+                                        <p>Prenom:</p>
                                     </div>
                                     <div className="value">
                                         <p>{profileInfo.firstName}</p>
                                     </div>
-                                    <div className="icon">
-                                        <IoIosArrowForward />
+                                    <div className="icon" onClick={() => handleEditMode("firstName")}>
+                                        {editModeField === 'firstName' ? <FaPen /> : <IoIosArrowForward /> }
                                     </div>
                                 </div>
                                 <div className="lastName row">
                                     <div className="title">
-                                        <p>Prénom:</p>
+                                        <p>Nom:</p>
                                     </div>
                                     <div className="value">
                                         <p>{profileInfo.lastName}</p>
                                     </div>
-                                    <div className="icon">
-                                        <IoIosArrowForward />
+                                    <div className="icon" onClick={() => handleEditMode("lastName")}>
+                                    {editModeField === 'lastName' ? <FaPen /> : <IoIosArrowForward /> }
                                     </div>
                                 </div>
                                 <div className="email row">
@@ -103,8 +111,8 @@ export function ProfilePage({ setProfileImage, profileImage}) {
                                     <div className="value">
                                         <p>{profileInfo.email}</p>
                                     </div>
-                                    <div className="icon">
-                                        <IoIosArrowForward />
+                                    <div className="icon" onClick={() => handleEditMode("email")}>
+                                    {editModeField === 'email' ? <FaPen /> : <IoIosArrowForward /> }
                                     </div>
                                 </div>
                             </>
