@@ -28,15 +28,6 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
     });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
-    // const formatDate = (dateString) => {
-    //     const date = new Date(dateString);
-    //     if (isNaN(date.getTime())) {
-    //         return "Date inconnue";
-    //     }
-    //     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    //     return new Intl.DateTimeFormat('fr-FR', options).format(date);
-    // };
-
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
@@ -68,6 +59,15 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
 
     }, [setMovies, currentPage, setPage]);
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return "Date inconnue";
+        }
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Intl.DateTimeFormat('fr-FR', options).format(date);
+    };
+
     console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist")
 
     return (
@@ -94,6 +94,7 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
                             </div>
                             <div className="right">
                                 <li className='title'>{moovie.title}</li>
+                                <span className='release-date'>Sortie <strong>{formatDate(moovie.release_date)}</strong></span>
                                 {/* <li>Date de sortie: {formatDate(moovie.release_date)}</li> */}
                             </div>
                         </div>

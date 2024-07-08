@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './MooviesList.css';
 import { useEffect } from 'react';
-import { FaStar, FaPlay, FaPlus, FaCheck } from "react-icons/fa";
+import { FaStar, FaPlus, FaCheck } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
 import { setDoc, doc, getDocs, collection } from 'firebase/firestore';
@@ -59,7 +59,7 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
     }
 };
 
-export function MooviesList({ currentPage, movies, setMovies, setTotalPages, setPage }) {
+export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
@@ -83,18 +83,18 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, set
             }
         };
         fetchMoviesAndWatchlist(); 
-    }, [currentPage, setMovies, setTotalPages]);    
+    }, [currentPage, setMovies, setTotalPages]);
 
-      console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist   ")
+    console.log(movies, "movies prop")
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
     }
 
-    // const formatDate = (date) => {
-    //     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    //     return new Date(date).toLocaleDateString('fr-FR', options);
-    // }
+    const formatDate = (date) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString('fr-FR', options);
+    }
 
     return (
         <div className="moovies-list">
@@ -119,12 +119,8 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, set
                             <div className="right">
                                 <div className="first-col">
                                     <li className='title'>{moovie.title || moovie.name}</li>
+                                    <span className='release-date'>Sortie <strong>{formatDate(moovie.release_date)}</strong></span>
                                     {/* <li>{formatDate(moovie.release_date) || formatDate(moovie.first_air_date)}</li> */}
-                                </div>
-                                <div className="second-col">
-                                    <a className='play-btn' href="youtube.com">
-                                        <FaPlay />
-                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -84,7 +84,7 @@
         width: 35px;
     }
 
-    .moovie-container {
+    .search-list .moovie-container {
         display: flex;
         align-items: center;
         gap: 10px;

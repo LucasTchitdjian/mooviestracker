@@ -85,8 +85,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding-left: 3vw;
-        padding-bottom: 20px;
+        padding: 0 0 10px 10px;
     }
 
     .moovies-list h2 {
@@ -99,9 +98,11 @@
     }
     .moovies-list li {
         color: black;
+        font-weight: 800;
+        font-size: 16px;
     }
     .moovies-list .card {
-        height: 200px;
+        height: 185px;
         width: 150px;
     }
     .moovies-list .right {
@@ -109,18 +110,17 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        height: 230px;
+        height: 200px;
     }
-    .play-btn {
-        padding: 15px 25px;
-        background-color: #333;
-        color: white;
-        border-radius: 20px;
+    .first-col > span {
+        color: black;
+        font-size: 14px;
     }
 }
 
 @media screen and (max-width: 400px) {
     .moovies-list .right {
         height: 185px;
+        flex-grow: 1;
     }
 }

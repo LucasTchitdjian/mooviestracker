@@ -84,8 +84,12 @@
     .moovies li {
         color: black;
     }
-    .moovies-list .card {
+    .moovies .card {
         height: 200px;
         width: 150px;
+    }
+    .moovies-container .right > span {
+        color: black;
+        font-size: 14px;
     }
 }

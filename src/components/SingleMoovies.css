@@ -9,6 +9,10 @@
     padding-left: 5vw;
     background-color: white;
     border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 .single-moovies h2 {
@@ -17,6 +21,10 @@
     display: inline-block;
     z-index: 1;
     padding: 0.225em;
+}
+
+.movie-infos {
+    flex-grow: 1;
 }
 
 .single-moovies h2::before {
@@ -48,7 +56,7 @@
 }
 
 .single-moovies .card .left {
-    width: 15%;
+    width: 20%;
 }
 
 .single-moovies .card .left img {
@@ -138,6 +146,28 @@
     font-weight: bold;
     z-index: 0;
     cursor: pointer;
+}
+
+.video h3 {
+    margin: 3rem 0;
+    position: relative;
+    padding-left: 2px;
+}
+
+.video iframe {
+    width: 80vw; /* 80% de la largeur de la fenêtre */
+    height: 45vw; /* Maintenir un ratio 16:9 */
+  }
+  
+
+.video h3::after {
+    content: '';
+    position: absolute;
+    top: 0.075rem;
+    left: -0.375rem;
+    width: 0.3125rem;
+    height: 1.25rem;
+    background-color: #fecc00;
 }
 
  @media screen and (max-width: 450px) {
