@@ -102,12 +102,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             id: 2,
             name: 'Séries',
             path: '/series'
-        },
-        {
-            id: 3,
-            name: 'Trailers',
-            path: '/trailers'
-        },
+        }
     ];
 
     const accountItems = [

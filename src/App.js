@@ -1,7 +1,6 @@
 import './App.css';
 import { Header } from './components/Header';
 import { MooviesList } from './components/MooviesList';
-import Trailers from './components/Trailers';
 import Series from './components/Series';
 import SingleMoovies from './components/SingleMoovies';
 import { Pagination } from './components/Pagination';
@@ -24,7 +23,6 @@ function App() {
 
   const [movies, setMovies] = useState([]);
   const [series, setSeries] = useState([]);
-  const [trailers, setTrailers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +69,6 @@ function App() {
             </>
           } />
           <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
-          <Route path='/trailers' element={<Trailers mooviesNowPlaying={mooviesNowPlaying} setTrailers={setTrailers} trailers={trailers} />} />
           <Route path='/series' element={<Navigate to="/top-rated-series" />} /> {/* Redirect to '/series' */}
           <Route path='/top-rated-series' element={
             <>
