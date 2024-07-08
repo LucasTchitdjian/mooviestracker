@@ -129,6 +129,12 @@ header .right {
     cursor: pointer;
 }
 
+.account img {
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+}
+
 .right.active .account::after {
     content: "";
     position: absolute;
@@ -169,11 +175,6 @@ header .right {
 
 .right.active .account .columns .row:hover {
     background-color: #444;
-}
-
-.account > img {
-    width: 100%;
-    border-radius: 50%;
 }
 
 .account p {
@@ -220,6 +221,11 @@ header .right {
     }
     .hamburger-menu.active > li.close-hamburger > svg {
         color: #fff;
+    }
+    .account img {
+        height: 48px;
+        width: 48px;
+        border-radius: 50%;
     }
     .account p {
         display: none;
