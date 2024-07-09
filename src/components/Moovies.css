@@ -74,6 +74,10 @@
     display: none;
 }
 
+.moovies-container .right {
+    display: none;
+}
+
 @media screen and (max-width: 450px) {
 
     .moovies li.title {
