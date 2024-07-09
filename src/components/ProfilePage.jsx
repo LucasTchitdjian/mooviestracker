@@ -34,7 +34,7 @@ export function ProfilePage({ setProfileImage, profileImage }) {
             }
         } catch (error) {
             console.error("Erreur lors de la récupération des données :", error);
-            alert("Erreur lors de la récupération des données : " + error.message);
+            toast.error("Erreur lors de la récupération des données : " + error.message, { autoClose: 1000 });
         }
     }, [setProfileImage]);
 

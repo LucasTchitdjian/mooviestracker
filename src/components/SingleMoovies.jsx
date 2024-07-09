@@ -15,7 +15,7 @@ function SingleMoovies({ movies }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
     const [trailer, setTrailer] = useState(null);
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", { autoClose: 3000 });
+    const notify = () => toast.success("Film ajouté à votre watchlist", { autoclose: 1000 });
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -86,7 +86,7 @@ function SingleMoovies({ movies }) {
                         })
                         .catch(error => {
                             console.error('Erreur lors de la récupération de la watchlist :', error);
-                            toast.error("Erreur lors de la récupération de la watchlist", { autoClose: 3000 });
+                            toast.error("Erreur lors de la récupération de la watchlist", { autoclose: 1000 });
                         });
                 } else {
                     // Clear watchlist when user is not logged in
@@ -109,7 +109,7 @@ function SingleMoovies({ movies }) {
                 return response;
             } catch (error) {
                 console.error('Erreur lors de la récupération des informations du film :', error);
-                toast.error("Erreur lors de la récupération des informations du film", { autoClose: 3000 });
+                toast.error("Erreur lors de la récupération des informations du film", { autoclose: 1000 });
             }
         };
         fetchData();

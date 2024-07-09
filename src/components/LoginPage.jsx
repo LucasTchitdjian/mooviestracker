@@ -16,7 +16,7 @@ export function LoginPage({ setUserConnected }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
-        toast.success("Vous êtes connecté", { autoClose: 3000 });
+        toast.success("Vous êtes connecté", { autoClose: 1000 });
         setUserConnected(true);
         localStorage.setItem('userConnected', JSON.stringify(true));
         navigate('/');
@@ -32,12 +32,12 @@ export function LoginPage({ setUserConnected }) {
     event.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      toast.success("Vous êtes connecté", userCredential, { autoClose: 3000 });
+      toast.success("Vous êtes connecté", userCredential, { autoClose: 1000 });
       setUserConnected(true);
       localStorage.setItem('userConnected', JSON.stringify(true));
       navigate('/');
     } catch (error) {
-      toast.error("Erreur lors de la connexion", error, { autoClose: 3000 });
+      toast.error("Erreur lors de la connexion", error, { autoClose: 1000 });
       console.error('Login error:', error);
       setError(error.message);
   };

@@ -14,7 +14,7 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
     if (!auth.currentUser) { // Check if user is logged in
         console.log("No user logged in.");
         toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
-            autoClose: 3000,
+            autoclose: 1000,
         });
         return; // Stop execution if not logged in
     }
@@ -29,7 +29,7 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
         // Vérifier si le film est déjà dans la watchlist
         if (storedWatchlist.includes(movieId)) {
             toast.warning("Ce film est déjà dans votre watchlist", {
-                autoClose: 3000,
+                autoclose: 1000,
             });
             return;
         }
@@ -42,11 +42,11 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
             release_date: movie.release_date || movie.first_air_date,
             timestamp: new Date()
         });
+        toast.success("Film ajouté à votre watchlist", {
+            autoclose: 100,
+        });
         setMoviesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, movieId];
-            toast.success("Film ajouté à votre watchlist", {
-                autoClose: 3000,
-            });
             localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
             return newWatchlist;
         });
@@ -54,7 +54,7 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
     } catch (error) {
         console.error('Erreur lors de l\'ajout du film à la watchlist :', error);
         toast.error("Erreur lors de l'ajout à la watchlist", {
-            autoClose: 3000,
+            autoclose: 1000,
         });
     }
 };

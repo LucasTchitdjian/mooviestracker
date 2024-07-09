@@ -15,17 +15,13 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
     const handleAddToWatchlist = (movie) => {
         if (auth.currentUser) { // Check if user is logged in
             addToWatchlist(movie, setMoviesAddedToWatchlist);
-            notify();
         } else {
             toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
-                autoClose: 3000,
+                autoclose: 1000,
             });
         }
     };
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoClose: 3000,
-    });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
@@ -49,7 +45,7 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
                 .catch(error => {
                     console.error("Error getting watchlist:", error);
                     toast.error("Erreur lors de la récupération de la watchlist", {
-                        autoClose: 3000,
+                        autoclose: 1000,
                     });
                 });
         } else {
@@ -67,8 +63,6 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Intl.DateTimeFormat('fr-FR', options).format(date);
     };
-
-    console.log(moviesAddedToWatchlist, "moviesAddedToWatchlist")
 
     return (
         <div className='moovies'>

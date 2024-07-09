@@ -12,10 +12,6 @@ import { addToWatchlist } from './MooviesList';
 const Series = ({ series, setSeries, currentPage }) => {
     const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoClose: 3000,
-    });
-
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
@@ -36,7 +32,7 @@ const Series = ({ series, setSeries, currentPage }) => {
                 .catch(error => {
                     console.error("Error getting watchlist:", error);
                     toast.error("Erreur lors de la récupération de la watchlist", {
-                        autoClose: 3000,
+                        autoclose: 1000,
                     });
                 });
         } else {
@@ -59,7 +55,6 @@ const Series = ({ series, setSeries, currentPage }) => {
                                     <span onClick={(e) => {
                                         e.preventDefault();
                                         addToWatchlist(serie, setSeriesAddedToWatchlist);
-                                        notify();
                                     }}
                                         className='add-watchlist'
                                         style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>

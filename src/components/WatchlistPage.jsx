@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase-config';
 import { query, onSnapshot, orderBy, collection, deleteDoc, doc } from 'firebase/firestore';
-import { FaPlay } from "react-icons/fa";
 import './WatchlistPage.css';
 import { RxCross2 } from "react-icons/rx";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 export function WatchlistPage() {
     const notify = () => toast.error("Film supprimé de votre watchlist !", {
-        autoClose: 3000,
+        autoclose: 1000,
     });
     const [watchlist, setWatchlist] = useState([]);
 
@@ -18,7 +18,7 @@ export function WatchlistPage() {
         setWatchlist(storedWatchlist);
         if (!auth.currentUser) {
             toast.error("Vous devez être connecté pour voir votre watchlist", {
-                autoClose: 3000,
+                autoclose: 1000,
             });
             return;
         }
@@ -36,11 +36,6 @@ export function WatchlistPage() {
 
         return () => unsubscribe();
     }, []);
-
-    const formatDate = (date) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString('fr-FR', options);
-    }
 
     const deleteMovie = async (movieId) => {
         if (movieId !== 'string') {
@@ -60,42 +55,34 @@ export function WatchlistPage() {
     }
 
     return (
-        <div className="watchlist">
+        <div className="watchlist-wrapper">
             <ToastContainer />
             <h2>Ma Liste à visionner</h2>
-            <ul>
-                {watchlist.map(movie => (
-                    <div key={movie.id} className="movie-container">
-                        <div className="left">
-                            <div className="card">
-                                <div className="delete-movies" onClick={(e) => {
-                                    e.stopPropagation(); // Arrête la propagation de l'événement de clic
-                                    deleteMovie(movie.id, setWatchlist);
-                                    notify();
-                                }}>
-                                    <RxCross2 />
-                                </div>
-                                <li>
-                                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-                                </li>
+            <div className="watchlist-container">
+                <ul>
+                    {watchlist.map(movie => (
+                        <div className="card">
+                            <Link to={`/now-playing/movie/${movie.id}`} key={movie.id}>
+                                <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                            </Link>
+                            <div className="delete-movies" onClick={(e) => {
+                                e.stopPropagation(); // Arrête la propagation de l'événement de clic
+                                deleteMovie(movie.id, setWatchlist);
+                                notify();
+                            }}>
+                                <RxCross2 />
                             </div>
                         </div>
-                        <div className="right" onClick={() => {
-                            window.location.href = `/movie/${movie.id}`;
-                        }}>
-                            <div className="first-col">
-                                <li className='title'>{movie.title || movie.name}</li>
-                                <li>{formatDate(movie.release_date) || formatDate(movie.first_air_date)}</li>
-                            </div>
-                            <div className="second-col">
-                                <a className='play-btn' href="youtube.com">
-                                    <FaPlay />
-                                </a>
-                            </div>
-                        </div>
+                    ))}
+                </ul>
+                {watchlist.length === 0 && (
+                    <div className='empty-watchlist'>
+                        <p>Votre watchlist est vide, dès maitenant ajoutez films, séries</p>
+                        <Link to={`/now-playing`}>Parcourir les nouveaux films</Link>
+                        <Link to={`/top-rated-series`}>Parcourir les séries les mieux notés</Link>
                     </div>
-                ))}
-            </ul>
+                )}
+            </div>
         </div>
     );
 }

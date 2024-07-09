@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export const handleLogout = () => {
     signOut(auth)
         .then(() => {
-            toast.success("Vous êtes déconnecté", { autoClose: 3000 });
+            toast.success("Vous êtes déconnecté", { autoClose: 1000 });
             window.location.reload();
         })
         .catch(error => {

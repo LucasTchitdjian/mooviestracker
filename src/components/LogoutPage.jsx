@@ -7,7 +7,7 @@ export function LogoutPage({ setUserConnected }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        toast.success("Vous êtes déconnecté", { autoClose: 3000 });
+        toast.success("Vous êtes déconnecté", { autoClose: 1000 });
         setUserConnected(false);
         localStorage.setItem('userConnected', JSON.stringify(false));
         setTimeout(() => {

@@ -1,39 +1,40 @@
-.watchlist {
+.watchlist-wrapper {
+    padding: 1rem 5rem;
+    background-color: #f2f2f2;
+}
+
+.watchlist-wrapper h2 {
+    margin-bottom: 1rem;
+}
+
+.watchlist-container {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     min-height: 100vh;
 }
 
-.watchlist h2 {
-    text-align: left;
-    padding-left: 5vw;
-    padding-top: 3vh;
-    padding-bottom: 3vh;
-    font-size: clamp(1.25rem, 2vw, 3rem);
-}
-
-.watchlist ul {
-    padding-left: 5vw;
-}
-
-.watchlist ul a {
+.watchlist-container ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     width: 100%;
+    gap: 10px;
 }
 
-.watchlist li {
-    line-height: 1.5rem;
-}
-
-.watchlist .card {
+.watchlist-container .card {
+    cursor: pointer;
     position: relative;
 }
 
-.watchlist ul {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap ;
-    gap: 20px;
+.watchlist-container img {
+    width: 100%;
+    border-radius: 10px;
 }
 
-.watchlist .card .delete-movies {
+.watchlist-container .card .delete-movies {
     position: absolute;
     top: 2px;
     right: 5px;
@@ -44,37 +45,37 @@
     cursor: pointer;
 }
 
-.watchlist .card .delete-movies > svg {
+.watchlist-container .card .delete-movies > svg {
     color: red;
 }
 
-.watchlist .card .moovie-info {
-    position: absolute;
-    display: none;
-}
-
-.watchlist .card img {
-    width: 200px;
-    height: 100%;
-    border-radius: 10px;
-}
-
-.watchlist .card .title {
-    font-weight: bold;
-}
-
-.watchlist .right .first-col {
+.watchlist-container .empty-watchlist {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
-.watchlist .right {
-    display: none;
+.empty-watchlist a {
+    padding: 10px;
+    background-color: #ffd300;
+    border-radius: 10px;
+    color: #333;
+}
+
+.empty-watchlist a:hover {
+    background-color: #ffcc00;
 }
 
 @media screen and (max-width: 450px) {
-    .watchlist .card img {
-        width: 150px;
-    } 
+    .watchlist-wrapper {
+        padding: 1rem;
+    }
+    .watchlist-container .empty-watchlist {
+        flex-direction: column;
+    }
+    .watchlist-container .empty-watchlist > * {
+        width: 100%;
+        text-align: center;
+    }
 }

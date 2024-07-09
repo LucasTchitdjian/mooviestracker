@@ -24,7 +24,7 @@ const registerUser = async (email, password, firstName, lastName) => {
       });
     }
 
-    toast.success("Votre compte a été créé avec succès", userCredential, { autoClose: 3000 });
+    toast.success("Votre compte a été créé avec succès", userCredential, { autoclose: 1000 });
   } catch (error) {
     const errorMessage = error.message;
     console.error("Erreur lors de la création de l'utilisateur :", errorMessage);

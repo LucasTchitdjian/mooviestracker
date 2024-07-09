@@ -11,7 +11,7 @@ import { FaCheck } from 'react-icons/fa';
 export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
     const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoClose: 3000,
+        autoclose: 1000,
     });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 

@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
     if (!auth.currentUser) {
         console.log("No user logged in.");
-        toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", { autoClose: 3000 });
+        toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", { autoclose: 1000 });
         return;
     }
 
@@ -22,7 +22,7 @@ const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
         const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 
         if (storedWatchlist.includes(serieId)) {
-            toast.warning("Cette série est déjà dans votre watchlist", { autoClose: 3000 });
+            toast.warning("Cette série est déjà dans votre watchlist", { autoclose: 1000 });
             return;
         }
 
@@ -43,7 +43,7 @@ const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout de la série à la watchlist :', error);
-        toast.error("Erreur lors de l'ajout à la watchlist", { autoClose: 3000 });
+        toast.error("Erreur lors de l'ajout à la watchlist", { autoclose: 1000 });
     }
 };
 
@@ -54,7 +54,7 @@ function SingleSeries({ series }) {
     const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
 
     const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoClose: 3000,
+        autoclose: 1000,
     });
     // Utilise find pour obtenir directement la série désiré. 
 
@@ -113,7 +113,7 @@ function SingleSeries({ series }) {
                     .catch(error => {
                         console.error("Error getting watchlist:", error);
                         toast.error("Erreur lors de la récupération de la watchlist", {
-                            autoClose: 3000,
+                            autoclose: 1000,
                         });
                     });
             } else {
