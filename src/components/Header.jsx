@@ -40,8 +40,6 @@ const itemVariants = {
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected, profileImage }) {
 
-    console.log('profileImage', profileImage);
-
     const navigate = useNavigate();
 
     const [menuActive, setMenuActive] = useState(false);
@@ -55,8 +53,9 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
         e.preventDefault();
         if (searchTerm !== '') {
             navigate('/search');
-            const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
-            const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${searchTerm}`;
+            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+            const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${searchTerm}`;
+            const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${searchTerm}`;
 
             Promise.all([
                 fetch(moviesUrl).then(response => response.json()),
