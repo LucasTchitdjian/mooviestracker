@@ -88,8 +88,6 @@ function SingleSeries({ series }) {
         }
     }, [id, serie, genreNames, genre_ids]);
 
-    console.log(seriesAddedToWatchlist, "seriesAddedToWatchlist")
-
     const getGenres = async (genres) => {
         try {
             const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;

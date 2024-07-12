@@ -11,7 +11,6 @@ import { db } from '../firebase-config';
 export const addToWatchlistSeries = async (serie, setSeriesAddedToWatchlist) => {
 
     if (!auth.currentUser) { // Check if user is logged in
-        console.log("No user logged in.");
         toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", {
             autoclose: 1000,
         });

@@ -30,7 +30,7 @@ export function ProfilePage({ setProfileImage, profileImage }) {
                 setLastName(docSnap.data().lastName); // [4] Mettez à jour l'état du nom de famille
                 setEmail(docSnap.data().email); // [5] Mettez à jour l'état de l'email
             } else {
-                console.log("No such document!");
+                console.error("No such document!");
             }
         } catch (error) {
             console.error("Erreur lors de la récupération des données :", error);
@@ -67,7 +67,7 @@ export function ProfilePage({ setProfileImage, profileImage }) {
                 await fetchProfileData(user.uid);
             } else {
                 setIsAuthenticated(false);
-                console.log('User is not authenticated');
+                toast.error("Vous devez être connecté pour voir votre profil", { autoClose: 1000 });
             }
         });
 

@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => {
 
     if (!auth.currentUser) { // Check if user is logged in
-        console.log("No user logged in.");
         toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
             autoclose: 1000,
         });
