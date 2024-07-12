@@ -1,7 +1,7 @@
 import './App.css';
 import { Header } from './components/Header';
 import { MooviesList } from './components/MooviesList';
-import Series from './components/Series';
+import { Series } from './components/Series';
 import SingleMoovies from './components/SingleMoovies';
 import { Pagination } from './components/Pagination';
 import { SearchResultsList } from './components/SearchResultsList';
@@ -72,7 +72,7 @@ function App() {
           <Route path='/series' element={<Navigate to="/top-rated-series" />} /> {/* Redirect to '/series' */}
           <Route path='/top-rated-series' element={
             <>
-              <Series series={series} setSeries={setSeries} setPage={setPage} currentPage={currentPage} />
+              <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
               <Pagination context="top-rated-series" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
