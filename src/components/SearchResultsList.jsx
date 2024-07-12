@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './SearchResultsList.css';
 import { useEffect } from 'react';
 import { FaPlus, FaStar } from "react-icons/fa";
-import { addToWatchlist } from '../components/MooviesList';
+import { addToWatchlistMovies } from '../components/MooviesList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
@@ -16,7 +16,8 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/search/movie?api_key=d7e7ae694a392629f56dea0d38fd160e&query=${search}`)
+        const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${search}`)
             .then(response => response.json())
             .then(data => setSearch(data.results))
             .catch(error => console.error('Erreur lors de la recherche du film:', error));
@@ -41,7 +42,7 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                         <div className="card">
                             <span onClick={(e) => {
                                 e.preventDefault();
-                                addToWatchlist(moovie, setMoviesAddedToWatchlist);
+                                addToWatchlistMovies(moovie, setMoviesAddedToWatchlist);
                                 notify();
                             }} className='add-watchlist'
                                 style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>

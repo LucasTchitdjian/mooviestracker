@@ -3,7 +3,7 @@ import './Moovies.css';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { FaPlus, FaCheck, FaStar } from "react-icons/fa";
-import { addToWatchlist } from './MooviesList'; // Assuming you have addToWatchlist in MooviesList
+import { addToWatchlistMovies } from './MooviesList'; // Assuming you have addToWatchlist in MooviesList
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from '../firebase-config';
@@ -14,7 +14,7 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
 
     const handleAddToWatchlist = (movie) => {
         if (auth.currentUser) { // Check if user is logged in
-            addToWatchlist(movie, setMoviesAddedToWatchlist);
+            addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
         } else {
             toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
                 autoclose: 1000,
@@ -25,7 +25,8 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`)
+        const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbApiKey}&language=fr-FR&page=${currentPage}`)
             .then(response => response.json())
             .then(data => {
                 setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil

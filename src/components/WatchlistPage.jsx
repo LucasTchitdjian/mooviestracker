@@ -62,9 +62,15 @@ export function WatchlistPage() {
                 <ul>
                     {watchlist.map(movie => (
                         <div className="card">
-                            <Link to={`/now-playing/movie/${movie.id}`} key={movie.id}>
-                                <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-                            </Link>
+                            {movie.type === 'tv' ? (
+                                <Link to={`/serie/${movie.id}`} key={movie.id}>
+                                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                                </Link>
+                            ) : (
+                                <Link to={`/now-playing/movie/${movie.id}`} key={movie.id}>
+                                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                                </Link>
+                            )}
                             <div className="delete-movies" onClick={(e) => {
                                 e.stopPropagation(); // Arrête la propagation de l'événement de clic
                                 deleteMovie(movie.id, setWatchlist);

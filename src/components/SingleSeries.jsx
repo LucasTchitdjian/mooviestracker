@@ -4,48 +4,11 @@ import './SingleSeries.css';
 import { Link } from 'react-router-dom';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
 import { auth } from '../firebase-config';
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
+import { addToWatchlistSeries } from './Series';
 
-const addToWatchlist = async (serie, setSeriesAddedToWatchlist) => {
-    if (!auth.currentUser) {
-        console.log("No user logged in.");
-        toast.error("Vous devez être connecté pour ajouter des séries à votre watchlist", { autoclose: 1000 });
-        return;
-    }
-
-    try {
-        const serieId = serie.id.toString();
-        const serieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', serieId);
-
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-
-        if (storedWatchlist.includes(serieId)) {
-            toast.warning("Cette série est déjà dans votre watchlist", { autoclose: 1000 });
-            return;
-        }
-
-        await setDoc(serieRef, {  // Use 'serie' instead of 'movie' here
-            id: serie.id,
-            title: serie.title || serie.name,
-            poster_path: serie.poster_path,
-            overview: serie.overview,
-            release_date: serie.release_date || serie.first_air_date,
-            timestamp: new Date()
-        });
-
-        setSeriesAddedToWatchlist(prevState => {
-            const newWatchlist = [...prevState, serieId];
-            localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
-            return newWatchlist;
-        });
-
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout de la série à la watchlist :', error);
-        toast.error("Erreur lors de l'ajout à la watchlist", { autoclose: 1000 });
-    }
-};
 
 function SingleSeries({ series }) {
     const [serieInfos, setSerieInfos] = useState(null);
@@ -53,7 +16,7 @@ function SingleSeries({ series }) {
     const { id } = useParams();
     const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", {
+    const notify = () => toast.success("Série ajouté à votre watchlist", {
         autoclose: 1000,
     });
     // Utilise find pour obtenir directement la série désiré. 
@@ -88,7 +51,8 @@ function SingleSeries({ series }) {
 
     useEffect(() => {
         if (!serie) {
-            fetch(`https://api.themoviedb.org/3/tv/${serie}?api_key=d7e7ae694a392629f56dea0d38fd160e`)
+            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+            fetch(`https://api.themoviedb.org/3/tv/${serie}?api_key=${tmdbApiKey}`)
                 .then(response => response.json())
                 .then(data => setSerieInfos(data))
                 .catch(error => console.error('Erreur lors de la récupération des données de la série:', error));
@@ -128,7 +92,8 @@ function SingleSeries({ series }) {
 
     const getGenres = async (genres) => {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR`);
+            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+            const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${tmdbApiKey}&language=fr-FR`);
             const data = await response.json();
             const serieGenres = genres.map(genreId => {
                 const genreData = data.genres.find(genre => genre.id === genreId);
@@ -154,7 +119,7 @@ function SingleSeries({ series }) {
                         <div className="card">
                             <span onClick={(e) => {
                                 e.preventDefault();
-                                addToWatchlist(serieInfos, setSeriesAddedToWatchlist);
+                                addToWatchlistSeries(serieInfos, setSeriesAddedToWatchlist);
                                 notify();
                             }}
                                 className='add-watchlist'

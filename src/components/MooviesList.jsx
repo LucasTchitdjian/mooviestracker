@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
+export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => {
 
     if (!auth.currentUser) { // Check if user is logged in
         console.log("No user logged in.");
@@ -36,6 +36,7 @@ export const addToWatchlist = async (movie, setMoviesAddedToWatchlist) => {
 
         await setDoc(movieRef, {
             id: movie.id,
+            type: 'movie',
             title: movie.title || movie.name,
             poster_path: movie.poster_path,
             overview: movie.overview,
@@ -65,8 +66,9 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
     useEffect(() => {
         const fetchMoviesAndWatchlist = async () => {
             try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
                 const response = await fetch(
-                    `https://api.themoviedb.org/3/movie/now_playing?api_key=d7e7ae694a392629f56dea0d38fd160e&language=fr-FR&page=${currentPage}`
+                    `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbApiKey}&language=fr-FR&page=${currentPage}`
                 );
                 const data = await response.json();
                 setTotalPages(data.total_pages);
@@ -84,8 +86,6 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
         };
         fetchMoviesAndWatchlist(); 
     }, [currentPage, setMovies, setTotalPages]);
-
-    console.log(movies, "movies prop")
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
@@ -108,7 +108,7 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
                                 <div className="card">
                                     <span onClick={(e) => {
                                         e.preventDefault();
-                                        addToWatchlist(moovie, setMoviesAddedToWatchlist);
+                                        addToWatchlistMovies(moovie, setMoviesAddedToWatchlist);
                                     }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
                                     {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}

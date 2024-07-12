@@ -6,7 +6,7 @@ import { auth } from '../firebase-config';
 import { getDocs, collection } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import { db } from '../firebase-config';
-import { addToWatchlist } from './MooviesList';
+import { addToWatchlistMovies } from './MooviesList';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
@@ -67,7 +67,8 @@ function SingleMoovies({ movies }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=d7e7ae694a392629f56dea0d38fd160e`) // Requête pour obtenir les informations du film
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}`) // Requête pour obtenir les informations du film
                     .then(response => response.json())
                     .then(data => {
                         setMoovieInfos(data);
@@ -94,7 +95,7 @@ function SingleMoovies({ movies }) {
                     setMoviesAddedToWatchlist(storedWatchlist);
                 }
 
-                const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=d7e7ae694a392629f56dea0d38fd160e`) // Requête pour obtenir la bande annonce du film
+                const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${tmdbApiKey}`) // Requête pour obtenir la bande annonce du film
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.results && data.results.length > 0) {
@@ -137,7 +138,7 @@ function SingleMoovies({ movies }) {
                             <div className="card">
                                 <span onClick={(e) => {
                                     e.preventDefault();
-                                    addToWatchlist(displayedMovie);
+                                    addToWatchlistMovies(displayedMovie);
                                     notify();
                                 }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                 <div className="left">
