@@ -130,8 +130,8 @@ header .right {
 }
 
 .account img {
-    height: 64px;
-    width: 64px;
+    height: 48px;
+    width: 48px;
     border-radius: 50%;
 }
 
@@ -223,8 +223,8 @@ header .right {
         color: #fff;
     }
     .account img {
-        height: 48px;
-        width: 48px;
+        height: 24px;
+        width: 24px;
         border-radius: 50%;
     }
     .account p {
