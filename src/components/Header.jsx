@@ -145,7 +145,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
     return (
         <header>
             <div className="logo">
-                <h1><Link to="/">Lucas Movies</Link></h1>
+                <h1><Link to="/">What to Watch</Link></h1>
             </div>
             <form className="form" onSubmit={handleSearch}>
                 <div className="input">
