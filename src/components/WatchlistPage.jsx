@@ -14,7 +14,8 @@ export function WatchlistPage() {
     const [watchlist, setWatchlist] = useState([]);
 
     useEffect(() => {
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
         setWatchlist(storedWatchlist);
         if (!auth.currentUser) {
             toast.error("Vous devez être connecté pour voir votre watchlist", {
@@ -45,7 +46,8 @@ export function WatchlistPage() {
                 await deleteDoc(movieRef);
                 setWatchlist(prevWatchlist => {
                     const updatedWatchlist = prevWatchlist.filter(movie => movie.id !== movieId);
-                    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+                    const userId = auth.currentUser.uid;
+                    localStorage.setItem(`${userId}-watchlist`, JSON.stringify(updatedWatchlist));
                     return updatedWatchlist;
                 })
             } catch (error) {

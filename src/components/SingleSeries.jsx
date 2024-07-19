@@ -82,7 +82,8 @@ function SingleSeries({ series }) {
                     });
             } else {
                 // Clear watchlist when user is not logged in
-                const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+                const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+                const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
                 setSeriesAddedToWatchlist(storedWatchlist);
             }
         }

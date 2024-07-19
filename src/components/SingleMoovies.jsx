@@ -74,7 +74,9 @@ function SingleMoovies({ movies }) {
                         setMoovieInfos(data);
                         setLoading(false);
                     });
-                const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+                
+                const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+                const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
                 setMoviesAddedToWatchlist(storedWatchlist);
 
                 if (auth.currentUser) {
@@ -91,6 +93,7 @@ function SingleMoovies({ movies }) {
                         });
                 } else {
                     // Clear watchlist when user is not logged in
+                    const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
                     const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
                     setMoviesAddedToWatchlist(storedWatchlist);
                 }

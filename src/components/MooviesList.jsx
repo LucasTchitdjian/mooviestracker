@@ -23,7 +23,8 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
         const movieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', movieId);
 
         // Récuperer la watchlist depuis local storage
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const userId = auth.currentUser.u
+        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
 
         // Vérifier si le film est déjà dans la watchlist
         if (storedWatchlist.includes(movieId)) {
@@ -47,7 +48,8 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
         });
         setMoviesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, movieId];
-            localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
+            const userId = auth.currentUser.uid;
+            localStorage.setItem(`${userId}-watchlist`, JSON.stringify(newWatchlist));            
             return newWatchlist;
         });
 

@@ -32,7 +32,8 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
                 setPage(data.total_pages); // Pour faire passer la props page à Pagination et faire fonctionner la pagination dans l'accueil
                 setMovies(data.results);
             });
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
         setMoviesAddedToWatchlist(storedWatchlist);
 
         if (auth.currentUser) {

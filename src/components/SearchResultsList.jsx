@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
+import { auth } from '../firebase-config';
 
 export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
@@ -22,7 +23,8 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
             .then(data => setSearch(data.results))
             .catch(error => console.error('Erreur lors de la recherche du film:', error));
 
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
         setMoviesAddedToWatchlist(storedWatchlist);
 
     }, [setSearch, setMovies, search]);

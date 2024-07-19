@@ -22,7 +22,8 @@ export const addToWatchlistSeries = async (serie, setSeriesAddedToWatchlist) => 
         const serieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', serieId);
 
         // Récuperer la watchlist depuis local storage
-        const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const userId = auth.currentUser.uid;
+        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
 
         // Vérifier si le film est déjà dans la watchlist
         if (storedWatchlist.includes(serieId)) {
