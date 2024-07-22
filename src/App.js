@@ -68,7 +68,12 @@ function App() {
               <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
-          <Route path='/search' element={<SearchResultsList movies={movies} setMovies={setMovies} />} />
+          <Route path='/search' element={
+            <>
+              <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm}  />
+              <Pagination context="search" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+            </>
+          } />
           <Route path='/series' element={<Navigate to="/top-rated-series" />} /> {/* Redirect to '/series' */}
           <Route path='/top-rated-series' element={
             <>
