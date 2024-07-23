@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { auth, db } from '../firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function SearchResultsList({ movies, setMovies, search, setSearch }) {
@@ -31,9 +31,6 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                     const snapshot = await getDocs(watchlistRef);
                     const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
                     setMoviesAddedToWatchlist(watchlistMovies);
-                    toast.success("Film ajouté à votre watchlist", {
-                        autoclose: 100,
-                    });
                 }
             } catch (error) {
                 console.error('Erreur lors de la recherche du film ou série:', error);
@@ -47,6 +44,14 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
         return movies.sort((a, b) => b.vote_average - a.vote_average); // Trier par ordre décroissant
     };
 
+    const getSearchResultsType = (movies) => {
+        if (movies.length > 0) {
+            movies.map((movie) => {
+                return movie.type;
+            });
+        }
+    };
+
     return (
         <div className="search-list">
             <ToastContainer />
@@ -58,6 +63,7 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                             <span onClick={(e) => {
                                 e.preventDefault();
                                 addToWatchlistMovies(moovie, setMoviesAddedToWatchlist);
+                                getSearchResultsType(moovie);
                             }} className='add-watchlist'
                                 style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
                                 {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
