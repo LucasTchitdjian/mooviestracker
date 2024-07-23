@@ -47,7 +47,8 @@ export const addToWatchlistSeries = async (serie, setSeriesAddedToWatchlist) => 
         });
         setSeriesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, serieId];
-            localStorage.setItem('watchlist', JSON.stringify(newWatchlist));
+            const userId = auth.currentUser.uid;
+            localStorage.setItem(`${userId}-watchlist`, JSON.stringify(newWatchlist));
             return newWatchlist;
         });
 

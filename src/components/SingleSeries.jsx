@@ -15,10 +15,7 @@ function SingleSeries({ series }) {
     const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
     const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
-
-    const notify = () => toast.success("Série ajouté à votre watchlist", {
-        autoclose: 1000,
-    });
+    
     // Utilise find pour obtenir directement la série désiré. 
 
     const serie = series.find(serie => serie.id === parseInt(id, 10));
@@ -58,7 +55,8 @@ function SingleSeries({ series }) {
                 .catch(error => console.error('Erreur lors de la récupération des données de la série:', error));
         } else {
             setSerieInfos(serie);
-            const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+            const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
+            const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
             setSeriesAddedToWatchlist(storedWatchlist);
             const fetchGenreNames = async () => {
                 const names = await getGenres(serie.genre_ids); // Supposons que genreIds est un tableau d'IDs de genres
@@ -119,7 +117,6 @@ function SingleSeries({ series }) {
                             <span onClick={(e) => {
                                 e.preventDefault();
                                 addToWatchlistSeries(serieInfos, setSeriesAddedToWatchlist);
-                                notify();
                             }}
                                 className='add-watchlist'
                                 style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>

@@ -15,8 +15,6 @@ function SingleMoovies({ movies }) {
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
     const [trailer, setTrailer] = useState(null);
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", { autoclose: 1000 });
-
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const collectionUrl = searchParams.get('collection');
@@ -141,8 +139,7 @@ function SingleMoovies({ movies }) {
                             <div className="card">
                                 <span onClick={(e) => {
                                     e.preventDefault();
-                                    addToWatchlistMovies(displayedMovie);
-                                    notify();
+                                    addToWatchlistMovies(displayedMovie, setMoviesAddedToWatchlist);
                                 }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                 <div className="left">
                                     <img src={`https://image.tmdb.org/t/p/w500${displayedMovie.poster_path}`} alt={displayedMovie.title} />

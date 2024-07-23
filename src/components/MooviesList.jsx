@@ -10,23 +10,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => {
-
-    if (!auth.currentUser) { // Check if user is logged in
+    if (!auth.currentUser) {
         toast.error("Vous devez être connecté pour ajouter des films à votre watchlist", {
             autoclose: 1000,
         });
-        return; // Stop execution if not logged in
+        return;
     }
 
     try {
-        const movieId = movie.id.toString(); // utiliser l'id du film comme id du document
+        const movieId = movie.id.toString();
         const movieRef = doc(db, 'users', auth.currentUser.uid, 'watchlist', movieId);
 
-        // Récuperer la watchlist depuis local storage
-        const userId = auth.currentUser.u
+        const userId = auth.currentUser.uid;
         const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
 
-        // Vérifier si le film est déjà dans la watchlist
         if (storedWatchlist.includes(movieId)) {
             toast.warning("Ce film est déjà dans votre watchlist", {
                 autoclose: 1000,
@@ -48,8 +45,7 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
         });
         setMoviesAddedToWatchlist(prevState => {
             const newWatchlist = [...prevState, movieId];
-            const userId = auth.currentUser.uid;
-            localStorage.setItem(`${userId}-watchlist`, JSON.stringify(newWatchlist));            
+            localStorage.setItem(`${userId}-watchlist`, JSON.stringify(newWatchlist));
             return newWatchlist;
         });
 
@@ -102,25 +98,28 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
             <ToastContainer />
             <h2>Liste des films à l'affiche</h2>
             <ul>
-                {movies.map((moovie) => (
-                    <Link to={`/now-playing/movie/${moovie.id}`} key={moovie.id}>
+                {movies.map((movie, index) => (
+                    <Link to={`/now-playing/movie/${movie.id}`} key={index}>
                         <div className="moovie-container">
                             <div className="left">
                                 <div className="card">
                                     <span onClick={(e) => {
                                         e.preventDefault();
-                                        addToWatchlistMovies(moovie, setMoviesAddedToWatchlist);
-                                    }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
-                                    <p className='rating'><FaStar /> {ratingFormat(moovie.vote_average)}</p>
-                                    {moovie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${moovie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
+                                        addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
+                                    }} 
+                                    className='add-watchlist' 
+                                    style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(movie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
+                                        {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(movie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                                    <p className='rating'><FaStar /> {ratingFormat(movie.vote_average)}</p>
+                                    {movie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">
                                     </div>
                                 </div>
                             </div>
                             <div className="right">
                                 <div className="first-col">
-                                    <li className='title'>{moovie.title || moovie.name}</li>
-                                    <span className='release-date'>Sortie <strong>{formatDate(moovie.release_date)}</strong></span>
+                                    <li className='title'>{movie.title || movie.name}</li>
+                                    <span className='release-date'>Sortie <strong>{formatDate(movie.release_date)}</strong></span>
                                     {/* <li>{formatDate(moovie.release_date) || formatDate(moovie.first_air_date)}</li> */}
                                 </div>
                             </div>
