@@ -3,30 +3,43 @@ import './SearchResultsList.css';
 import { useEffect } from 'react';
 import { FaPlus, FaStar } from "react-icons/fa";
 import { addToWatchlistMovies } from '../components/MooviesList';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import { auth } from '../firebase-config';
+import { auth, db } from '../firebase-config';
+import { collection, getDocs } from 'firebase/firestore';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function SearchResultsList({ movies, setMovies, search, setSearch }) {
 
-    const notify = () => toast.success("Film ajouté à votre watchlist", {
-        autoclose: 1000,
-    });
     const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
 
     useEffect(() => {
-        const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${search}`)
-            .then(response => response.json())
-            .then(data => setSearch(data.results))
-            .catch(error => console.error('Erreur lors de la recherche du film:', error));
+        const fetchSearchResults = async () => {
+            try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${search}`
+                );
+                const data = await response.json();
+                setSearch(data.results);
 
-        const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
-        const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
-        setMoviesAddedToWatchlist(storedWatchlist);
-
+                if (auth.currentUser) {
+                    const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
+                    const snapshot = await getDocs(watchlistRef);
+                    const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
+                    setMoviesAddedToWatchlist(watchlistMovies);
+                    toast.success("Film ajouté à votre watchlist", {
+                        autoclose: 100,
+                    });
+                }
+            } catch (error) {
+                console.error('Erreur lors de la recherche du film ou série:', error);
+            }
+        };
+        fetchSearchResults();
     }, [setSearch, setMovies, search]);
 
     // Fonction pour trier les films par vote_average décroissant
@@ -45,7 +58,6 @@ export function SearchResultsList({ movies, setMovies, search, setSearch }) {
                             <span onClick={(e) => {
                                 e.preventDefault();
                                 addToWatchlistMovies(moovie, setMoviesAddedToWatchlist);
-                                notify();
                             }} className='add-watchlist'
                                 style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
                                 {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(moovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
