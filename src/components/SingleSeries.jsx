@@ -38,6 +38,7 @@ function SingleSeries({ series }) {
     }
 
     const formatReleaseDate = (releaseDate) => {
+        if (!releaseDate) return '';
         const date = new Date(releaseDate);
         return date.toLocaleDateString('fr-FR', {
             year: 'numeric',
@@ -127,7 +128,9 @@ function SingleSeries({ series }) {
                             </div>
                             <div className="right">
                                 <div className="first-line">
-                                    <p>Depuis {formatReleaseDate(serieInfos.first_air_date)}</p>
+                                    <p>
+                                        {formatReleaseDate(serieInfos.first_air_date)} {formatReleaseDate(serieInfos.first_air_date) && <span>Depuis</span>}
+                                    </p>
                                     {/* Vérifier si episode_run_time est défini et a une longueur supérieure à 0 avant de l'utiliser */}
                                     {serieInfos && serieInfos.episode_run_time && serieInfos.episode_run_time.length > 0 ?
                                         <p>{formatRuntime(serieInfos.episode_run_time[0])}</p> // Si vous avez plusieurs durées et voulez toutes les afficher, vous devez ajuster la logique ici

@@ -43,6 +43,7 @@ function SingleMoovies({ movies }) {
 
     // Formater la date ici si movie existe
     const formatDate = (dateString) => {
+        if (!dateString) return '';
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Intl.DateTimeFormat('fr-FR', options).format(new Date(dateString));
     };
@@ -146,7 +147,7 @@ function SingleMoovies({ movies }) {
                                 </div>
                                 <div className="right">
                                     <div className="first-line">
-                                        <p>{formatDate(displayedMovie.release_date)} <span>en salle</span></p>
+                                    <p>{formatDate(displayedMovie?.release_date)} {formatDate(displayedMovie?.release_date) && <span>en salle</span>}</p>
                                         <p>{formatRuntime(displayedMovie?.runtime)}</p>
                                         <p>{movieGenres ? movieGenres : ""}</p>
                                     </div>
