@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import './MooviesList.css';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { FaStar, FaPlus, FaCheck } from "react-icons/fa";
 import { db } from '../firebase-config';
 import { auth } from '../firebase-config';
-import { setDoc, doc, getDocs, collection } from 'firebase/firestore';
-import { useState } from 'react';
+import { setDoc, doc} from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GlobalContext } from '../context/GlobalContext';
 
 export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => {
     if (!auth.currentUser) {
@@ -58,10 +58,10 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
 };
 
 export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
-    const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
+    const { moviesAddedToWatchlist, setMoviesAddedToWatchlist } = useContext(GlobalContext);
 
     useEffect(() => {
-        const fetchMoviesAndWatchlist = async () => {
+        const fetchMovies = async () => {
             try {
                 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
                 const response = await fetch(
@@ -71,18 +71,16 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
                 setTotalPages(data.total_pages);
                 setMovies(data.results);
 
-                if (auth.currentUser) {
-                    const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
-                    const snapshot = await getDocs(watchlistRef);
-                    const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
-                    setMoviesAddedToWatchlist(watchlistMovies);
-                } 
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
         };
-        fetchMoviesAndWatchlist(); 
+        fetchMovies(); 
     }, [currentPage, setMovies, setTotalPages]);
+
+    const handleAddToWatchlist = (movie) => {
+        addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
+    }
 
     const ratingFormat = (rating) => {
         return rating.toFixed(1).toString().replace('.', ',');
@@ -105,11 +103,11 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
                                 <div className="card">
                                     <span onClick={(e) => {
                                         e.preventDefault();
-                                        addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
+                                        handleAddToWatchlist(movie);
                                     }} 
                                     className='add-watchlist' 
-                                    style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(movie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
-                                        {Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(movie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                                    style={moviesAddedToWatchlist.includes(movie.id.toString()) ? { backgroundColor: '#22BB33'} : {}}>
+                                        {moviesAddedToWatchlist.includes(movie.id.toString()) ? <FaCheck/> : <FaPlus />}</span>
                                     <p className='rating'><FaStar /> {ratingFormat(movie.vote_average)}</p>
                                     {movie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="" /> : <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg" alt="" />}
                                     <div className="moovie-info">

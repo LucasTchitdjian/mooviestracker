@@ -17,7 +17,8 @@ import { LogoutPage } from './components/LogoutPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
-import DefaultAvatarImg from './DefaultAvatarImgRemoved.png'; // [3] Importez l'image par défaut
+import DefaultAvatarImg from './DefaultAvatarImgRemoved.png';
+import { GlobalProvider } from './context/GlobalContext';
 
 function App() {
 
@@ -28,10 +29,9 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
-  const [userConnected, setUserConnected] = useState(false); // [1] Ajoutez un état pour gérer la connexion de l'utilisateur
-  const [profileImage, setProfileImage] = useState(DefaultAvatarImg); // [1] Ajoutez un état pour gérer l'image de profil
+  const [userConnected, setUserConnected] = useState(false);
+  const [profileImage, setProfileImage] = useState(DefaultAvatarImg);
 
-  // Load userConnected state from localStorage and Firebase when the app loads
   useEffect(() => {
     const userConnectedFromStorage = localStorage.getItem('userConnected');
     if (userConnectedFromStorage) {
@@ -51,17 +51,17 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // Save userConnected state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('userConnected', JSON.stringify(userConnected));
   }, [userConnected]);
 
   return (
     <div className="App">
+      <GlobalProvider>
       <Router>
         <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} profileImage={profileImage} />
         <Routes>
-          <Route path="/" element={<Navigate to="/now-playing" />} /> {/* Redirect to /now-playing */}
+          <Route path="/" element={<Navigate to="/now-playing" />} />
           <Route path="/now-playing" element={
             <>
               <MooviesList mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
@@ -70,11 +70,13 @@ function App() {
           } />
           <Route path='/search' element={
             <>
-              <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm}  />
+              <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
               <Pagination context="search" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
-          <Route path='/series' element={<Navigate to="/top-rated-series" />} /> {/* Redirect to '/series' */}
+          <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
+          <Route path='/search/series/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+          <Route path='/series' element={<Navigate to="/top-rated-series" />} />
           <Route path='/top-rated-series' element={
             <>
               <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
@@ -98,6 +100,7 @@ function App() {
           <Route path='/profile' element={<ProfilePage profileImage={profileImage} setProfileImage={setProfileImage} />} />
         </Routes>
       </Router>
+      </GlobalProvider>
       <Footer />
     </div>
   );

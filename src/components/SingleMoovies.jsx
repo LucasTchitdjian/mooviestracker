@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import './SingleMoovies.css';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
-import { auth } from '../firebase-config';
-import { getDocs, collection } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
-import { db } from '../firebase-config';
 import { addToWatchlistMovies } from './MooviesList';
+import { GlobalContext } from '../context/GlobalContext';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-    const [moviesAddedToWatchlist, setMoviesAddedToWatchlist] = useState([]);
+    const { moviesAddedToWatchlist, setMoviesAddedToWatchlist } = useContext(GlobalContext);    
     const [trailer, setTrailer] = useState(null);
 
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const collectionUrl = searchParams.get('collection');
-
-    // Déterminez le chemin de retour en fonction de la collection
-    let backPath = '/'; // Chemin par défaut
-    if (collectionUrl === 'now-playing') {
-        backPath = '/now-playing';
-    } else if (collectionUrl === 'top-rated') {
-        backPath = '/top-rated';
-    } else {
-        // Si la collection n'est pas spécifiée, utilisez le chemin actuel comme chemin de retour
-        backPath = location.pathname.split('/').slice(0, -1).join('/');
-    }
-
-    // Déterminez le lien à afficher en fonction du backPath 
-    let linkTo = "/"; // Chemin par défaut vers la page d'accueil
-    if (backPath.startsWith('/now-playing')) {
-        linkTo = '/now-playing';
-    } else if (backPath.startsWith('/top-rated')) {
-        linkTo = '/top-rated';
-    }
+    const navigate = useNavigate();
+    const searchQuery = new URLSearchParams(location.search).get('query');
+    const from = location.state?.from || { pathname: '/' };
 
     // Utilise find pour obtenir directement le film désiré.
     const movie = movies.find(movie => movie.id === parseInt(id, 10));
@@ -64,7 +44,7 @@ function SingleMoovies({ movies }) {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchSingleMovieAndTrailer = async () => {
             try {
                 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
                 await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}`) // Requête pour obtenir les informations du film
@@ -73,29 +53,6 @@ function SingleMoovies({ movies }) {
                         setMoovieInfos(data);
                         setLoading(false);
                     });
-                
-                const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
-                const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
-                setMoviesAddedToWatchlist(storedWatchlist);
-
-                if (auth.currentUser) {
-                    // Fetch watchlist from Firestore when user is logged in
-                    const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
-                    getDocs(watchlistRef)
-                        .then(snapshot => {
-                            const watchlistMovies = snapshot.docs.map(doc => doc.data().id.toString());
-                            setMoviesAddedToWatchlist(watchlistMovies);
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors de la récupération de la watchlist :', error);
-                            toast.error("Erreur lors de la récupération de la watchlist", { autoclose: 1000 });
-                        });
-                } else {
-                    // Clear watchlist when user is not logged in
-                    const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
-                    const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
-                    setMoviesAddedToWatchlist(storedWatchlist);
-                }
 
                 const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${tmdbApiKey}`) // Requête pour obtenir la bande annonce du film
                     .then(response => response.json())
@@ -115,7 +72,7 @@ function SingleMoovies({ movies }) {
                 toast.error("Erreur lors de la récupération des informations du film", { autoclose: 1000 });
             }
         };
-        fetchData();
+        fetchSingleMovieAndTrailer();
     }, [id]);
 
     const movieGenres = moovieInfos && moovieInfos.genres.map(genre => genre.name).join(', ');
@@ -126,11 +83,15 @@ function SingleMoovies({ movies }) {
 
     const displayedMovie = moovieInfos || movie;
 
+    const handleAddToWatchlist = (movie) => {
+        addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
+    }
+
     return (
         <div className="wrapper">
             <ToastContainer />
             <div className="back-btn">
-                <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
+                <button onClick={() => navigate(`/search/?query=${searchQuery}`)} to={from}><FaLongArrowAltLeft /> Retour</button>
             </div>
             <div className='single-moovies'>
                 <div className="movie-infos">
@@ -140,8 +101,9 @@ function SingleMoovies({ movies }) {
                             <div className="card">
                                 <span onClick={(e) => {
                                     e.preventDefault();
-                                    addToWatchlistMovies(displayedMovie, setMoviesAddedToWatchlist);
-                                }} className='add-watchlist' style={Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{Array.isArray(moviesAddedToWatchlist) && moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                                    handleAddToWatchlist(displayedMovie);
+                                }} className='add-watchlist' 
+                                style={moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                 <div className="left">
                                     <img src={`https://image.tmdb.org/t/p/w500${displayedMovie.poster_path}`} alt={displayedMovie.title} />
                                 </div>
