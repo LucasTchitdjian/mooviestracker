@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import './SingleSeries.css';
-import { Link } from 'react-router-dom';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
-import { auth } from '../firebase-config';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase-config';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { addToWatchlistSeries } from './Series';
+import { GlobalContext } from '../context/GlobalContext';
 
-
-function SingleSeries({ series }) {
+function SingleSeries() {
     const [serieInfos, setSerieInfos] = useState(null);
     const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
-    const [seriesAddedToWatchlist, setSeriesAddedToWatchlist] = useState([]);
-    
-    // Utilise find pour obtenir directement la série désiré. 
+    const { seriesAddedToWatchlist, setSeriesAddedToWatchlist } = React.useContext(GlobalContext);
 
-    const serie = series.find(serie => serie.id === parseInt(id, 10));
+    const location = useLocation();
+    const navigate = useNavigate();
+    const searchQuery = new URLSearchParams(location.search).get('query');
+    const from = location.state?.from || { pathname: '/' };
 
     const formatRuntime = (runtime) => {
         if (runtime > 60) {
@@ -31,7 +28,7 @@ function SingleSeries({ series }) {
     }
 
     const formatRating = (rating) => {
-        if (rating !== undefined) {
+        if (rating !== undefined) { 
             rating = rating.toFixed(1);
             return rating.toString().replace('.', ',');
         }
@@ -45,70 +42,35 @@ function SingleSeries({ series }) {
         });
     }
 
-    const genre_ids = serieInfos?.genre_ids;
-
     useEffect(() => {
-        if (!serie) {
-            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-            fetch(`https://api.themoviedb.org/3/tv/${serie}?api_key=${tmdbApiKey}`)
-                .then(response => response.json())
-                .then(data => setSerieInfos(data))
-                .catch(error => console.error('Erreur lors de la récupération des données de la série:', error));
-        } else {
-            setSerieInfos(serie);
-            const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
-            const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
-            setSeriesAddedToWatchlist(storedWatchlist);
-            const fetchGenreNames = async () => {
-                const names = await getGenres(serie.genre_ids); // Supposons que genreIds est un tableau d'IDs de genres
-                setGenreNames(names); // Mettez à jour l'état avec les noms de genres obtenus
-            };
-            fetchGenreNames();
+        const fetchSingleSerie = async () => {
+            try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}`);
+                const data = await response.json();
+                setSerieInfos(data);
 
-            if (auth.currentUser) {
-                // Fetch watchlist from Firestore when user is logged in
-                const watchlistRef = collection(db, 'users', auth.currentUser.uid, 'watchlist');
-                getDocs(watchlistRef)
-                    .then(snapshot => {
-                        const watchlistSeries = snapshot.docs.map(doc => doc.data().id.toString());
-                        setSeriesAddedToWatchlist(watchlistSeries);
-                    })
-                    .catch(error => {
-                        console.error("Error getting watchlist:", error);
-                        toast.error("Erreur lors de la récupération de la watchlist", {
-                            autoclose: 1000,
-                        });
-                    });
-            } else {
-                // Clear watchlist when user is not logged in
-                const userId = auth.currentUser ? auth.currentUser.uid : 'guest';
-                const storedWatchlist = JSON.parse(localStorage.getItem(`${userId}-watchlist`)) || [];
-                setSeriesAddedToWatchlist(storedWatchlist);
+                if (data.genres) {
+                    const genres = data.genres.map(genre => genre.name).join(', ');
+                    setGenreNames(genres);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations de la série:', error);
             }
-        }
-    }, [id, serie, genreNames, genre_ids]);
+        };
 
-    const getGenres = async (genres) => {
-        try {
-            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-            const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${tmdbApiKey}&language=fr-FR`);
-            const data = await response.json();
-            const serieGenres = genres.map(genreId => {
-                const genreData = data.genres.find(genre => genre.id === genreId);
-                return genreData ? genreData.name : null;
-            }).filter(name => name != null); // Filtrer pour enlever les éventuels null
-            return serieGenres.join(' | ');
-        } catch (error) {
-            console.error('Erreur lors de la récupération des genres:', error);
-            return ''; // Retourne une chaîne vide ou une valeur par défaut en cas d'erreur
-        }
-    };
+        fetchSingleSerie();
+    }, [id]);
+
+    const handleAddToWatchlist = (serie) => {
+        addToWatchlistSeries(serie, setSeriesAddedToWatchlist);
+    }
 
     return (
         <div className="wrapper">
             <ToastContainer />
             <div className="back-btn">
-                <Link to="/series"><FaLongArrowAltLeft /> Retour</Link>
+                <button onClick={() => navigate(`/search/?query=${searchQuery}`)} to={from}><FaLongArrowAltLeft /> Retour</button>
             </div>
             <div className='single-series'>
                 {serieInfos ? (
@@ -117,24 +79,22 @@ function SingleSeries({ series }) {
                         <div className="card">
                             <span onClick={(e) => {
                                 e.preventDefault();
-                                addToWatchlistSeries(serieInfos, setSeriesAddedToWatchlist);
+                                handleAddToWatchlist(serieInfos);
                             }}
                                 className='add-watchlist'
-                                style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
-                                {Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? <FaCheck /> : <FaPlus />}
+                                style={seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
+                                {seriesAddedToWatchlist.includes(serieInfos.id.toString()) ? <FaCheck /> : <FaPlus />}
                             </span>
                             <div className="left">
                                 <img src={`https://image.tmdb.org/t/p/w500${serieInfos.poster_path}`} alt={serieInfos.title} />
                             </div>
                             <div className="right">
-                                <div className="first-line">
+                            <div className="first-line">
                                     <p>
-                                        {formatReleaseDate(serieInfos.first_air_date)} {formatReleaseDate(serieInfos.first_air_date) && <span>Depuis</span>}
+                                        {formatReleaseDate(serieInfos.first_air_date) && <span>Depuis</span>} {formatReleaseDate(serieInfos.first_air_date)}
                                     </p>
-                                    {/* Vérifier si episode_run_time est défini et a une longueur supérieure à 0 avant de l'utiliser */}
                                     {serieInfos && serieInfos.episode_run_time && serieInfos.episode_run_time.length > 0 ?
-                                        <p>{formatRuntime(serieInfos.episode_run_time[0])}</p> // Si vous avez plusieurs durées et voulez toutes les afficher, vous devez ajuster la logique ici
-                                        : null}
+                                        <p>{formatRuntime(serieInfos.episode_run_time[0])}</p> : null}
                                     <p>{genreNames}</p>
                                 </div>
                                 <div className="second-line">
