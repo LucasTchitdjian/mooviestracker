@@ -75,7 +75,7 @@ function App() {
             </>
           } />
           <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
-          <Route path='/search/series/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+          <Route path='/search/tv/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path='/series' element={<Navigate to="/top-rated-series" />} />
           <Route path='/top-rated-series' element={
             <>

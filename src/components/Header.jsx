@@ -52,7 +52,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
     const handleSearch = async (e) => {
         e.preventDefault();
         if (searchTerm !== '') {
-            navigate('/search');
+            navigate(`/search/?query=${searchTerm}`);
             const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
             const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${searchTerm}`;
             const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${searchTerm}`;

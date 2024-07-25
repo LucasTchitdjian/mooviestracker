@@ -15,7 +15,6 @@ function SingleSeries() {
     const location = useLocation();
     const navigate = useNavigate();
     const searchQuery = new URLSearchParams(location.search).get('query');
-    const from = location.state?.from || { pathname: '/' };
 
     const formatRuntime = (runtime) => {
         if (runtime > 60) {
@@ -66,11 +65,21 @@ function SingleSeries() {
         addToWatchlistSeries(serie, setSeriesAddedToWatchlist);
     }
 
+    const handleBackLink = () => {
+        if (searchQuery !== null) {
+            console.log("searchQuery !== null");
+            navigate(`/search/?query=${searchQuery}`);
+        } else {
+            console.log("searchQuery === null");
+            navigate('/series');
+        }
+    }
+
     return (
         <div className="wrapper">
             <ToastContainer />
             <div className="back-btn">
-                <button onClick={() => navigate(`/search/?query=${searchQuery}`)} to={from}><FaLongArrowAltLeft /> Retour</button>
+                <button onClick={handleBackLink}><FaLongArrowAltLeft /> Retour</button>
             </div>
             <div className='single-series'>
                 {serieInfos ? (
