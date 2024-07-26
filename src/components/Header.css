@@ -137,13 +137,13 @@ header .right {
 
 .right.active .account::after {
     content: "";
-    position: absolute;
-    width: 300px;
-    height: 80vh;
+    position: fixed;
+    width: 100vw;
+    height: 100dvh;
     background-color: #333;
     border-radius: 10px;
     right: 0;
-    top: 40px;
+    top: -30px;
     z-index: 1;
     border: none;
     outline: none;
@@ -153,11 +153,19 @@ header .right {
     display: none;
 }
 
+.account .columns > svg {
+    position: absolute;
+    right: 20px;
+    top: -30px;
+    font-size: 1.5em;
+}
+
 .right.active .account .columns {
     display: block;
     position: absolute;
     width: 300px;
     right: 0;
+    top: 20px;
     z-index: 2;
     color: white;
 }
@@ -171,6 +179,7 @@ header .right {
     align-items: center;
     gap: 16px;
     padding: 18px 10px;
+    width: 100%;
 }
 
 .right.active .account .columns .row:hover {
@@ -181,7 +190,7 @@ header .right {
     font-size: small;
 }
 
-.open-hamburger {
+.open-hamburger > svg {
     font-size: 1.5em;
 }
 
@@ -211,7 +220,7 @@ header .right {
         gap: 20px;
     }
     header .form {
-        width: 60%;
+        width: 80%;
     }
     header .menu ul {
         gap: 0;
@@ -222,20 +231,21 @@ header .right {
     .hamburger-menu.active > li.close-hamburger > svg {
         color: #fff;
     }
-    .account img {
-        height: 24px;
-        width: 24px;
-        border-radius: 50%;
-    }
     .account p {
         display: none;
     }
-
+    /* Size Account and hamburger menu for mobile devices */
+    .account > svg {
+        font-size: 1em;
+    }
+    .open-hamburger > svg {
+        font-size: 1.3em;
+    }
+    /*  */
     .hamburger-menu.active::after {
         width: 50vw;
     }
     .right.active .account::after {
-        height: 70vw;
-        top: 50px;
+        height: 100dvh;
     }
 }

@@ -6,7 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 // import profilImg from '../PhotoLucas.jpg';
-import { FaArrowRightToBracket } from "react-icons/fa6";
+import { FaArrowRightToBracket, FaUser } from "react-icons/fa6";
 import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
 import { RxAvatar } from "react-icons/rx";
@@ -165,9 +165,10 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             </div> */}
             <div className={`right ${accountActive ? 'active' : ''}`}>
                 <div className="account" onClick={handleAccountClick}>
-                    <img src={profileImage} alt="perso avatar" />
+                    <FaUser />
                     {/* <p>{userConnected ? 'connecté' : 'non connecté'}</p> */}
                     <div className="columns">
+                        <RxCross2 />
                         {accountItems.map((item) => {
                             // La condition pour vérifier si l'élément est visible est déplacée à l'extérieur du composant Link
                             if (!item.visible) return null;
