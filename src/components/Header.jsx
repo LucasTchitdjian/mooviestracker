@@ -11,32 +11,33 @@ import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
 import { RxAvatar } from "react-icons/rx";
 
-const variants = {
-    open: {
+const menuVariants = {
+    hidden: {
+        x: '100%',  // Déplacer le menu complètement hors de l'écran à droite
+        opacity: 0, // Rendre le menu transparent
         transition: {
-            staggerChildren: 0.3,
-            stiffness: 1000,
-        },
+            staggerChildren: 0.1, // Délai entre chaque élément
+            staggerDicrection: -1, // Direction de l'animation
+        }
     },
-    closed: {
+    visible: {
+        x: '0%',    // Positionner le menu à sa position finale
+        opacity: 1, // Rendre le menu visible
         transition: {
-            staggerChildren: 0.1,
-            staggerDirection: -1,
-            damping: 3000,
+            type: 'spring', // Type de transition, peut être 'tween' ou 'spring'
+            stiffness: 500, // Dureté de l'animation
+            damping: 30,    // Amorti de l'animation
+            duration: 0.5,  // Durée de l'animation
+            staggerChildren: 0.3, // Délai entre chaque élément
         },
     },
 };
 
 const itemVariants = {
-    open: {
-        y: 0,
-        opacity: 1,
-    },
-    closed: {
-        y: 50,
-        opacity: 0,
-    },
-};
+    hidden: { opacity: 0, y: 20 },  // Initialement cachés et décalés
+    visible: { opacity: 1, y: 0 }   // Visibles et à leur position finale
+  };
+  
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected, profileImage }) {
 
@@ -164,48 +165,47 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                 <Link to="/watchlist">Watchlist</Link>
             </div> */}
             <div className={`right ${accountActive ? 'active' : ''}`}>
-                <div className="account" onClick={handleAccountClick}>
-                    <FaUser />
-                    {/* <p>{userConnected ? 'connecté' : 'non connecté'}</p> */}
-                    <div className="columns">
-                        <RxCross2 />
-                        {accountItems.map((item) => {
-                            // La condition pour vérifier si l'élément est visible est déplacée à l'extérieur du composant Link
-                            if (!item.visible) return null;
-                            return (
-                                <Link
-                                    to={item.path}
-                                    key={item.id}  // Clé déplacée ici pour assurer une performance optimale et éviter des erreurs de rendu
-                                    onClick={(e) => {
-                                        // Seulement empêcher le comportement par défaut si une fonction onClick est fournie
-                                        if (item.onClick) {
-                                            e.preventDefault();
-                                            item.onClick();
-                                        }
-                                        // Pas besoin de bloc 'else', laissez le comportement par défaut du lien se poursuivre
-                                    }}
-                                >
-                                    <div className="row">
+                <div className={`account-menu ${accountActive ? 'active' : ''}`} onClick={handleAccountClick}>
+                    <div className="account-icon">
+                        <FaUser />
+                    </div>
+                    <div className="account-dropdown">
+                        <ul>
+                            {accountItems.map((item) => (
+                                item.visible && (
+                                    <li key={item.id} onClick={() => item.onClick ? item.onClick() : navigate(item.path)}>
                                         {item.icon}
-                                        <span>{item.name}</span> {/* Modification pour inclure le nom de l'élément dans un span pour un meilleur contrôle du style */}
-                                    </div>
-                                </Link>
-                            );
-                        })}
+                                        <span>{item.name}</span>
+                                    </li>
+                                )
+                            ))}
+                        </ul>
+                        <div className="account-close" onClick={handleAccountClick}>
+                            <RxCross2 />
+                        </div>
                     </div>
                 </div>
-
                 <div className={`menu ${menuActive ? 'active' : ''}`}>
-                    <ul className='browser-menu' variants={variants}>
-                        {menuItems.map(item => (
-                            <motion.li key={item.id} variants={itemVariants} onClick={handleMenuClick} initial="closed" animate={`${menuActive ? 'open' : 'closed'}`}>
-                                <Link to={item.path}>{item.name}</Link>
-                            </motion.li>
-                        ))}
-                    </ul>
-                    <ul className={`hamburger-menu ${menuActive ? 'active' : ''}`}>
-                        <li onClick={handleMenuClick} className='open-hamburger'><RxHamburgerMenu /></li>
-                        <li onClick={handleMenuClick} className='close-hamburger'><RxCross2 /></li>
+                    {/* Menu Items */}
+                    <motion.div
+                        initial="hidden"
+                        animate={menuActive ? 'visible' : 'hidden'}
+                        variants={menuVariants}
+                        className="menu-background"
+                    >
+                        <ul className='browser-menu'>
+                            {menuItems.map(item => (
+                                <motion.li variants={itemVariants} initial="hidden" animate={menuActive ? "visible" : "hidden"} key={item.id} onClick={handleMenuClick}>
+                                    <Link to={item.path}>{item.name}</Link>
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                    {/* Hamburger Icon */}
+                    <ul className="hamburger-menu">
+                        <li onClick={handleMenuClick} className="open-hamburger">
+                            {menuActive ? <RxCross2 style={ { color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }}/>}
+                        </li>
                     </ul>
                 </div>
             </div>
