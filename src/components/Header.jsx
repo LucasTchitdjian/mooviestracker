@@ -195,7 +195,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                     >
                         <ul className='browser-menu'>
                             {menuItems.map(item => (
-                                <motion.li variants={itemVariants} initial="hidden" animate={menuActive ? "visible" : "hidden"} key={item.id} onClick={handleMenuClick}>
+                                <motion.li variants={itemVariants} key={item.id} onClick={handleMenuClick}>
                                     <Link to={item.path}>{item.name}</Link>
                                 </motion.li>
                             ))}
