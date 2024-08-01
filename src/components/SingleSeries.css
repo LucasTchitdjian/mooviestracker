@@ -1,5 +1,5 @@
 .wrapper {
-    padding: 1rem 5rem;
+    padding: 6rem 5rem;
     background-color: #f2f2f2;
     min-height: 100vh;
 }
@@ -165,7 +165,7 @@
 
 @media screen and (max-width: 450px) {
     .wrapper {
-        padding: 1rem 1rem;
+        padding: 5rem 1rem;
     }
 
     .single-series .card .left {
