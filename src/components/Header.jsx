@@ -6,10 +6,13 @@ import { RxCross2 } from "react-icons/rx";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 // import profilImg from '../PhotoLucas.jpg';
-import { FaArrowRightToBracket, FaUser } from "react-icons/fa6";
+import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoIosListBox } from "react-icons/io";
 import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
 import { RxAvatar } from "react-icons/rx";
+import { BiSolidCameraMovie } from "react-icons/bi";
+import { MdLiveTv } from "react-icons/md";
+import { FaUserPlus } from "react-icons/fa";
 
 const menuVariants = {
     hidden: {
@@ -36,15 +39,14 @@ const menuVariants = {
 const itemVariants = {
     hidden: { opacity: 0, y: 20 },  // Initialement cachés et décalés
     visible: { opacity: 1, y: 0 }   // Visibles et à leur position finale
-  };
-  
+};
+
 
 export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected, profileImage }) {
 
     const navigate = useNavigate();
 
     const [menuActive, setMenuActive] = useState(false);
-    const [accountActive, setAccountActive] = useState(false);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -83,51 +85,44 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
     };
 
     const handleMenuClick = () => {
-        if (!accountActive) {
             setMenuActive(!menuActive);
-        }
-    }
-
-    const handleAccountClick = () => {
-        setAccountActive(!accountActive);
     }
 
     const menuItems = [
         {
             id: 1,
             name: 'Cinéma',
-            path: '/top-rated'
+            path: '/top-rated',
+            icon: <BiSolidCameraMovie />
         },
         {
             id: 2,
             name: 'Séries',
-            path: '/series'
-        }
-    ];
-
-    const accountItems = [
+            path: '/series',
+            icon: <MdLiveTv />
+        },
         {
-            id: 1,
+            id: 3,
             name: 'Se connecter',
             path: '/login',
             icon: <FaArrowRightToBracket />,
             visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         },
         {
-            id: 2,
+            id: 4,
             name: 'S\'inscrire',
             path: '/register',
-            icon: <FaArrowRightToBracket />,
+            icon: <FaUserPlus />,
             visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         },
         {
-            id: 3,
+            id: 5,
             name: 'Watchlist',
             path: '/watchlist',
             icon: <IoIosListBox />,
             visible: userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
         }, {
-            id: 4,
+            id: 6,
             name: 'Déconnexion',
             path: '/logout',
             icon: <FaArrowRightToBracket />,
@@ -135,7 +130,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             onClick: handleLogout // Ajoutez une propriété onClick pour gérer la déconnexion
         },
         {
-            id: 5,
+            id: 7,
             name: 'Profil',
             path: '/profile',
             icon: <RxAvatar />,
@@ -164,27 +159,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             {/* <div className="watchlist">
                 <Link to="/watchlist">Watchlist</Link>
             </div> */}
-            <div className={`right ${accountActive ? 'active' : ''}`}>
-                <div className={`account-menu ${accountActive ? 'active' : ''}`} onClick={handleAccountClick}>
-                    <div className="account-icon">
-                        <FaUser />
-                    </div>
-                    <div className="account-dropdown">
-                        <ul>
-                            {accountItems.map((item) => (
-                                item.visible && (
-                                    <li key={item.id} onClick={() => item.onClick ? item.onClick() : navigate(item.path)}>
-                                        {item.icon}
-                                        <span>{item.name}</span>
-                                    </li>
-                                )
-                            ))}
-                        </ul>
-                        <div className="account-close" onClick={handleAccountClick}>
-                            <RxCross2 />
-                        </div>
-                    </div>
-                </div>
+            <div className="right">
                 <div className={`menu ${menuActive ? 'active' : ''}`}>
                     {/* Menu Items */}
                     <motion.div
@@ -194,8 +169,9 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                         className="menu-background"
                     >
                         <ul className='browser-menu'>
-                            {menuItems.map(item => (
-                                <motion.li variants={itemVariants} key={item.id} onClick={handleMenuClick}>
+                            {menuItems.filter(item => item.visible !== false).map(item => (
+                                <motion.li variants={itemVariants} key={item.id} onClick={item.onClick ? item.onClick : handleMenuClick}>
+                                    <Link to={item.path}>{item.icon}</Link>
                                     <Link to={item.path}>{item.name}</Link>
                                 </motion.li>
                             ))}
@@ -204,7 +180,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                     {/* Hamburger Icon */}
                     <ul className="hamburger-menu">
                         <li onClick={handleMenuClick} className="open-hamburger">
-                            {menuActive ? <RxCross2 style={ { color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }}/>}
+                            {menuActive ? <RxCross2 style={{ color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
                         </li>
                     </ul>
                 </div>

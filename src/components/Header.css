@@ -1,4 +1,9 @@
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,7 +31,7 @@ header .logo h1 {
 }
 
 header .form {
-    width: 50%;
+    flex-grow: 0.6;
     height: 2.125rem;
     border: 1px solid #fff;
     border-radius: 10px;
@@ -62,7 +67,7 @@ header .form input[type="search"] {
     top: 0;
     right: 0;
     bottom: 0;
-    width: 350px; /* 300px */
+    width: 400px; /* 400px */
     background-color: black;
     z-index: 999;
     display: flex;
@@ -72,6 +77,7 @@ header .form input[type="search"] {
 
 .open-hamburger {
     display: block;
+    z-index: 1003;
 }
 
 header .menu li {
@@ -92,10 +98,6 @@ header .browser-menu {
 
 }
 
-header .browser-menu li {
-    margin: 10px 0;
-}
-
 header .browser-menu li a {
     color: #fff;
     text-decoration: none;
@@ -108,98 +110,45 @@ header .right {
 }
 
 /* Styles pour le menu hamburger */
-.hamburger-menu {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;   
-}
 
 .hamburger-menu li {
     list-style: none;
     cursor: pointer;
 }
 
-.open-hamburger > svg {
-    font-size: 1.5em;
-    z-index: 1001;
-}
-
-/* Styles pour le menu de compte */
-.account-menu {
-    position: relative;
-  }
-  
-  .account-icon {
-    cursor: pointer;
-  }
-  
-  .account-dropdown {
-    position: absolute;
-    right: 0;
-    top: 20px;
-    width: 250px;
-    background-color: #333;
-    color: white;
-    border-radius: 8px;
-    padding: 10px;
-    display: none;
-    z-index: 1000;
-  }
-  
-  .account-menu.active .account-dropdown {
-    display: block;
-  }
-  
-  .account-dropdown ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .account-dropdown li {
+.menu.active .browser-menu li {
     display: flex;
     align-items: center;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .account-dropdown li:hover {
-    background-color: #444;
-  }
-  
-  .account-dropdown li span {
-    margin-left: 10px;
-  }
-  
-  .account-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-  }  
+    gap: 15px;
+    height: 50px;
+}
+
+.menu.active .browser-menu li a:nth-child(2) {
+    padding-bottom: 10px;
+}
+
+.open-hamburger > svg {
+    font-size: 1.5em;
+    z-index: 1002;
+    color: white;
+}
 
 @media screen and (max-width: 450px) {
+    .menu-background {
+        width: 70dvw;
+    }
 
     .browser-menu li a {
         position: relative;
         color: #fff;
     }
 
-    .menu.active .browser-menu li {
-        display: block;
-    }
-
     .hamburger-menu li.open-hamburger {
         display: block;
         z-index: 3;
     }
-    header {
-        padding: 10px 3vw;
-        gap: 20px;
-    }
     header .form {
-        width: 80%;
+        flex-grow: 0.7;
     }
     header .menu ul {
         gap: 0;
@@ -217,8 +166,15 @@ header .right {
     .open-hamburger > svg {
         font-size: 1.3em;
     }
+    .hamburger-menu {
+        z-index: 1003;
+        position: relative;
+    }
     /*  */
     .hamburger-menu.active::after {
         width: 50vw;
+    }
+    .account-icon > svg {
+        font-size: 1.5em;
     }
 }
