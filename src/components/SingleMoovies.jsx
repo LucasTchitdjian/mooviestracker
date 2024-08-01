@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import './SingleMoovies.css';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import { addToWatchlistMovies } from './MooviesList';
 import { GlobalContext } from '../context/GlobalContext';
+import { Link } from 'react-router-dom';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
@@ -14,9 +15,6 @@ function SingleMoovies({ movies }) {
     const [trailer, setTrailer] = useState(null);
 
     const location = useLocation();
-    const navigate = useNavigate();
-    const searchQuery = new URLSearchParams(location.search).get('query');
-    const from = location.state?.from || { pathname: '/' };
 
     // Utilise find pour obtenir directement le film désiré.
     const movie = movies.find(movie => movie.id === parseInt(id, 10));
@@ -87,11 +85,33 @@ function SingleMoovies({ movies }) {
         addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
     }
 
+    const searchParams = new URLSearchParams(location.search);
+    const collectionUrl = searchParams.get('collection');
+
+    // Déterminez le chemin de retour en fonction de la collection
+    let backPath = '/'; // Chemin par défaut
+    if (collectionUrl === 'now-playing') {
+        backPath = '/now-playing';
+    } else if (collectionUrl === 'top-rated') {
+        backPath = '/top-rated';
+    } else {
+        // Si la collection n'est pas spécifiée, utilisez le chemin actuel comme chemin de retour
+        backPath = location.pathname.split('/').slice(0, -1).join('/');
+    }
+
+    // Déterminez le lien à afficher en fonction du backPath 
+    let linkTo = "/"; // Chemin par défaut vers la page d'accueil
+    if (backPath.startsWith('/now-playing')) {
+        linkTo = '/now-playing';
+    } else if (backPath.startsWith('/top-rated')) {
+        linkTo = '/top-rated';
+    }
+
     return (
         <div className="wrapper">
             <ToastContainer />
             <div className="back-btn">
-                <button onClick={() => navigate(`/search/?query=${searchQuery}`)} to={from}><FaLongArrowAltLeft /> Retour</button>
+                <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
             </div>
             <div className='single-moovies'>
                 <div className="movie-infos">
