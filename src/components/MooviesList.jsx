@@ -83,7 +83,11 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
     }
 
     const ratingFormat = (rating) => {
-        return rating.toFixed(1).toString().replace('.', ',');
+        if (rating !== undefined) {
+            return rating.toFixed(1).toString().replace('.', ',');
+        } else {
+            return 'N/A';
+        }
     }
 
     const formatDate = (date) => {
