@@ -58,9 +58,10 @@ const Moovies = ({ movies, setMovies, currentPage, setPage }) => {
                                 </div>
                             </div>
                             <div className="right">
-                                <li className='title'>{moovie.title}</li>
-                                <span className='release-date'>Sortie <strong>{formatDate(moovie.release_date)}</strong></span>
-                                <li>Date de sortie: {formatDate(moovie.release_date)}</li>
+                                <div className="first-col">
+                                    <li class name='title'>{moovie.title || moovie.name}</li>
+                                    <span className='release-date'>Sortie <strong>{formatDate(moovie.release_date)}</strong></span>
+                                </div>
                             </div>
                         </div>
                     </Link>

@@ -1,7 +1,7 @@
 .moovies h2 {
     text-align: left;
     padding-left: 3vw;
-    padding-top: 3vh;
+    padding-top: 10vh;
     padding-bottom: 3vh;
     font-size: clamp(1.25rem, 2vw, 3rem);
 }
@@ -70,23 +70,28 @@
     color: #ffd250 ;
 }
 
-.moovies li.title {
+/* .moovies li.title {
     display: none;
-}
+} */
 
 .moovies-container .right {
     display: none;
 }
 
 @media screen and (max-width: 450px) {
-
-    .moovies li.title {
-        font-weight: bold;
-        display: block;
+    .moovies-container .right {
+        align-self: flex-start;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 200px;
     }
 
     .moovies li {
         color: black;
+        font-weight: bold;
+        display: block;
+        line-height: 1.5rem;
     }
     .moovies .card {
         height: 200px;
