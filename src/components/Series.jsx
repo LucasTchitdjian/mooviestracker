@@ -87,14 +87,29 @@ export function Series({ series, setSeries, currentPage, setTotalPages }) {
         fetchSeriesAndWatchlist();
     }, [currentPage, setSeries, setTotalPages]);
 
+    const ratingFormat = (rating) => {
+        if (rating !== undefined) {
+            return rating.toFixed(1).toString().replace('.', ',');
+        } else {
+            return 'N/A';
+        }
+    }
+
+    const formatDate = (date) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString('fr-FR', options);
+    }
+
+    console.log(series, "series");
+
     return (
-        <div className='series'>
+        <div className='series-list'>
             <ToastContainer />
             <h2>Liste des séries les mieux notées de tous les temps</h2>
             <ul>
                 {series.map((serie, index) => (
                     <Link to={`/serie/${serie.id}`} key={index}>
-                        <div className="series-container">
+                        <div className="serie-container">
                             <div className="left">
                                 <div className="card">
                                     <span onClick={(e) => {
@@ -102,16 +117,21 @@ export function Series({ series, setSeries, currentPage, setTotalPages }) {
                                         addToWatchlistSeries(serie, setSeriesAddedToWatchlist);
                                     }}
                                         className='add-watchlist'
-                                        style={Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
-                                        {Array.isArray(seriesAddedToWatchlist) && seriesAddedToWatchlist.includes(serie.id.toString()) ? <FaCheck /> : <FaPlus />}
+                                        style={seriesAddedToWatchlist.includes(serie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>
+                                        {seriesAddedToWatchlist.includes(serie.id.toString()) ? <FaCheck /> : <FaPlus />}
                                     </span>
-                                    <p className='rating'><FaStar /> {serie.vote_average.toFixed(1).replace('.', ',')}</p>
-                                    <img src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`} alt={serie.name} />
+                                    <p className='rating'><FaStar /> {ratingFormat(serie.vote_average)}</p>
+                                    {serie.poster_path !== null ? <img src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`} alt={serie.title || serie.name} /> : <img src='https://via.placeholder.com/500x750' alt='placeholder' />}
+                                    <div className="serie-info">
+                                    </div>
                                 </div>
                             </div>
                             <div className="right">
-                                <li className="title">{serie.name}</li>
+                                <div className="first-col">
+                                <li className="title">{serie.name || serie.title}</li>
+                                <span className='release-date'>Sortie <strong>{formatDate(serie.first_air_date)}</strong></span>
                                 {/* <li>Note: {serie.vote_average.toFixed(1).replace('.', ',')} /10</li> */}
+                                </div>
                             </div>
                         </div>
                     </Link>

@@ -1,47 +1,31 @@
-.series h2 {
+.series-list h2 {
     text-align: left;
-    padding-left: 5vw;
-    padding-top: 3vh;
+    padding-left: 2vw;
+    padding-top: 10vh;
     padding-bottom: 3vh;
+    font-size: clamp(1.25rem, 2vw, 3rem);
 }
 
-.series ul {
-    padding-left: 3vw;
+.series-list ul {
+    padding-left: 2vw;
+    padding-right: 2vw;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-template-rows: auto;
     gap: 20px;
 }
 
-.series ul a {
-    text-decoration: none;
-    color: black;
+.series-list li {
+    line-height: 1.5rem;
 }
 
-.series .card li {
-    line-height: 1.5;;
-}
-
-.series .card {
-    min-height: 100%;
-    width: 200px;
-}
-
-.series .card img {
-    width: 100%;
+.series-list .card {
     height: 250px;
-    border-radius: 10px;
-}
-
-.series .card .title {
-    font-weight: bold;
-}
-
-.series .left .card {
+    width: 200px;
+    cursor: pointer;
     position: relative;
 }
 
-.series .card .add-watchlist {
+.series-list .card .add-watchlist {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -53,21 +37,26 @@
     z-index: 0;
 }
 
-.series-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.series-container li {
-    font-weight: bold;
-}
-
-.series-container li.title {
+.series-list .card .serie-info {
+    position: absolute;
     display: none;
 }
 
-.series-container .rating {
+.series-list .card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.series-list .card .title {
+    font-weight: bold;
+}
+
+.series-list .right {
+    display: none;
+}
+
+.serie-container .rating {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -84,9 +73,54 @@
     color: #ffd250 ;
 }
 
-@media screen and (max-width: 400px) {
-    
-    .series-container li.title {
+@media screen and (max-width: 450px) {
+
+    .series-list .card .add-watchlist {
+        left: 10px;
+        right: 0;
+        width: 35px;
+    }
+
+    .serie-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 0 10px 10px;
+    }
+
+    .series-list h2 {
+        padding-left: 3vw;
+    }
+    .series-list ul {
         display: block;
+        justify-items: center;
+        padding-left: 0;
+    }
+    .series-list li {
+        color: black;
+        font-weight: 800;
+        font-size: 16px;
+    }
+    .series-list .card {
+        height: 185px;
+        width: 150px;
+    }
+    .series-list .right {
+        align-self: flex-start;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 200px;
+    }
+    .first-col > span {
+        color: black;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .series-list .right {
+        height: 185px;
+        flex-grow: 1;
     }
 }
