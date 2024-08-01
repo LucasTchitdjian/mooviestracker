@@ -1,7 +1,7 @@
 .moovies-list h2 {
     text-align: left;
     padding-left: 2vw;
-    padding-top: 3vh;
+    padding-top: 5vh;
     padding-bottom: 3vh;
     font-size: clamp(1.25rem, 2vw, 3rem);
 }
