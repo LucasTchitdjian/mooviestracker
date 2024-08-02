@@ -40,6 +40,7 @@ export const addToWatchlistSeries = async (serie, setSeriesAddedToWatchlist) => 
             poster_path: serie.poster_path,
             overview: serie.overview,
             release_date: serie.release_date || serie.first_air_date,
+            rating: serie.vote_average,
             timestamp: new Date()
         });
         toast.success("Série ajouté à votre watchlist", {

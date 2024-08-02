@@ -38,6 +38,7 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
             poster_path: movie.poster_path,
             overview: movie.overview,
             release_date: movie.release_date || movie.first_air_date,
+            rating: movie.vote_average,
             timestamp: new Date()
         });
         toast.success("Film ajouté à votre watchlist", {
