@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import './SingleSeries.css';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
 import { ToastContainer } from 'react-toastify';
@@ -27,7 +27,7 @@ function SingleSeries() {
     }
 
     const formatRating = (rating) => {
-        if (rating !== undefined) { 
+        if (rating !== undefined) {
             rating = rating.toFixed(1);
             return rating.toString().replace('.', ',');
         }
@@ -78,10 +78,10 @@ function SingleSeries() {
     return (
         <div className="serie-wrapper">
             <ToastContainer />
-            <div className="back-btn">
-                <button onClick={handleBackLink}><FaLongArrowAltLeft /> Retour</button>
-            </div>
             <div className='single-series'>
+                <div className="back-btn">
+                    <Link onClick={handleBackLink}><FaLongArrowAltLeft /> Retour</Link>
+                </div>
                 {serieInfos ? (
                     <>
                         <h2>{serieInfos.name}</h2>
@@ -98,7 +98,7 @@ function SingleSeries() {
                                 <img src={`https://image.tmdb.org/t/p/w500${serieInfos.poster_path}`} alt={serieInfos.title} />
                             </div>
                             <div className="right">
-                            <div className="first-line">
+                                <div className="first-line">
                                     <p>
                                         {formatReleaseDate(serieInfos.first_air_date) && <span>Depuis</span>} {formatReleaseDate(serieInfos.first_air_date)}
                                     </p>
