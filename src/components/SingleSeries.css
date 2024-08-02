@@ -1,12 +1,12 @@
-.wrapper {
+.serie-wrapper {
     padding: 6rem 5rem;
     background-color: #f2f2f2;
     min-height: 100vh;
 }
 
-.back-btn {
-    padding: 10px 0;
-    width: 10%;
+.serie-wrapper .back-btn {
+    padding: 5px 10px;
+    width: fit-content;
     position: absolute;
     background-color: #fecc00;
 }
@@ -164,7 +164,7 @@
 }
 
 @media screen and (max-width: 450px) {
-    .wrapper {
+    .serie-wrapper {
         padding: 5rem 1rem;
     }
 
@@ -183,8 +183,5 @@
         padding-bottom: 10px;
         flex-direction: column;
         align-items: flex-start;
-    }
-    .back-btn {
-        width: 30%;
     }
 }

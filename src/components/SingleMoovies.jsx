@@ -108,15 +108,15 @@ function SingleMoovies({ movies }) {
     }
 
     return (
-        <div className="wrapper">
+        <div className="moovie-wrapper">
             <ToastContainer />
-            <div className="back-btn">
-                <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
-            </div>
             <div className='single-moovies'>
+                <div className="back-btn">
+                    <Link to={linkTo}><FaLongArrowAltLeft /> Retour</Link>
+                </div>
                 <div className="movie-infos">
                     {displayedMovie ? (
-                            <>
+                        <>
                             <h2>{displayedMovie.title}</h2>
                             <div className="card">
                                 <span onClick={(e) => {

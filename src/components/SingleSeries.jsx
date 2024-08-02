@@ -76,7 +76,7 @@ function SingleSeries() {
     }
 
     return (
-        <div className="wrapper">
+        <div className="serie-wrapper">
             <ToastContainer />
             <div className="back-btn">
                 <button onClick={handleBackLink}><FaLongArrowAltLeft /> Retour</button>

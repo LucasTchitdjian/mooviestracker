@@ -1,11 +1,11 @@
-.wrapper {
-    padding: 1rem 5rem;
+.moovie-wrapper {
+    padding: 4rem 5rem;
     background-color: #f2f2f2;
     min-height: 100vh;
 }
 
 .single-moovies {
-    padding: 1rem;
+    margin-top: 1vh;
     padding-left: 5vw;
     background-color: white;
     border-radius: 10px;
@@ -13,6 +13,14 @@
     align-items: flex-start;
     min-height: 100vh;
     flex-direction: column;
+    position: relative;
+}
+
+.back-btn {
+    width: fit-content;
+    background-color: #fecc00;
+    position: absolute;
+    padding: 5px 10px;
 }
 
 .single-moovies h2 {
@@ -170,9 +178,19 @@
     background-color: #fecc00;
 }
 
+@media screen and (min-width: 453px) and (max-width: 889px) {
+    /* Styles à appliquer pour les résolutions d'écran entre 453px et 889px */
+    .moovie-wrapper {
+        padding: 4rem 2rem;
+    }
+    .single-moovies .card .left {
+        width: 50%;
+    }
+  }
+  
  @media screen and (max-width: 450px) {
-    .wrapper {
-        padding: 1rem 1rem;
+    .moovie-wrapper {
+        padding: 5rem 1rem;
     }
     .single-moovies .card .left {
         width: 100%;
