@@ -1,7 +1,10 @@
+.series-list {
+    padding-top: 2vh;
+}
+
 .series-list h2 {
     text-align: left;
     padding-left: 2vw;
-    padding-top: 10vh;
     padding-bottom: 3vh;
     font-size: clamp(1.25rem, 2vw, 3rem);
 }
