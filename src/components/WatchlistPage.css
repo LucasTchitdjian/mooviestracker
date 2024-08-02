@@ -24,7 +24,7 @@
 
 .watchlist-container .card {
     height: 250px;
-    width: 200px;
+    width: 100%;
     cursor: pointer;
     position: relative;
 }
@@ -39,7 +39,7 @@
     position: absolute;
     top: 2px;
     left: 5px;
-    padding: 5px;
+    padding: 4px 5px;
     background-color: black;
     border-radius: 10px;
     z-index: 0;
@@ -74,8 +74,8 @@
     align-items: center;
     gap: 5px;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 2px;
+    right: 5px;
     background-color: #333;
     color: white;
     padding: 8px;
@@ -86,9 +86,27 @@
     color: #ffd250 ;
 }
 
+@media (min-width: 451px) and (max-width: 601px) {
+    /* Styles à appliquer pour les résolutions d'écran entre 401px et 601px */
+    .watchlist-wrapper {
+        padding: 3rem 2rem;
+    }
+    .watchlist-container ul {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Exemple de style pour la grille */
+    }
+  }
+  
+
 @media screen and (max-width: 450px) {
     .watchlist-wrapper {
-        padding: 1rem;
+        padding: 3rem 0.5rem;
+    }
+    .watchlist-container {
+        padding: 10px;
+    }
+    .watchlist-container ul {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
     }
     .watchlist-container .empty-watchlist {
         flex-direction: column;
@@ -96,5 +114,19 @@
     .watchlist-container .empty-watchlist > * {
         width: 100%;
         text-align: center;
+    }
+    .watchlist-container .card {
+        height: 200px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 366px) {
+    .watchlist-container .card {
+        height: auto;
+        width: 70%;
+    }
+    .watchlist-container ul {
+        justify-items: center;
     }
 }
