@@ -177,4 +177,7 @@ header .right {
     .account-icon > svg {
         font-size: 1.5em;
     }
+    .menu.active .browser-menu li a:nth-child(2) {
+        padding-bottom: 5px;
+    }
 }
