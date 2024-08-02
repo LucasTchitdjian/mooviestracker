@@ -85,7 +85,7 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
     };
 
     const handleMenuClick = () => {
-            setMenuActive(!menuActive);
+        setMenuActive(!menuActive);
     }
 
     const menuItems = [
@@ -139,52 +139,54 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
     ];
 
     return (
-        <header>
-            <div className="logo">
-                <h1><Link to="/">What to Watch</Link></h1>
-            </div>
-            <form className="form" onSubmit={handleSearch}>
-                <div className="input">
-                    <input
-                        type="search"
-                        placeholder="Rechercher"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                    />
+        <div className="main-content">
+            <header>
+                <div className="logo">
+                    <h1><Link to="/">What to Watch</Link></h1>
                 </div>
-                <button type="submit" className="search-icon">
-                    <IoIosSearch />
-                </button>
-            </form>
-            {/* <div className="watchlist">
+                <form className="form" onSubmit={handleSearch}>
+                    <div className="input">
+                        <input
+                            type="search"
+                            placeholder="Rechercher"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+                    <button type="submit" className="search-icon">
+                        <IoIosSearch />
+                    </button>
+                </form>
+                {/* <div className="watchlist">
                 <Link to="/watchlist">Watchlist</Link>
             </div> */}
-            <div className="right">
-                <div className={`menu ${menuActive ? 'active' : ''}`}>
-                    {/* Menu Items */}
-                    <motion.div
-                        initial="hidden"
-                        animate={menuActive ? 'visible' : 'hidden'}
-                        variants={menuVariants}
-                        className="menu-background"
-                    >
-                        <ul className='browser-menu'>
-                            {menuItems.filter(item => item.visible !== false).map(item => (
-                                <motion.li variants={itemVariants} key={item.id} onClick={item.onClick ? item.onClick : handleMenuClick}>
-                                    <Link to={item.path}>{item.icon}</Link>
-                                    <Link to={item.path}>{item.name}</Link>
-                                </motion.li>
-                            ))}
+                <div className="right">
+                    <div className={`menu ${menuActive ? 'active' : ''}`}>
+                        {/* Menu Items */}
+                        <motion.div
+                            initial="hidden"
+                            animate={menuActive ? 'visible' : 'hidden'}
+                            variants={menuVariants}
+                            className="menu-background"
+                        >
+                            <ul className='browser-menu'>
+                                {menuItems.filter(item => item.visible !== false).map(item => (
+                                    <motion.li variants={itemVariants} key={item.id} onClick={item.onClick ? item.onClick : handleMenuClick}>
+                                        <Link to={item.path}>{item.icon}</Link>
+                                        <Link to={item.path}>{item.name}</Link>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                        {/* Hamburger Icon */}
+                        <ul className="hamburger-menu">
+                            <li onClick={handleMenuClick} className="open-hamburger">
+                                {menuActive ? <RxCross2 style={{ color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
+                            </li>
                         </ul>
-                    </motion.div>
-                    {/* Hamburger Icon */}
-                    <ul className="hamburger-menu">
-                        <li onClick={handleMenuClick} className="open-hamburger">
-                            {menuActive ? <RxCross2 style={{ color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
-                        </li>
-                    </ul>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </div>
     );
 }
