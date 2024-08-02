@@ -122,6 +122,9 @@
 }
 
 @media (max-width: 366px) {
+    .watchlist-wrapper h2 {
+        margin-top: 2vh;
+    }
     .watchlist-container .card {
         height: auto;
         width: 70%;
