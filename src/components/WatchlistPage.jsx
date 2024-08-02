@@ -6,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
+import { FaStar } from "react-icons/fa";
 
 export function WatchlistPage() {
     const notify = () => toast.error("Film supprimé de votre watchlist !", {
@@ -56,6 +57,14 @@ export function WatchlistPage() {
         }
     }
 
+    const ratingFormat = (rating) => {
+        if (rating !== undefined) {
+            return rating.toFixed(1).toString().replace('.', ',');
+        } else {
+            return 'N/A';
+        }
+    }
+
     return (
         <div className="watchlist-wrapper">
             <ToastContainer />
@@ -80,6 +89,7 @@ export function WatchlistPage() {
                             }}>
                                 <RxCross2 />
                             </div>
+                            <p className='rating'><FaStar /> {ratingFormat(movie.rating)}</p>
                         </div>
                     ))}
                 </ul>
