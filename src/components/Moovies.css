@@ -1,7 +1,10 @@
+.moovies {
+    padding-top: 2vh;
+}
+
 .moovies h2 {
     text-align: left;
     padding-left: 3vw;
-    padding-top: 10vh;
     padding-bottom: 3vh;
     font-size: clamp(1.25rem, 2vw, 3rem);
 }
