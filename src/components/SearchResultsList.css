@@ -4,14 +4,14 @@
 
 .search-list h2 {
     text-align: left;
-    padding-left: 5vw;
+    padding-left: 2vw;
     padding-top: 3vh;
     padding-bottom: 3vh;
     font-size: clamp(1.25rem, 2vw, 3rem);
 }
 
 .search-list ul {
-    padding-left: 3vw;
+    padding-left: 2vw;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
