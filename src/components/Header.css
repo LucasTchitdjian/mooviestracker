@@ -181,3 +181,10 @@ header .right {
         padding-bottom: 5px;
     }
 }
+
+@media (max-width: 366px) {
+    header {
+        padding: 5px 1vw;
+        gap: 3px;
+    }
+}
