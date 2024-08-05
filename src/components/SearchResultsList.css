@@ -2,14 +2,6 @@
     min-height: 100vh;
 }
 
-.search-list h2 {
-    text-align: left;
-    padding-left: 2vw;
-    padding-top: 3vh;
-    padding-bottom: 3vh;
-    font-size: clamp(1.25rem, 2vw, 3rem);
-}
-
 .search-list ul {
     padding-left: 2vw;
     display: grid;
@@ -76,6 +68,26 @@
     color: #ffd250 ;
 }
 
+/* Search form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    width: 100%;
+}
+.search-form input {
+    border: 2px solid #929292;
+    border-radius: 10px;
+    font-size: clamp(1.225rem, 3vw, 2rem);
+    padding: 1rem;
+    width: 70%;
+}
+.search-form input:focus {
+    outline: none;
+    border-color: #ffd300;
+    box-shadow: 0 0 0 0.2rem #ffd300;
+}
+
 @media screen and (max-width: 450px) {
 
     .search-list .card .add-watchlist {
@@ -96,11 +108,10 @@
         padding-left: 3vw;
     }
     .search-list ul {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        justify-items: center;
         padding: 0;
+        gap: 10px;
     }
     .search-list li {
         color: black;
@@ -127,5 +138,13 @@
 @media screen and (max-width: 400px) {
     .search-list .right {
         height: 185px;
+    }
+    .search-form {
+        margin: .5rem 0;
+        width: 100%;
+    }
+    .search-form input {
+        padding: .5rem;
+        width: 90%;
     }
 }
