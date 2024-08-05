@@ -1,92 +1,48 @@
 import './Header.css';
-import { IoIosSearch } from "react-icons/io";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-// import profilImg from '../PhotoLucas.jpg';
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoIosListBox } from "react-icons/io";
-import { handleLogout } from '../authServices'; // Importez la fonction de déconnexion
+import { handleLogout } from '../authServices';
 import { RxAvatar } from "react-icons/rx";
 import { BiSolidCameraMovie } from "react-icons/bi";
 import { MdLiveTv } from "react-icons/md";
 import { FaUserPlus } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 const menuVariants = {
     hidden: {
-        x: '100%',  // Déplacer le menu complètement hors de l'écran à droite
-        opacity: 0, // Rendre le menu transparent
+        x: '100%',
+        opacity: 0,
         transition: {
-            staggerChildren: 0.1, // Délai entre chaque élément
-            staggerDicrection: -1, // Direction de l'animation
+            staggerChildren: 0.1,
+            staggerDicrection: -1,
         }
     },
     visible: {
-        x: '0%',    // Positionner le menu à sa position finale
-        opacity: 1, // Rendre le menu visible
+        x: '0%',
+        opacity: 1,
         transition: {
-            type: 'spring', // Type de transition, peut être 'tween' ou 'spring'
-            stiffness: 500, // Dureté de l'animation
-            damping: 30,    // Amorti de l'animation
-            duration: 0.5,  // Durée de l'animation
-            staggerChildren: 0.3, // Délai entre chaque élément
+            type: 'spring',
+            stiffness: 500,
+            damping: 30,
+            duration: 0.5,
+            staggerChildren: 0.3,
         },
     },
 };
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 20 },  // Initialement cachés et décalés
-    visible: { opacity: 1, y: 0 }   // Visibles et à leur position finale
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
 };
 
-
-export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userConnected, profileImage }) {
-
-    const navigate = useNavigate();
+export function Header({ searchTerm, userConnected }) {
 
     const [menuActive, setMenuActive] = useState(false);
-
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
-
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if (searchTerm !== '') {
-            navigate(`/search/?query=${searchTerm}`);
-            const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-            const moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${searchTerm}`;
-            const seriesUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${searchTerm}`;
-
-            Promise.all([
-                fetch(moviesUrl).then(response => response.json()),
-                fetch(seriesUrl).then(response => response.json())
-            ]).then(([moviesData, seriesData]) => {
-                // Ajout de la propriété 'type' pour chaque film
-                const moviesWithTypes = moviesData.results.map(movie => ({
-                    ...movie,
-                    type: 'movie'
-                }));
-                // Ajout de la propriété 'type' pour chaque série
-                const seriesWithTypes = seriesData.results.map(series => ({
-                    ...series,
-                    type: 'serie'
-                }));
-                // Combinez les résultats des films et des séries avec la propriété 'type' ajoutée
-                const combinedResults = [...moviesWithTypes, ...seriesWithTypes];
-                setMovies(combinedResults);
-                setSeries(seriesWithTypes);
-            }).catch(error => {
-                console.error('Erreur lors de la récupération des données:', error);
-            });
-        }
-    };
-
-    const handleMenuClick = () => {
-        setMenuActive(!menuActive);
-    }
 
     const menuItems = [
         {
@@ -106,37 +62,41 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
             name: 'Se connecter',
             path: '/login',
             icon: <FaArrowRightToBracket />,
-            visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
+            visible: !userConnected
         },
         {
             id: 4,
             name: 'S\'inscrire',
             path: '/register',
             icon: <FaUserPlus />,
-            visible: !userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
+            visible: !userConnected
         },
         {
             id: 5,
             name: 'Watchlist',
             path: '/watchlist',
             icon: <IoIosListBox />,
-            visible: userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
+            visible: userConnected
         }, {
             id: 6,
             name: 'Déconnexion',
             path: '/logout',
             icon: <FaArrowRightToBracket />,
-            visible: userConnected, // Ajoutez une propriété visible pour afficher ou masquer l'élément
-            onClick: handleLogout // Ajoutez une propriété onClick pour gérer la déconnexion
+            visible: userConnected,
+            onClick: handleLogout
         },
         {
             id: 7,
             name: 'Profil',
             path: '/profile',
             icon: <RxAvatar />,
-            visible: userConnected // Ajoutez une propriété visible pour afficher ou masquer l'élément
+            visible: userConnected
         }
     ];
+
+    const handleMenuClick = () => {
+        setMenuActive(!menuActive);
+    };
 
     return (
         <div className="main-content">
@@ -144,25 +104,14 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                 <div className="logo">
                     <h1><Link to="/">What to Watch</Link></h1>
                 </div>
-                <form className="form" onSubmit={handleSearch}>
-                    <div className="input">
-                        <input
-                            type="search"
-                            placeholder="Rechercher"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                        />
-                    </div>
-                    <button type="submit" className="search-icon">
-                        <IoIosSearch />
-                    </button>
-                </form>
-                {/* <div className="watchlist">
-                <Link to="/watchlist">Watchlist</Link>
-            </div> */}
+                <div className="search">
+                    <Link to="/search">
+                    <div className="icon"><FaSearch /></div>
+                    <p>Rechercher un film ou une série</p>
+                    </Link>
+                </div>
                 <div className="right">
                     <div className={`menu ${menuActive ? 'active' : ''}`}>
-                        {/* Menu Items */}
                         <motion.div
                             initial="hidden"
                             animate={menuActive ? 'visible' : 'hidden'}
@@ -178,7 +127,6 @@ export function Header({ setMovies, setSeries, searchTerm, setSearchTerm, userCo
                                 ))}
                             </ul>
                         </motion.div>
-                        {/* Hamburger Icon */}
                         <ul className="hamburger-menu">
                             <li onClick={handleMenuClick} className="open-hamburger">
                                 {menuActive ? <RxCross2 style={{ color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
