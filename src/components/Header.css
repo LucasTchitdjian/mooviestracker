@@ -1,4 +1,3 @@
-
 .main-content {
     margin-top: 70px;
 }
@@ -72,7 +71,8 @@ header .form input[type="search"] {
     top: 0;
     right: 0;
     bottom: 0;
-    width: 400px; /* 400px */
+    width: 400px;
+    /* 400px */
     background-color: black;
     z-index: 999;
     display: flex;
@@ -132,10 +132,40 @@ header .right {
     padding-bottom: 7px;
 }
 
-.open-hamburger > svg {
+.open-hamburger>svg {
     font-size: 1.5em;
     z-index: 1002;
     color: white;
+}
+
+/* Search btn and text */
+
+.search a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.search .icon>svg {
+    color: black;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.search a p {
+    font-size: 1.5em;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 845px) {
+
+    /* Hide search text */
+    .search a p {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 450px) {
@@ -152,36 +182,46 @@ header .right {
         display: block;
         z-index: 3;
     }
+
     header .form {
         flex-grow: 0.7;
     }
+
     header .menu ul {
         gap: 0;
     }
-    .hamburger-menu.active > li.close-hamburger > svg {
+
+    .hamburger-menu.active>li.close-hamburger>svg {
         color: #fff;
     }
+
     .account-menu p {
         display: none;
     }
+
     /* Size Account and hamburger menu for mobile devices */
-    .account-menu > svg {
+    .account-menu>svg {
         font-size: 1em;
     }
-    .open-hamburger > svg {
+
+    .open-hamburger>svg {
         font-size: 1.3em;
     }
+
     .hamburger-menu {
         z-index: 1003;
         position: relative;
     }
+
     /*  */
     .hamburger-menu.active::after {
         width: 50vw;
     }
-    .account-icon > svg {
+
+    .account-icon>svg {
         font-size: 1.5em;
     }
+
     .menu.active .browser-menu li a:nth-child(2) {
         padding-bottom: 5px;
     }
