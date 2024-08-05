@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './SingleSeries.css';
 import { FaLongArrowAltLeft, FaCheck, FaPlus } from "react-icons/fa";
 import { ToastContainer } from 'react-toastify';
@@ -11,10 +11,6 @@ function SingleSeries() {
     const [genreNames, setGenreNames] = useState(null);
     const { id } = useParams();
     const { seriesAddedToWatchlist, setSeriesAddedToWatchlist } = React.useContext(GlobalContext);
-
-    const location = useLocation();
-    const navigate = useNavigate();
-    const searchQuery = new URLSearchParams(location.search).get('query');
 
     const formatRuntime = (runtime) => {
         if (runtime > 60) {
@@ -64,23 +60,13 @@ function SingleSeries() {
     const handleAddToWatchlist = (serie) => {
         addToWatchlistSeries(serie, setSeriesAddedToWatchlist);
     }
-
-    const handleBackLink = () => {
-        if (searchQuery !== null) {
-            console.log("searchQuery !== null");
-            navigate(`/search/?query=${searchQuery}`);
-        } else {
-            console.log("searchQuery === null");
-            navigate('/series');
-        }
-    }
-
+    
     return (
         <div className="serie-wrapper">
             <ToastContainer />
             <div className='single-series'>
                 <div className="back-btn">
-                    <Link onClick={handleBackLink}><FaLongArrowAltLeft /> Retour</Link>
+                    <Link to="/series"><FaLongArrowAltLeft /> Retour</Link>
                 </div>
                 {serieInfos ? (
                     <>
