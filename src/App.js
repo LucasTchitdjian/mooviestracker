@@ -71,7 +71,6 @@ function App() {
           <Route path='/search' element={
             <>
               <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Pagination context="search" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
           <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
