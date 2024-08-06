@@ -14,6 +14,7 @@ header {
     padding: 10px 2vw;
     padding-bottom: 20px;
     background-color: #ffd300;
+    height: 75px;
 }
 
 header .logo a {
@@ -26,12 +27,12 @@ header li a {
     color: white;
     z-index: 9999;
     letter-spacing: 2px;
-    font-size: clamp(1.25rem, 2vw, 2rem);
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
 }
 
 header .logo h1 {
     text-align: left;
-    font-size: clamp(1.225rem, 3vw, 2rem);
+    font-size: clamp(1.525rem, 3vw, 2rem);
 }
 
 header .form {
@@ -155,7 +156,7 @@ header .right {
 }
 
 .search a p {
-    font-size: 1.5em;
+    font-size: 1.2em;
     padding-bottom: 5px;
     font-weight: bold;
 }
@@ -204,9 +205,9 @@ header .right {
         font-size: 1em;
     }
 
-    .open-hamburger>svg {
+    /* .open-hamburger>svg {
         font-size: 1.3em;
-    }
+    } */
 
     .hamburger-menu {
         z-index: 1003;
@@ -224,6 +225,9 @@ header .right {
 
     .menu.active .browser-menu li a:nth-child(2) {
         padding-bottom: 5px;
+    }
+    .search .icon>svg {
+        font-size: 1.3em;
     }
 }
 
