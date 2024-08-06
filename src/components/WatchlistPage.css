@@ -22,7 +22,7 @@
 }
 
 .watchlist-container .card {
-    height: 250px;
+    height: auto;
     width: 100%;
     cursor: pointer;
     position: relative;
