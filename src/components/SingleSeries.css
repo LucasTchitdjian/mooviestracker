@@ -18,8 +18,13 @@
 }
 
 .serie-wrapper .back-btn a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     text-decoration: none;
     color: black;
+    font-weight: 600;
+    font-size: 1.25rem;
 }
 
 .single-series {
@@ -28,6 +33,7 @@
     background-color: white;
     border-radius: 10px;
     position: relative;
+    min-height: 100dvh;
 }
 
 .single-series h2 {
