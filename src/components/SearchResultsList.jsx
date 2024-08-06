@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import './SearchResultsList.css';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState, useRef } from 'react';
 import { FaPlus, FaStar, FaCheck } from "react-icons/fa";
 import { addToWatchlistMovies } from '../components/MooviesList';
 import { addToWatchlistSeries } from '../components/Series';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GlobalContext } from '../context/GlobalContext';
+import { IoClose } from "react-icons/io5";
 
 export function SearchResultsList({ movies, setMovies }) {
     //searchTerm Passe pas ce que j'ecrit dans la barre de recherche
@@ -14,6 +15,8 @@ export function SearchResultsList({ movies, setMovies }) {
     const { moviesAddedToWatchlist, setMoviesAddedToWatchlist, seriesAddedToWatchlist, setSeriesAddedToWatchlist } = useContext(GlobalContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+
+    const inputRef = useRef(null);
 
     useEffect(() => {
         if (searchTerm) {
@@ -44,12 +47,22 @@ export function SearchResultsList({ movies, setMovies }) {
         setSearchTerm(e.target.value);
     };
 
+    const clearText = () => {
+        setSearchTerm('');
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }
+
     return (
         <div className="search-list">
             <ToastContainer />
             <div className="search-form">
                 <form className='search-form'>
-                    <input value={searchTerm} onChange={handleSearchChange} type="text" placeholder="Rechercher un film ou une série" />
+                    <div className="input-container">
+                        <input ref={inputRef} value={searchTerm} onChange={handleSearchChange} type="text" placeholder="Rechercher un film ou une série" />
+                        <IoClose className="clear-icon" onClick={clearText}/>
+                    </div>
                 </form>
             </div>
             <ul>

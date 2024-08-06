@@ -1,5 +1,6 @@
 .search-list {
     min-height: 100vh;
+    padding-bottom: 20px;
 }
 
 .search-list ul {
@@ -88,6 +89,28 @@
     box-shadow: 0 0 0 0.2rem #ffd300;
 }
 
+.input-container {
+    position: relative;
+    width: 70%; /* Adjust as needed */
+}
+
+.input-container input {
+    width: 100%;
+    padding-right: 30px; /* Space for the icon */
+    /* Other input styles */
+}
+
+.clear-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
+    /* Other icon styles */
+    font-size: 1.5rem;
+}
+
+
 @media screen and (max-width: 450px) {
 
     .search-list .card .add-watchlist {
@@ -139,12 +162,14 @@
     .search-list .right {
         height: 185px;
     }
-    .search-form {
-        margin: .5rem 0;
-        width: 100%;
+    .input-container {
+        position: relative;
+        width: 70%; /* Adjust as needed */
     }
-    .search-form input {
-        padding: .5rem;
-        width: 90%;
+    
+    .input-container input {
+        width: 100%;
+        padding-right: 30px; /* Space for the icon */
+        /* Other input styles */
     }
 }
