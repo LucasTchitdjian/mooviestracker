@@ -15,8 +15,8 @@
 }
 
 .search-list .card {
-    height: 250px;
-    width: 200px;
+    height: auto;
+    width: 100%;
     cursor: pointer;
     position: relative;
 }
@@ -108,6 +108,7 @@
     cursor: pointer;
     /* Other icon styles */
     font-size: 1.5rem;
+    color: red;
 }
 
 
@@ -133,16 +134,16 @@
     .search-list ul {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         justify-items: center;
-        padding: 0;
+        padding: 10px;
         gap: 10px;
     }
     .search-list li {
         color: black;
     }
-    .search-list .card {
+    /* .search-list .card {
         height: 200px;
         width: 150px;
-    }
+    } */
     .search-list .right {
         align-self: flex-start;
         display: flex;
@@ -156,6 +157,10 @@
         color: white;
         border-radius: 20px;
     }
+    .input-container {
+        position: relative;
+        width: 90%; /* Adjust as needed */
+    }
 }
 
 @media screen and (max-width: 400px) {
@@ -164,7 +169,7 @@
     }
     .input-container {
         position: relative;
-        width: 70%; /* Adjust as needed */
+        width: 95%; /* Adjust as needed */
     }
     
     .input-container input {
