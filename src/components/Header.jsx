@@ -129,7 +129,7 @@ export function Header({ searchTerm, userConnected }) {
                         </motion.div>
                         <ul className="hamburger-menu">
                             <li onClick={handleMenuClick} className="open-hamburger">
-                                {menuActive ? <RxCross2 style={{ color: 'white', fontSize: '2.5em' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
+                                {menuActive ? <RxCross2 style={{ color: 'white' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
                             </li>
                         </ul>
                     </div>
