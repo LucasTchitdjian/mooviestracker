@@ -22,8 +22,8 @@
 }
 
 .moovies-list .card {
-    height: 250px;
-    width: 200px;
+    height: auto;
+    width: 100%;
     cursor: pointer;
     position: relative;
 }
