@@ -88,7 +88,7 @@
 @media (min-width: 451px) and (max-width: 601px) {
     /* Styles à appliquer pour les résolutions d'écran entre 401px et 601px */
     .watchlist-wrapper {
-        padding: 3rem 2rem;
+        padding: 1rem 2rem;
     }
     .watchlist-container ul {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Exemple de style pour la grille */
@@ -98,7 +98,7 @@
 
 @media screen and (max-width: 450px) {
     .watchlist-wrapper {
-        padding: 3rem 0.5rem;
+        padding: 0.5rem 0.5rem;
     }
     .watchlist-container {
         padding: 10px;
@@ -126,7 +126,7 @@
     }
     .watchlist-container .card {
         height: auto;
-        width: 70%;
+        width: 100%;
     }
     .watchlist-container ul {
         justify-items: center;
