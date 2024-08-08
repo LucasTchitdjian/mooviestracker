@@ -19,6 +19,7 @@ import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
 import DefaultAvatarImg from './DefaultAvatarImgRemoved.png';
 import { GlobalProvider } from './context/GlobalContext';
+import { Filters } from './components/Filters';
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
           <Route path="/" element={<Navigate to="/now-playing" />} />
           <Route path="/now-playing" element={
             <>
+              <Filters />
               <MooviesList mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
               <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
