@@ -40,7 +40,7 @@ const itemVariants = {
     visible: { opacity: 1, y: 0 }
 };
 
-export function Header({ searchTerm, userConnected }) {
+export function Header({ userConnected }) {
 
     const [menuActive, setMenuActive] = useState(false);
 
@@ -117,6 +117,7 @@ export function Header({ searchTerm, userConnected }) {
                             animate={menuActive ? 'visible' : 'hidden'}
                             variants={menuVariants}
                             className="menu-background"
+                            data-testid="menu-background"
                         >
                             <ul className='browser-menu'>
                                 {menuItems.filter(item => item.visible !== false).map(item => (
@@ -129,7 +130,7 @@ export function Header({ searchTerm, userConnected }) {
                         </motion.div>
                         <ul className="hamburger-menu">
                             <li onClick={handleMenuClick} className="open-hamburger">
-                                {menuActive ? <RxCross2 style={{ color: 'white' }} /> : <RxHamburgerMenu style={{ color: 'black' }} />}
+                                {menuActive ? <RxCross2 data-testid="hamburger-close-icon" style={{ color: 'white' }} /> : <RxHamburgerMenu data-testid="hamburger-open-icon" style={{ color: 'black' }} />}
                             </li>
                         </ul>
                     </div>
