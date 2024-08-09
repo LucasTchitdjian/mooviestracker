@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@firebase/app": "^0.10.7",
     "@firebase/auth": "^1.7.5",
+    "@mui/material": "^5.16.7",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^10.12.4",
     "framer-motion": "^11.3.12",
@@ -15,6 +19,7 @@
     "react-router-dom": "^6.25.1",
     "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.5",
+    "styled-components": "^6.1.12",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
