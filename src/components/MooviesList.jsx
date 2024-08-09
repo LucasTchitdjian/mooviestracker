@@ -58,26 +58,26 @@ export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => 
     }
 };
 
-export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
+export function MooviesList({ currentPage, movies, setMovies, setTotalPages, yearFilter, genreFilter }) {
     const { moviesAddedToWatchlist, setMoviesAddedToWatchlist } = useContext(GlobalContext);
 
     useEffect(() => {
         const fetchMovies = async () => {
             try {
                 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                console.log(typeof genreFilter, "genreFilter type");
                 const response = await fetch(
-                    `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbApiKey}&language=fr-FR&page=${currentPage}`
-                );
+                    `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&region=FR&language=fr-FR&sort_by=vote_count.desc&primary_release_date.desc&primary_release_date.gte=${yearFilter}-01-01&primary_release_date.lte=${yearFilter}-12-31&with_genres=${genreFilter}&page=${currentPage}`
+                );                               
                 const data = await response.json();
                 setTotalPages(data.total_pages);
                 setMovies(data.results);
-
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
         };
         fetchMovies(); 
-    }, [currentPage, setMovies, setTotalPages]);
+    }, [currentPage, setMovies, setTotalPages, yearFilter, genreFilter]);
 
     const handleAddToWatchlist = (movie) => {
         addToWatchlistMovies(movie, setMoviesAddedToWatchlist);
@@ -99,7 +99,6 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages }) {
     return (
         <div className="moovies-list">
             <ToastContainer />
-            <h2>Liste des films à l'affiche</h2>
             <ul>
                 {movies.map((movie, index) => (
                     <Link to={`/now-playing/movie/${movie.id}`} key={index}>
