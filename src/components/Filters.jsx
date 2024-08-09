@@ -1,53 +1,135 @@
 import './Filters.css';
+import * as React from 'react';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
-export function Filters() {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+const genres = [
+    'Action',
+    'Animation',
+    'Aventure',
+    'Comédie',
+    'Drame',
+    'Fantastique',
+    'Horreur',
+    'Policier',
+    'Science-fiction',
+    'Thriller',
+];
+
+const years = [
+    '2024',
+    '2023',
+    '2022',
+    '2021',
+    '2020',
+    '2019',
+    '2018',
+    '2017',
+    '2016',
+    '2015',
+    '2014',
+    '2013',
+    '2012',
+    '2011',
+    '2010',
+];
+
+export function Filters({ setYearFilter, setGenreFilter, yearFilter }) {
+    const [genreName, setGenreName] = React.useState('Action');
+
+    const handleYearFilter = (event) => {
+        const selectedYear = event.target.value;
+        setYearFilter(selectedYear);
+    }
+
+    const handleGenreFilter = (event) => {
+        const selectedGenre = event.target.value;
+        setGenreName(selectedGenre);
+        const genreMapping = {
+            'Action': '28',
+            'Animation': '16',
+            'Aventure': '12',
+            'Comédie': '35',
+            'Drame': '18',
+            'Fantastique': '14',
+            'Horreur': '27',
+            'Policier': '80',
+            'Science-fiction': '878',
+            'Thriller': '53'
+        };
+        setGenreFilter(genreMapping[selectedGenre] || 'NA');
+    }
+
     return (
         <div className="filters">
-            <div className="filter-title">
-                <span>Trier par</span>
-            </div>
             <div className="filter">
                 <label htmlFor="year">Année</label>
-                <select name="year" id="year">
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option>
-                    <option value="2019">2019</option>
-                    <option value="2018">2018</option>
-                    <option value="2017">2017</option>
-                    <option value="2016">2016</option>
-                    <option value="2015">2015</option>
-                    <option value="2014">2014</option>
-                    <option value="2013">2013</option>
-                    <option value="2012">2012</option>
-                    <option value="2011">2011</option>
-                    <option value="2010">2010</option>
-                </select>
+                <FormControl sx={{ m: 1, width: 200 }}>
+                    <Select
+                        displayEmpty
+                        value={yearFilter}
+                        onChange={handleYearFilter}
+                        input={<OutlinedInput />}
+                        MenuProps={MenuProps}
+                        inputProps={{ 'aria-label': 'Sans label' }}
+                        className="year-select"
+                    >
+                        <MenuItem disabled value="">
+                            <em>Sélectionnez une année</em>
+                        </MenuItem>
+                        {years.map((year) => (
+                            <MenuItem
+                                sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
+                                key={year}
+                                value={year}
+                            >
+                                {year}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </div>
             <div className="filter">
                 <label htmlFor="genre">Genre</label>
-                <select name="genre" id="genre">
-                    <option value="action">Action</option>
-                    <option value="animation">Animation</option>
-                    <option value="aventure">Aventure</option>
-                    <option value="comedie">Comédie</option>
-                    <option value="drame">Drame</option>
-                    <option value="fantastique">Fantastique</option>
-                    <option value="horreur">Horreur</option>
-                    <option value="policier">Policier</option>
-                    <option value="science-fiction">Science-fiction</option>
-                    <option value="thriller">Thriller</option>
-                </select>
-            </div>
-            <div className="filter">
-                <label htmlFor="rating">Note</label>
-                <select name="rating" id="rating">
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
+                <FormControl sx={{ m: 1, width: 200 }}>
+                    <Select
+                        displayEmpty
+                        value={genreName}
+                        onChange={handleGenreFilter}
+                        input={<OutlinedInput />}
+                        MenuProps={MenuProps}
+                        inputProps={{ 'aria-label': 'Sans label' }}
+                        className="genre-select"
+                    >
+                        <MenuItem disabled value="">
+                            <em>Sélectionnez un genre</em>
+                        </MenuItem>
+                        {genres.map((genre) => (
+                            <MenuItem
+                                sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
+                                className='genre-items'
+                                key={genre}
+                                value={genre}
+                            >
+                                {genre}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </div>
         </div>
-    )
+    );
 }
