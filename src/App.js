@@ -32,6 +32,8 @@ function App() {
   const [mooviesNowPlaying, setMooviesNowPlaying] = useState([]);
   const [userConnected, setUserConnected] = useState(false);
   const [profileImage, setProfileImage] = useState(DefaultAvatarImg);
+  const [yearFilter, setYearFilter] = useState('2024');
+  const [genreFilter, setGenreFilter] = useState('28');
 
   useEffect(() => {
     const userConnectedFromStorage = localStorage.getItem('userConnected');
@@ -65,8 +67,8 @@ function App() {
           <Route path="/" element={<Navigate to="/now-playing" />} />
           <Route path="/now-playing" element={
             <>
-              <Filters />
-              <MooviesList mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
+              <Filters yearFilter={yearFilter} setGenreFilter={setGenreFilter} setYearFilter={setYearFilter} />
+              <MooviesList genreFilter={genreFilter} yearFilter={yearFilter} mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
               <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
             </>
           } />
