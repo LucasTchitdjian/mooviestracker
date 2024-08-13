@@ -1,8 +1,14 @@
+.filter-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .filters {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 0 20px;
     gap: 10px;
 }
 
@@ -34,6 +40,21 @@
 .filter .genre-items {
     font-family: 'Montserrat', sans-serif;
     color: red;
+}
+
+.reset-btn button {
+    padding: 10px;
+    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.reset-btn button:hover {
+    background: #f0f0f0;
+    border: 1px solid #000;
 }
 
 @media (width <= 800px) {
