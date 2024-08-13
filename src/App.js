@@ -80,13 +80,13 @@ function App() {
           <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
           <Route path='/search/tv/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path='/series' element={<Navigate to="/top-rated-series" />} />
-          <Route path='/top-rated-series' element={
-            <>
-              <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
-              <Pagination context="top-rated-series" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
-            </>
-          } />
-          <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+            <Route path='/top-rated-series' element={
+              <>
+                <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
+                <Pagination context="top-rated-series" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+              </>
+            } />
+            <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
           <Route path="/top-rated" element={
             <>
               <Moovies movies={movies} setMovies={setMovies} currentPage={currentPage} setPage={setPage} />
