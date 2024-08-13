@@ -74,61 +74,70 @@ export function Filters({ setYearFilter, setGenreFilter, yearFilter }) {
     }
 
     return (
-        <div className="filters">
-            <div className="filter">
-                <label htmlFor="year">Année</label>
-                <FormControl sx={{ m: 1, width: 200 }}>
-                    <Select
-                        displayEmpty
-                        value={yearFilter}
-                        onChange={handleYearFilter}
-                        input={<OutlinedInput />}
-                        MenuProps={MenuProps}
-                        inputProps={{ 'aria-label': 'Sans label' }}
-                        className="year-select"
-                    >
-                        <MenuItem disabled value="">
-                            <em>Sélectionnez une année</em>
-                        </MenuItem>
-                        {years.map((year) => (
-                            <MenuItem
-                                sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
-                                key={year}
-                                value={year}
-                            >
-                                {year}
+        <div className="filter-wrapper">
+            <div className="filters">
+                <div className="filter">
+                    <label htmlFor="year">Année</label>
+                    <FormControl sx={{ m: 1, width: 200 }}>
+                        <Select
+                            displayEmpty
+                            value={yearFilter}
+                            onChange={handleYearFilter}
+                            input={<OutlinedInput />}
+                            MenuProps={MenuProps}
+                            inputProps={{ 'aria-label': 'Sans label' }}
+                            className="year-select"
+                        >
+                            <MenuItem disabled value="">
+                                <em>Sélectionnez une année</em>
                             </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                            {years.map((year) => (
+                                <MenuItem
+                                    sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
+                                    key={year}
+                                    value={year}
+                                >
+                                    {year}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div className="filter">
+                    <label htmlFor="genre">Genre</label>
+                    <FormControl sx={{ m: 1, width: 200 }}>
+                        <Select
+                            displayEmpty
+                            value={genreName}
+                            onChange={handleGenreFilter}
+                            input={<OutlinedInput />}
+                            MenuProps={MenuProps}
+                            inputProps={{ 'aria-label': 'Sans label' }}
+                            className="genre-select"
+                        >
+                            <MenuItem disabled value="">
+                                <em>Sélectionnez un genre</em>
+                            </MenuItem>
+                            {genres.map((genre) => (
+                                <MenuItem
+                                    sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
+                                    className='genre-items'
+                                    key={genre}
+                                    value={genre}
+                                >
+                                    {genre}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
             </div>
-            <div className="filter">
-                <label htmlFor="genre">Genre</label>
-                <FormControl sx={{ m: 1, width: 200 }}>
-                    <Select
-                        displayEmpty
-                        value={genreName}
-                        onChange={handleGenreFilter}
-                        input={<OutlinedInput />}
-                        MenuProps={MenuProps}
-                        inputProps={{ 'aria-label': 'Sans label' }}
-                        className="genre-select"
-                    >
-                        <MenuItem disabled value="">
-                            <em>Sélectionnez un genre</em>
-                        </MenuItem>
-                        {genres.map((genre) => (
-                            <MenuItem
-                                sx={{ marginBottom: '8px', fontFamily: 'Montserrat' }}
-                                className='genre-items'
-                                key={genre}
-                                value={genre}
-                            >
-                                {genre}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+            <div className="reset-btn">
+                <button onClick={() => {
+                    setYearFilter('2024');
+                    setGenreFilter('');
+                    setGenreName('');
+                }}>Réinitialiser filtres</button>
             </div>
         </div>
     );
