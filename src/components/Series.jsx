@@ -101,8 +101,6 @@ export function Series({ series, setSeries, currentPage, setTotalPages }) {
         return new Date(date).toLocaleDateString('fr-FR', options);
     }
 
-    console.log(series, "series");
-
     return (
         <div className='series-list'>
             <ToastContainer />
