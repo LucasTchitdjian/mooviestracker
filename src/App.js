@@ -19,7 +19,9 @@ import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
 import DefaultAvatarImg from './DefaultAvatarImgRemoved.png';
 import { GlobalProvider } from './context/GlobalContext';
+import { MoviesProvider } from './context/GlobalContext';
 import { Filters } from './components/Filters';
+import { Banner } from './components/Banner';
 
 function App() {
 
@@ -61,48 +63,51 @@ function App() {
   return (
     <div className="App">
       <GlobalProvider>
-      <Router>
-        <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} profileImage={profileImage} />
-        <Routes>
-          <Route path="/" element={<Navigate to="/now-playing" />} />
-          <Route path="/now-playing" element={
-            <>
-              <Filters yearFilter={yearFilter} setGenreFilter={setGenreFilter} setYearFilter={setYearFilter} />
-              <MooviesList genreFilter={genreFilter} yearFilter={yearFilter} mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
-              <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
-            </>
-          } />
-          <Route path='/search' element={
-            <>
-              <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            </>
-          } />
-          <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
-          <Route path='/search/tv/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
-          <Route path='/series' element={<Navigate to="/top-rated-series" />} />
-            <Route path='/top-rated-series' element={
-              <>
-                <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
-                <Pagination context="top-rated-series" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
-              </>
-            } />
-            <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
-          <Route path="/top-rated" element={
-            <>
-              <Moovies movies={movies} setMovies={setMovies} currentPage={currentPage} setPage={setPage} />
-              <Pagination context="top-rated" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
-            </>
-          } />
-          <Route path='/now-playing/movie/:id' element={<SingleMoovies movies={movies} />} />
-          <Route path='/top-rated-series/movie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
-          <Route path='/top-rated/movie/:id' element={<SingleMoovies movies={movies} />} />
-          <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/watchlist" element={<WatchlistPage />} />
-          <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
-          <Route path='/profile' element={<ProfilePage profileImage={profileImage} setProfileImage={setProfileImage} />} />
-        </Routes>
-      </Router>
+        <MoviesProvider>
+          <Router>
+            <Header userConnected={userConnected} setMovies={setMovies} setSeries={setSeries} searchTerm={searchTerm} setSearchTerm={setSearchTerm} profileImage={profileImage} />
+            <Routes>
+              <Route path="/" element={<Navigate to="/now-playing" />} />
+              <Route path="/now-playing" element={
+                <>
+                  <Banner movies={mooviesNowPlaying} />
+                  <Filters yearFilter={yearFilter} setGenreFilter={setGenreFilter} setYearFilter={setYearFilter} />
+                  <MooviesList genreFilter={genreFilter} yearFilter={yearFilter} mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
+                  <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+                </>
+              } />
+              <Route path='/search' element={
+                <>
+                  <SearchResultsList movies={movies} setMovies={setMovies} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                </>
+              } />
+              <Route path='/search/movie/:id' element={<SingleMoovies movies={movies} />} />
+              <Route path='/search/tv/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+              <Route path='/series' element={<Navigate to="/top-rated-series" />} />
+              <Route path='/top-rated-series' element={
+                <>
+                  <Series series={series} setSeries={setSeries} setTotalPages={setTotalPages} currentPage={currentPage} />
+                  <Pagination context="top-rated-series" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+                </>
+              } />
+              <Route path='/serie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+              <Route path="/top-rated" element={
+                <>
+                  <Moovies movies={movies} setMovies={setMovies} currentPage={currentPage} setPage={setPage} />
+                  <Pagination context="top-rated" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
+                </>
+              } />
+              <Route path='/now-playing/movie/:id' element={<SingleMoovies movies={movies} />} />
+              <Route path='/top-rated-series/movie/:id' element={<SingleSeries movies={movies} series={series} setSeries={setSeries} />} />
+              <Route path='/top-rated/movie/:id' element={<SingleMoovies movies={movies} />} />
+              <Route path='/login' element={<LoginPage setUserConnected={setUserConnected} />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/watchlist" element={<WatchlistPage />} />
+              <Route path='/logout' element={<LogoutPage setUserConnected={setUserConnected} />} />
+              <Route path='/profile' element={<ProfilePage profileImage={profileImage} setProfileImage={setProfileImage} />} />
+            </Routes>
+          </Router>
+        </MoviesProvider>
       </GlobalProvider>
       <Footer />
     </div>
