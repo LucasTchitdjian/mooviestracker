@@ -8,6 +8,7 @@ import { setDoc, doc} from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GlobalContext } from '../context/GlobalContext';
+import { formatDate } from '../utils/movieReleaseDateFormatter';
 
 export const addToWatchlistMovies = async (movie, setMoviesAddedToWatchlist) => {
     if (!auth.currentUser) {
@@ -72,6 +73,7 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, yea
                 const data = await response.json();
                 setTotalPages(data.total_pages);
                 setMovies(data.results);
+                console.log(data.results);
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
@@ -89,11 +91,6 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, yea
         } else {
             return 'N/A';
         }
-    }
-
-    const formatDate = (date) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString('fr-FR', options);
     }
 
     return (
