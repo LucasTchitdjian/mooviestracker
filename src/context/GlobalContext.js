@@ -50,3 +50,48 @@ export const GlobalProvider = ({ children }) => {
         </GlobalContext.Provider>
     );
 };
+
+export const MoviesContext = createContext();
+
+export const MoviesProvider = ({ children }) => {
+    const [movies, setMovies] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [yearFilter, setYearFilter] = useState('2024');
+    const [genreFilter, setGenreFilter] = useState('28');
+
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&region=FR&language=fr-FR&sort_by=vote_count.desc&primary_release_date.desc&primary_release_date.gte=${yearFilter}-01-01&primary_release_date.lte=${yearFilter}-12-31&with_genres=${genreFilter}&page=${currentPage}`
+                );                               
+                const data = await response.json();
+                setTotalPages(data.total_pages);
+                setMovies(data.results);
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
+        };
+        fetchMovies(); 
+    }, [currentPage, yearFilter, genreFilter]);
+
+    return (
+        <MoviesContext.Provider value={{
+            movies,
+            setMovies,
+            totalPages,
+            setTotalPages,
+            currentPage,
+            setCurrentPage,
+            yearFilter,
+            setYearFilter,
+            genreFilter,
+            setGenreFilter,
+        }}>
+            {children}
+        </MoviesContext.Provider>
+    );
+};
