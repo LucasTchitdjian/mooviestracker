@@ -1,35 +1,34 @@
-import React, { useContext } from 'react';
-import { MoviesContext } from '../context/GlobalContext'; // Adjust the import path
+import React, { useContext, useState, useEffect } from 'react';
+import { MoviesContext } from '../context/GlobalContext';
 import './Banner.css';
-import { formatDate } from '../utils/movieReleaseDateFormatter';
+import { MovieSwiper } from './MovieSwiper';
 
 export const Banner = () => {
     const { movies } = useContext(MoviesContext);
+    const [activeMovie, setActiveMovie] = useState(null);
 
-    // Select the first movie or any specific movie logic
-    const featuredMovie = movies && movies.length > 0 ? movies[0] : null;
+    useEffect(() => {
+        if (movies && movies.length > 0) {
+            setActiveMovie(movies[0]);
+        }
+    }, [movies]);
 
-    console.log('featuredMovie:', featuredMovie);
+    const handleSlideChange = (swiper) => {
+        setActiveMovie(movies[swiper.realIndex]);
+    };
 
     return (
         <div className="banner">
-            {featuredMovie ? (
-                <div className="movie-banner">
-                    <img
-                        src={`https://image.tmdb.org/t/p/original${featuredMovie.poster_path}`}
-                        alt={featuredMovie.title || featuredMovie.name}
-                        className='active'
-                    />
-                    <div className="content">
-                        <h2>{featuredMovie.title || featuredMovie.name}</h2>
-                        <div className="sub-infos">
-                        <span>Sortie: {formatDate(featuredMovie.release_date)}</span>
+            {activeMovie && (
+                <>
+                    <div className="movie-banner">
+                        <div className="content">
+                            <h2>{activeMovie.title || activeMovie.name}</h2>
+                            <p>{activeMovie.overview}</p>
                         </div>
-                        <p>{featuredMovie.overview}</p>
                     </div>
-                </div>
-            ) : (
-                <p>No featured movie available</p>
+                    <MovieSwiper slides={movies} onSlideChange={handleSlideChange} />
+                </>
             )}
         </div>
     );
