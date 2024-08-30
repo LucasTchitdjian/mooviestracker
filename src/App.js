@@ -22,6 +22,7 @@ import { GlobalProvider } from './context/GlobalContext';
 import { MoviesProvider } from './context/GlobalContext';
 import { Filters } from './components/Filters';
 import { Banner } from './components/Banner';
+import 'swiper/css';
 
 function App() {
 
