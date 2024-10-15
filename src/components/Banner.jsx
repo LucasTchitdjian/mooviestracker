@@ -24,7 +24,7 @@ export const Banner = () => {
                     <div className="movie-banner">
                         <div className="content">
                             <h2>{activeMovie.title || activeMovie.name}</h2>
-                            <p>{activeMovie.overview}</p>
+                            <p>{activeMovie.overview.slice(0, 200)}{activeMovie.overview.length > 200 && '...'}</p>
                         </div>
                     </div>
                     <MovieSwiper slides={movies} onSlideChange={handleSlideChange} />
