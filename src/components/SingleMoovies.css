@@ -1,5 +1,5 @@
 .moovie-wrapper {
-    padding: 4rem 5rem;
+    padding: 2rem 3rem;
     background-color: #f2f2f2;
     min-height: 100vh;
 }
@@ -22,11 +22,15 @@
     position: absolute;
     left: 0;
     padding: 5px 10px;
+    border-radius: 10px 0 0 0;
 }
 
 .moovie-wrapper .back-btn a {
     text-decoration: none;
     color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .single-moovies h2 {
@@ -182,6 +186,38 @@
     width: 0.3125rem;
     height: 1.25rem;
     background-color: #fecc00;
+}
+
+.reviews h3 {
+    padding-top: 15px;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    gap: 10px;
+}
+
+.review > p {
+    max-width: 70ch;
+}
+
+.review > a {
+    font-weight: 600;
+    color: #fecc00;
+    width: fit-content;
+}
+
+.review > a:hover {
+    font-weight: 600;
+    color: black;
+}
+
+.review .first-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 @media screen and (min-width: 453px) and (max-width: 889px) {

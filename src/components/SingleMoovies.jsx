@@ -9,9 +9,10 @@ import { Link } from 'react-router-dom';
 
 function SingleMoovies({ movies }) {
     const [moovieInfos, setMoovieInfos] = useState(null);
+    const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-    const { moviesAddedToWatchlist, setMoviesAddedToWatchlist } = useContext(GlobalContext);    
+    const { moviesAddedToWatchlist, setMoviesAddedToWatchlist } = useContext(GlobalContext);
     const [trailer, setTrailer] = useState(null);
 
     const location = useLocation();
@@ -45,7 +46,7 @@ function SingleMoovies({ movies }) {
         const fetchSingleMovieAndTrailer = async () => {
             try {
                 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-                await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}`) // Requête pour obtenir les informations du film
+                await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}&region=FR&language=fr-FR`) // Requête pour obtenir les informations du film
                     .then(response => response.json())
                     .then(data => {
                         setMoovieInfos(data);
@@ -70,7 +71,20 @@ function SingleMoovies({ movies }) {
                 toast.error("Erreur lors de la récupération des informations du film", { autoclose: 1000 });
             }
         };
+        const fetchSingleMovieReviews = async () => {
+            try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${tmdbApiKey}`) // Requête pour obtenir les reviews du film
+                const data = await response.json();
+                console.log(data.results);
+                setReviews(data.results);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations du film :', error);
+                toast.error("Erreur lors de la récupération des informations du film", { autoclose: 1000 });
+            }
+        };
         fetchSingleMovieAndTrailer();
+        fetchSingleMovieReviews();
     }, [id]);
 
     const movieGenres = moovieInfos && moovieInfos.genres.map(genre => genre.name).join(', ');
@@ -122,14 +136,14 @@ function SingleMoovies({ movies }) {
                                 <span onClick={(e) => {
                                     e.preventDefault();
                                     handleAddToWatchlist(displayedMovie);
-                                }} className='add-watchlist' 
-                                style={moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
+                                }} className='add-watchlist'
+                                    style={moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? { backgroundColor: '#22BB33' } : {}}>{moviesAddedToWatchlist.includes(displayedMovie.id.toString()) ? <FaCheck /> : <FaPlus />}</span>
                                 <div className="left">
                                     <img src={`https://image.tmdb.org/t/p/w500${displayedMovie.poster_path}`} alt={displayedMovie.title} />
                                 </div>
                                 <div className="right">
                                     <div className="first-line">
-                                    <p>{formatDate(displayedMovie?.release_date)} {formatDate(displayedMovie?.release_date) && <span>en salle</span>}</p>
+                                        <p>{formatDate(displayedMovie?.release_date)} {formatDate(displayedMovie?.release_date) && <span>en salle</span>}</p>
                                         <p>{formatRuntime(displayedMovie?.runtime)}</p>
                                         <p>{movieGenres ? movieGenres : ""}</p>
                                     </div>
@@ -157,6 +171,24 @@ function SingleMoovies({ movies }) {
                     ) : (
                         <p>Pas de bande annonce disponible</p>
                     )}
+                </div>
+                <div className="reviews">
+                    <h3>Avis des spéctateurs</h3>
+                    {reviews.sort(function (a, b) {
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    }).map((review) => (
+                        <div key={review.id} className="review">
+                            <div className="first-line">
+                                <p>{review.author}</p>
+                                {review.author_details.rating !== null && <p>{review.author_details.rating} / 10</p>}
+                                <p>Publiée le {formatDate(review.created_at)}</p>
+                            </div>
+                            <p>{review.content.slice(0, 700)}{review.content.length > 700 && '...'}</p>
+                            {review.content.length > 700 && (
+                                <a href={review.url} target="_blank" rel="noreferrer">Lire la suite</a>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
