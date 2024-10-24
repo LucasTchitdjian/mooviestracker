@@ -75,8 +75,11 @@ export const MoviesProvider = ({ children }) => {
                 console.error("Error fetching movies:", error);
             }
         };
-        fetchMovies(); 
-    }, [currentPage, yearFilter, genreFilter]);
+
+        if (movies.length === 0) {
+            fetchMovies();
+        }
+    }, [currentPage, yearFilter, genreFilter, movies.length]);
 
     return (
         <MoviesContext.Provider value={{
@@ -95,3 +98,38 @@ export const MoviesProvider = ({ children }) => {
         </MoviesContext.Provider>
     );
 };
+
+export const TrendingMoviesContext = createContext();
+
+export const TrendingMoviesProvider = ({ children }) => {
+    const [trendingMovies, setTrendingMovies] = useState([]);
+
+    useEffect(() => {
+        const fetchTrendingMovies = async () => {
+            try {
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/trending/movie/day?api_key=${tmdbApiKey}&region=FR&language=fr-FR`
+                );
+                const data = await response.json();
+                setTrendingMovies(data.results);
+            }
+            catch (error) {
+                console.error("Error fetching trending movies:", error);
+            }
+        }
+
+        if (trendingMovies.length === 0) {
+            fetchTrendingMovies();  
+        }  
+    }, [trendingMovies.length]);
+
+    return (
+        <TrendingMoviesContext.Provider value={{
+            trendingMovies,
+            setTrendingMovies
+        }}>
+            {children}
+        </TrendingMoviesContext.Provider>
+    );
+}
