@@ -60,7 +60,7 @@ export function SearchResultsList({ movies, setMovies }) {
             <div className="search-form">
                 <form className='search-form'>
                     <div className="input-container">
-                        <input ref={inputRef} value={searchTerm} onChange={handleSearchChange} type="text" placeholder="Rechercher un film ou une série" />
+                        <input data-testid="input-search-form" ref={inputRef} value={searchTerm} onChange={handleSearchChange} type="text" placeholder="Rechercher un film ou une série" />
                         <IoClose className="clear-icon" onClick={clearText}/>
                     </div>
                 </form>
