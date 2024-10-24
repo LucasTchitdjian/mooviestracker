@@ -1,20 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { MoviesContext } from '../context/GlobalContext';
+import { TrendingMoviesContext } from '../context/GlobalContext';
 import './Banner.css';
 import { MovieSwiper } from './MovieSwiper';
+import { Link } from 'react-router-dom';
 
 export const Banner = () => {
-    const { movies } = useContext(MoviesContext);
+    const { trendingMovies } = useContext(TrendingMoviesContext);
     const [activeMovie, setActiveMovie] = useState(null);
 
     useEffect(() => {
-        if (movies && movies.length > 0) {
-            setActiveMovie(movies[0]);
+        if (trendingMovies && trendingMovies.length > 0) {
+            setActiveMovie(trendingMovies[0]);
         }
-    }, [movies]);
+    }, [trendingMovies]);
 
     const handleSlideChange = (swiper) => {
-        setActiveMovie(movies[swiper.realIndex]);
+        setActiveMovie(trendingMovies[swiper.realIndex]);
     };
 
     return (
@@ -23,11 +24,13 @@ export const Banner = () => {
                 <>
                     <div className="movie-banner">
                         <div className="content">
-                            <h2>{activeMovie.title || activeMovie.name}</h2>
+                            <Link to={`/now-playing/movie/${activeMovie.id}`}>
+                                <h2>{activeMovie.title || activeMovie.name}</h2>
+                            </Link>
                             <p>{activeMovie.overview.slice(0, 200)}{activeMovie.overview.length > 200 && '...'}</p>
                         </div>
                     </div>
-                    <MovieSwiper slides={movies} onSlideChange={handleSlideChange} />
+                    <MovieSwiper slides={trendingMovies} onSlideChange={handleSlideChange} />
                 </>
             )}
         </div>
