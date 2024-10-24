@@ -18,7 +18,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { ProfilePage } from './components/ProfilePage';
 import DefaultAvatarImg from './DefaultAvatarImgRemoved.png';
-import { GlobalProvider } from './context/GlobalContext';
+import { GlobalProvider, TrendingMoviesProvider } from './context/GlobalContext';
 import { MoviesProvider } from './context/GlobalContext';
 import { Filters } from './components/Filters';
 import { Banner } from './components/Banner';
@@ -71,7 +71,9 @@ function App() {
               <Route path="/" element={<Navigate to="/now-playing" />} />
               <Route path="/now-playing" element={
                 <>
-                  <Banner movies={mooviesNowPlaying} />
+                  <TrendingMoviesProvider>
+                  <Banner />
+                  </TrendingMoviesProvider>
                   <Filters yearFilter={yearFilter} setGenreFilter={setGenreFilter} setYearFilter={setYearFilter} />
                   <MooviesList genreFilter={genreFilter} yearFilter={yearFilter} mooviesNowPlaying={mooviesNowPlaying} setTotalPages={setTotalPages} page={page} currentPage={currentPage} setPage={setPage} movies={movies} setMovies={setMovies} series={series} setSeries={setSeries} setMooviesNowPlaying={setMooviesNowPlaying} />
                   <Pagination context="now-playing" page={currentPage} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage} />
