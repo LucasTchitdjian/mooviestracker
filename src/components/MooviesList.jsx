@@ -65,15 +65,13 @@ export function MooviesList({ currentPage, movies, setMovies, setTotalPages, yea
     useEffect(() => {
         const fetchMovies = async () => {
             try {
-                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-                console.log(typeof genreFilter, "genreFilter type");
+                const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;;
                 const response = await fetch(
                     `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&region=FR&language=fr-FR&sort_by=vote_count.desc&primary_release_date.desc&primary_release_date.gte=${yearFilter}-01-01&primary_release_date.lte=${yearFilter}-12-31&with_genres=${genreFilter}&page=${currentPage}`
                 );                               
                 const data = await response.json();
                 setTotalPages(data.total_pages);
                 setMovies(data.results);
-                console.log(data.results);
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
