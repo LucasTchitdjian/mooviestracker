@@ -72,13 +72,13 @@ export function WatchlistPage() {
             <div className="watchlist-container">
                 <ul>
                     {watchlist.map(movie => (
-                        <div className="card">
+                        <div className="card" key={movie.title}>
                             {movie.type === 'tv' ? (
-                                <Link to={`/serie/${movie.id}`} key={movie.id}>
+                                <Link to={`/serie/${movie.id}`}>
                                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                                 </Link>
                             ) : (
-                                <Link to={`/now-playing/movie/${movie.id}`} key={movie.id}>
+                                <Link to={`/now-playing/movie/${movie.id}`}>
                                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                                 </Link>
                             )}
