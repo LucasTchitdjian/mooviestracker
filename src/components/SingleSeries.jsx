@@ -41,7 +41,7 @@ function SingleSeries() {
         const fetchSingleSerie = async () => {
             try {
                 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
-                const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}`);
+                const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}&region=FR&language=fr-FR`);
                 const data = await response.json();
                 setSerieInfos(data);
 
