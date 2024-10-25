@@ -180,7 +180,7 @@ function SingleMoovies({ movies }) {
                         <div key={review.id} className="review">
                             <div className="first-line">
                                 <p>{review.author}</p>
-                                {review.author_details.rating !== null && <p>{review.author_details.rating} / 10</p>}
+                                {review.author_details.rating !== null && <p className='rating'><span>{review.author_details.rating}/</span> <span>10</span></p>}
                                 <p>Publiée le {formatDate(review.created_at)}</p>
                             </div>
                             <p>{review.content.slice(0, 700)}{review.content.length > 700 && '...'}</p>
